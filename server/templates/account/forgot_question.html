@@ -1,0 +1,11 @@
+{% extends "_base.html" %}{% from "_macros.html" import csrf %}
+{% block title %}سؤال امنیتی{% endblock %}
+{% block content %}<div class="wrap"><div class="authbox card pad">
+<h1>سؤال امنیتی</h1>
+<p class="note">شغلی که هنگام ثبت‌نام انتخاب کرده بودید را دوباره انتخاب کنید.</p>
+{% if error %}<div class="errbox" role="alert">{{ error }}</div>{% endif %}
+<form method="post" class="form">{{ csrf() }}
+<div><label for="job">شغل شما در زمان ثبت‌نام چه بود؟</label><select id="job" name="job" required><option value="" disabled selected>انتخاب کنید</option>{% for j in jobs %}<option value="{{ j }}">{{ j }}</option>{% endfor %}</select></div>
+<button class="btn" type="submit">تأیید</button></form>
+<p class="note"><a href="/account/login/">بازگشت به ورود</a></p>
+</div></div>{% endblock %}

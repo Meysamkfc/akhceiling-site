@@ -1,0 +1,7 @@
+{% extends "admin/_layout.html" %}{% from "_macros.html" import badge %}{% set nav = 'customers' %}
+{% block title %}مشتریان{% endblock %}
+{% block pn %}<h1>مشتریان</h1>
+<p class="row"><a class="btn sm {{ '' if not st else 'ghost' }}" href="/admin/customers/">همه</a>{% for k, t in L.USER_STATUS %}<a class="btn sm {{ '' if st == k else 'ghost' }}" href="/admin/customers/?status={{ k }}">{{ t }}</a>{% endfor %}</p>
+{% if rows %}<div class="scroll"><table class="tbl"><thead><tr><th>نام</th><th>شرکت</th><th>موبایل</th><th>شهر</th><th>تاریخ عضویت</th><th>وضعیت</th></tr></thead><tbody>
+{% for c in rows %}<tr><td><a href="/admin/customers/{{ c.id }}/">{{ c.name }}</a></td><td>{{ c.company or '—' }}</td><td class="num">{{ c.phone or c.email or '—' }}</td><td>{{ c.city or '—' }}</td><td>{{ jdate(c.created_at) }}</td><td>{{ badge(c.status, L.US[c.status]) }}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="note">موردی نیست.</p>{% endif %}{% endblock %}

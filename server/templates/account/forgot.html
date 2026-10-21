@@ -1,0 +1,11 @@
+{% extends "_base.html" %}{% from "_macros.html" import csrf %}
+{% block title %}فراموشی رمز عبور{% endblock %}
+{% block content %}<div class="wrap"><div class="authbox card pad">
+<h1>فراموشی رمز عبور</h1>
+<p class="note">ایمیل یا شماره موبایلی که با آن ثبت‌نام کرده‌اید را وارد کنید؛ سپس یک سؤال امنیتی از شما پرسیده می‌شود.</p>
+{% if error %}<div class="errbox" role="alert">{{ error }}</div>{% endif %}
+<form method="post" class="form">{{ csrf() }}
+<div><label for="identifier">ایمیل یا شماره موبایل</label><input id="identifier" name="identifier" dir="ltr" required maxlength="120" autocomplete="username"></div>
+<button class="btn" type="submit">ادامه</button></form>
+<p class="note"><a href="/account/login/">بازگشت به ورود</a></p>
+</div></div>{% endblock %}

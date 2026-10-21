@@ -1,0 +1,10 @@
+{% extends "_base.html" %}{% from "_macros.html" import csrf %}
+{% block title %}تأیید دومرحله‌ای{% endblock %}
+{% block content %}<div class="wrap"><div class="authbox card pad">
+<h1>کد تأیید</h1>
+<p class="note">کد ۶ رقمی برنامه احراز هویت خود (Google Authenticator یا مشابه) را وارد کنید.</p>
+{% if error %}<div class="errbox" role="alert">{{ error }}</div>{% endif %}
+<form method="post" class="form">{{ csrf() }}
+<div><label for="code">کد ۶ رقمی</label><input id="code" name="code" inputmode="numeric" autocomplete="one-time-code" dir="ltr" maxlength="7" required autofocus></div>
+<button class="btn" type="submit">تأیید و ورود</button></form>
+</div></div>{% endblock %}

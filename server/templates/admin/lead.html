@@ -1,0 +1,23 @@
+{% extends "admin/_layout.html" %}{% from "_macros.html" import csrf, badge %}{% set nav = 'leads' %}
+{% block title %}درخواست {{ lead.code }}{% endblock %}
+{% block pn %}<h1>{{ lead.code }} {{ badge(lead.status, L.LS[lead.status]) }}</h1>
+<div class="row2"><div class="card pad"><h2>مشخصات</h2><dl class="kv">
+<dt>نام</dt><dd>{{ lead.name }}</dd><dt>تلفن</dt><dd class="num"><a href="tel:{{ lead.phone }}">{{ lead.phone }}</a> — <a href="https://wa.me/98{{ lead.phone[1:] }}" target="_blank" rel="noopener">واتساپ</a></dd>
+{% if lead.company %}<dt>شرکت</dt><dd>{{ lead.company }}</dd>{% endif %}<dt>شهر</dt><dd>{{ lead.city or '—' }}</dd>
+<dt>اولویت</dt><dd><span class="bd {{ lead.priority }}">{{ {'hot': 'داغ', 'warm': 'گرم', 'cold': 'سرد'}[lead.priority] }} · امتیاز {{ lead.score }}</span>{% if lead.why %}<br><small>{{ lead.why }}</small>{% endif %}</dd><dt>منبع</dt><dd>{{ L.SOURCES[lead.source] }}</dd><dt>تاریخ</dt><dd>{{ jdatetime(lead.created_at) }}</dd>
+{% if lead.building %}<dt>نوع ساختمان</dt><dd>{{ L.BUILDINGS.get(lead.building, lead.building) }}</dd>{% endif %}
+{% if lead.product %}<dt>محصول</dt><dd>{{ L.PRODUCTS.get(lead.product, lead.product) }}</dd>{% endif %}
+{% if lead.area %}<dt>متراژ</dt><dd>{{ '%g' % lead.area }} متر مربع</dd>{% endif %}
+{% if extra.suggestion %}<dt>پیشنهاد دستیار</dt><dd>{{ extra.suggestion }}</dd>{% endif %}
+{% if lead.descr %}<dt>توضیحات</dt><dd>{{ lead.descr }}</dd>{% endif %}</dl></div>
+<div class="card pad"><h2>اقدام</h2>
+<form method="post" class="form">{{ csrf() }}<input type="hidden" name="action" value="status"><div><label for="status">وضعیت</label><select id="status" name="status">{% for k, t in L.LEAD_STATUS %}<option value="{{ k }}" {% if lead.status == k %}selected{% endif %}>{{ t }}</option>{% endfor %}</select></div><div><button class="btn sm" type="submit">ثبت وضعیت</button></div></form>
+<form method="post" class="form">{{ csrf() }}<input type="hidden" name="action" value="assign"><div><label for="assigned_to">مسئول پیگیری</label><select id="assigned_to" name="assigned_to">{% for s in staff %}<option value="{{ s.id }}" {% if lead.assigned_to == s.id %}selected{% endif %}>{{ s.name }}</option>{% endfor %}</select></div><div><button class="btn sm line" type="submit">ارجاع</button></div></form></div></div>
+<h2>ثبت نتیجه تماس</h2>
+<form method="post" class="form card pad">{{ csrf() }}<input type="hidden" name="action" value="call">
+<div class="row2"><div><label for="outcome">نتیجه تماس</label><select id="outcome" name="outcome">{% for o in L.CALL_OUTCOMES %}<option>{{ o }}</option>{% endfor %}</select></div><div><label for="ctext">توضیح (اختیاری)</label><input id="ctext" name="text" maxlength="300"></div></div>
+<div><button class="btn sm" type="submit">ثبت تماس</button></div></form>
+<h2>یادداشت</h2>
+<form method="post" class="form card pad">{{ csrf() }}<input type="hidden" name="action" value="note"><div><textarea name="text" maxlength="800" required aria-label="یادداشت"></textarea></div><div><button class="btn sm line" type="submit">افزودن یادداشت</button></div></form>
+<h2>تاریخچه</h2>
+<ul class="tl">{% for n in notes %}<li class="{{ n.kind }}"><small>{{ n.uname or '—' }} — {{ jdatetime(n.created_at) }}</small>{{ n.text }}</li>{% else %}<li>موردی ثبت نشده است.</li>{% endfor %}</ul>{% endblock %}

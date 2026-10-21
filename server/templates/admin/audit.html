@@ -1,0 +1,6 @@
+{% extends "admin/_layout.html" %}{% set nav = 'audit' %}
+{% block title %}گزارش امنیتی{% endblock %}
+{% block pn %}<h1>گزارش امنیتی و فعالیت‌ها</h1>
+<p class="note">آخرین ۳۰۰ رویداد: ورودهای موفق و ناموفق، تغییر رمز، فعال‌سازی ورود دومرحله‌ای، تأیید مشتریان و غیره.</p>
+<div class="scroll"><table class="tbl"><thead><tr><th>زمان</th><th>کاربر</th><th>رویداد</th><th>جزئیات</th><th>IP</th></tr></thead><tbody>
+{% for r in rows %}<tr><td>{{ jdatetime(r.created_at) }}</td><td>{{ r.uname or '—' }}</td><td>{{ r.action }}</td><td class="num">{{ r.detail or '' }}</td><td class="num">{{ r.ip or '' }}</td></tr>{% endfor %}</tbody></table></div>{% endblock %}

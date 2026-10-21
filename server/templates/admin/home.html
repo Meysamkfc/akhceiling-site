@@ -1,0 +1,16 @@
+{% extends "admin/_layout.html" %}{% from "_macros.html" import badge %}{% set nav = 'home' %}
+{% block title %}داشبورد کارشناس فروش{% endblock %}
+{% block pn %}<h1>داشبورد</h1>
+<div class="stats4">
+<a class="card pad" href="/admin/leads/?status=new"><b>{{ st.get('new', 0) }}</b><span>سرنخ جدید</span></a>
+<a class="card pad" href="/admin/leads/?mine=1"><b>{{ mine }}</b><span>سرنخ‌های باز من</span></a>
+<a class="card pad" href="/admin/customers/?status=pending"><b>{{ pend }}</b><span>عضویت در انتظار تأیید</span></a>
+<a class="card pad" href="/admin/orders/"><b>{{ open_orders }}</b><span>سفارش در انتظار بررسی</span></a></div>
+<h2>بازدید سایت</h2>
+<div class="stats4"><div class="card pad"><b>{{ v7 }}</b><span>بازدید ۷ روز اخیر</span></div><div class="card pad"><b>{{ v30 }}</b><span>بازدید ۳۰ روز اخیر</span></div></div>
+{% if top %}<div class="scroll"><table class="tbl"><thead><tr><th>صفحه</th><th>بازدید ۳۰ روز</th></tr></thead><tbody>{% for t in top %}<tr><td class="num">{{ t.path }}</td><td>{{ t.n }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="note">شمارنده ناشناس است: فقط تعداد بازدید هر صفحه ثبت می‌شود، بدون کوکی و بدون IP.</p>{% else %}<p class="note">هنوز بازدیدی ثبت نشده است.</p>{% endif %}
+<h2>آخرین درخواست‌ها</h2>
+{% if recent %}<div class="scroll"><table class="tbl"><thead><tr><th>اولویت</th><th>کد</th><th>تاریخ</th><th>نام</th><th>تلفن</th><th>منبع</th><th>وضعیت</th><th>مسئول</th></tr></thead><tbody>
+{% for l in recent %}<tr><td><span class="bd {{ l.priority }}">{{ {'hot': 'داغ', 'warm': 'گرم', 'cold': 'سرد'}[l.priority] }}</span></td><td><a href="/admin/leads/{{ l.id }}/">{{ l.code }}</a></td><td>{{ jdatetime(l.created_at) }}</td><td>{{ l.name }}</td><td class="num">{{ l.phone }}</td><td>{{ L.SOURCES[l.source] }}</td><td>{{ badge(l.status, L.LS[l.status]) }}</td><td>{{ l.aname or '—' }}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="note">هنوز درخواستی ثبت نشده است.</p>{% endif %}{% endblock %}

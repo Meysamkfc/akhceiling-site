@@ -1,0 +1,26 @@
+{% extends "account/_layout.html" %}{% from "_macros.html" import csrf, errs %}{% set nav = 'new' %}
+{% block title %}ثبت سفارش جدید{% endblock %}
+{% block pn %}<h1>ثبت سفارش جدید</h1>
+<p class="note">قیمت در این مرحله نمایش داده نمی‌شود؛ پس از ثبت، کارشناس فروش پیش‌فاکتور را برای شما ارسال می‌کند.</p>
+{{ errs(errors) }}
+<form method="post" enctype="multipart/form-data" class="form card pad" id="orderform" data-catalog="{{ catalog|tojson|forceescape }}">{{ csrf() }}
+<h2>اقلام سفارش</h2>
+<div id="rows">
+{% set keys = f.getlist('item_key[]') if f else [] %}{% set opts = f.getlist('option[]') if f else [] %}{% set qtys = f.getlist('qty[]') if f else [] %}
+{% for i in range((keys|length) if keys else 1) %}
+<div class="orow"><select name="item_key[]" aria-label="کالا"><option value="">انتخاب کالا…</option>{% for g in catalog %}<optgroup label="{{ g.group }}">{% for it in g['items'] %}<option value="{{ it.key }}" {% if keys and keys[i] == it.key %}selected{% endif %}>{{ it.title }}</option>{% endfor %}</optgroup>{% endfor %}</select>
+<select name="option[]" aria-label="گزینه" data-sel="{{ opts[i] if opts and i < (opts|length) else '' }}"><option value="">—</option></select>
+<input name="qty[]" inputmode="numeric" placeholder="تعداد" aria-label="تعداد" value="{{ qtys[i] if qtys and i < (qtys|length) else '' }}"><button type="button" class="btn line sm rm" aria-label="حذف ردیف">✕</button></div>
+{% endfor %}
+</div>
+<p><button type="button" class="btn line sm" id="addrow">+ افزودن قلم</button></p>
+<h2>تحویل</h2>
+<div class="row2"><div><label for="city">شهر تحویل *</label><input id="city" name="city" value="{{ f.get('city', user.city or '') if f else (user.city or '') }}" required maxlength="60"></div>
+<div><label for="desired_date">زمان مورد نیاز</label><input id="desired_date" name="desired_date" value="{{ f.get('desired_date','') if f else '' }}" placeholder="مثلاً ۱۰ روز دیگر" maxlength="40"></div></div>
+<div><label for="address">آدرس تحویل</label><textarea id="address" name="address" maxlength="400">{{ f.get('address','') if f else '' }}</textarea></div>
+<div><label for="note">توضیحات</label><textarea id="note" name="note" maxlength="1000">{{ f.get('note','') if f else '' }}</textarea></div>
+<h2>فاکتور یا نقشه (اختیاری)</h2>
+<div class="row2"><div><label for="files">فایل‌ها (PDF، JPG، PNG — حداکثر ۳ فایل، هر کدام ۵ مگابایت)</label><input id="files" name="files" type="file" multiple accept=".pdf,.jpg,.jpeg,.png"></div>
+<div><label for="file_kind">نوع فایل</label><select id="file_kind" name="file_kind"><option value="invoice">فاکتور</option><option value="plan">نقشه / تصویر پروژه</option></select></div></div>
+<div><button class="btn" type="submit">ثبت سفارش</button></div></form>{% endblock %}
+{% block scripts %}<script src="/assets/js/order.js?v=8722e2a3d0" integrity="sha384-weu/BOBMXXOHNWbUFzD2gcTPUW0Lo82uCzpks6NjR7KX2/k2CC37iLjM+TeH9k+J" crossorigin="anonymous" defer></script>{% endblock %}

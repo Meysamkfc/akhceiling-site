@@ -1,0 +1,6 @@
+{% extends "account/_layout.html" %}{% from "_macros.html" import badge %}{% set nav = 'orders' %}
+{% block title %}سفارش‌های من{% endblock %}
+{% block pn %}<h1>سفارش‌های من</h1><p><a class="btn" href="/account/orders/new/">ثبت سفارش جدید</a></p>
+{% if orders %}<div class="scroll"><table class="tbl"><thead><tr><th>کد</th><th>تاریخ</th><th>شهر</th><th>وضعیت</th></tr></thead><tbody>
+{% for o in orders %}<tr><td><a href="/account/orders/{{ o.code }}/">{{ o.code }}</a></td><td>{{ jdate(o.created_at) }}</td><td>{{ o.city }}</td><td>{{ badge(o.status, L.OS[o.status]) }}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="note">هنوز سفارشی ثبت نکرده‌اید.</p>{% endif %}{% endblock %}

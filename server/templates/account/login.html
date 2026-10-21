@@ -1,0 +1,13 @@
+{% extends "_base.html" %}{% from "_macros.html" import csrf, flashes %}
+{% block title %}ورود به حساب{% endblock %}
+{% block content %}<div class="wrap"><div class="authbox card pad">
+<h1>ورود به حساب</h1>{{ flashes() }}
+{% if error %}<div class="errbox" role="alert">{{ error }}</div>{% endif %}
+<form method="post" class="form" data-pow>{{ csrf() }}
+<div><label for="identifier">ایمیل یا شماره موبایل</label><input id="identifier" name="identifier" dir="ltr" required maxlength="120" autocomplete="username"></div>
+<div><label for="password">رمز عبور</label><input id="password" name="password" type="password" required autocomplete="current-password"></div>
+<button class="btn" type="submit">ورود</button></form>
+<p class="note"><a href="/account/forgot/">رمز عبور را فراموش کرده‌اید؟</a></p>
+<p class="note">مشتری ثابت هستید و هنوز عضو نشده‌اید؟ <a href="/account/register/">ثبت‌نام مشتریان</a></p>
+</div></div>{% endblock %}
+{% block scripts %}<script src="/assets/js/auth.js?v=f376e1d912" integrity="sha384-bD+/sEudlGdHffX5haqqI/LKTqBfc4Cej++gP/ur6nLH/fuoFVTe4jZB6YpGdn0P" crossorigin="anonymous" defer></script>{% endblock %}

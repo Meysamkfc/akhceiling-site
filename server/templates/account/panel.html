@@ -1,0 +1,13 @@
+{% extends "account/_layout.html" %}{% from "_macros.html" import badge %}{% set nav = 'home' %}
+{% block title %}پنل من{% endblock %}
+{% block pn %}<h1>سلام {{ user.name }}</h1>
+{% if user.status != 'active' %}
+<div class="card pad"><b>حساب شما در انتظار تأیید کارشناس فروش است.</b><p class="note">بعد از تأیید می‌توانید سفارش ثبت کنید و فاکتور ارسال کنید.</p></div>
+{% else %}
+<div class="stats4">{% for k, t in L.ORDER_STATUS if counts.get(k) %}<div class="card"><b>{{ counts[k] }}</b><span>{{ t }}</span></div>{% else %}<div class="card"><b>۰</b><span>سفارش ثبت‌شده</span></div>{% endfor %}</div>
+<p class="row"><a class="btn" href="/account/orders/new/">ثبت سفارش جدید</a><a class="btn line" href="/account/orders/">همه سفارش‌ها</a></p>
+<h2>آخرین سفارش‌ها</h2>
+{% if orders %}<div class="scroll"><table class="tbl"><thead><tr><th>کد</th><th>تاریخ</th><th>شهر</th><th>وضعیت</th></tr></thead><tbody>
+{% for o in orders %}<tr><td><a href="/account/orders/{{ o.code }}/">{{ o.code }}</a></td><td>{{ jdate(o.created_at) }}</td><td>{{ o.city }}</td><td>{{ badge(o.status, L.OS[o.status]) }}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="note">هنوز سفارشی ثبت نکرده‌اید.</p>{% endif %}
+{% endif %}{% endblock %}

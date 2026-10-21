@@ -1,0 +1,13 @@
+{% extends "account/_layout.html" %}{% from "_macros.html" import csrf, badge %}{% set nav = 'orders' %}
+{% block title %}سفارش {{ o.code }}{% endblock %}
+{% block pn %}<h1>سفارش {{ o.code }} {{ badge(o.status, L.OS[o.status]) }}</h1>
+<div class="card pad"><dl class="kv"><dt>تاریخ ثبت</dt><dd>{{ jdatetime(o.created_at) }}</dd><dt>شهر تحویل</dt><dd>{{ o.city }}</dd>{% if o.address %}<dt>آدرس</dt><dd>{{ o.address }}</dd>{% endif %}{% if o.desired_date %}<dt>زمان مورد نیاز</dt><dd>{{ o.desired_date }}</dd>{% endif %}{% if o.note %}<dt>توضیحات</dt><dd>{{ o.note }}</dd>{% endif %}</dl></div>
+<h2>اقلام</h2><div class="scroll"><table class="tbl"><thead><tr><th>کالا</th><th>گزینه</th><th>تعداد</th><th>واحد</th></tr></thead><tbody>
+{% for i in items %}<tr><td>{{ i.title }}</td><td>{{ i.option or '—' }}</td><td>{{ i.qty }}</td><td>{{ i.unit }}</td></tr>{% endfor %}</tbody></table></div>
+{% if msgs %}<h2>پیام کارشناس فروش</h2><ul class="tl">{% for m in msgs %}<li><small>{{ m.uname or 'کارشناس' }} — {{ jdatetime(m.created_at) }}</small>{{ m.text }}</li>{% endfor %}</ul>{% endif %}
+<h2>فایل‌ها</h2>
+<div class="card pad">{% for f in files %}<div class="fileli"><span class="bd {{ 'active' if f.side == 'staff' else '' }}">{{ 'از طرف ما' if f.side == 'staff' else 'ارسال شما' }}</span><a href="/files/{{ f.id }}/">{{ f.orig_name }}</a><small>{{ L.FILE_KINDS[f.kind] }} — {{ jdate(f.created_at) }}</small></div>{% else %}<p class="note">فایلی ثبت نشده است.</p>{% endfor %}
+{% if o.status not in ('delivered', 'canceled') %}<form method="post" action="/account/orders/{{ o.code }}/upload/" enctype="multipart/form-data" class="form">{{ csrf() }}
+<div class="row2"><div><label for="files">ارسال فاکتور یا فایل جدید</label><input id="files" name="files" type="file" multiple required accept=".pdf,.jpg,.jpeg,.png"></div>
+<div><label for="kind">نوع</label><select id="kind" name="kind"><option value="invoice">فاکتور</option><option value="plan">نقشه / تصویر پروژه</option><option value="other">سایر</option></select></div></div>
+<div><button class="btn sm" type="submit">ارسال</button></div></form>{% endif %}</div>{% endblock %}

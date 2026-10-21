@@ -1,0 +1,4 @@
+{% macro csrf() %}<input type="hidden" name="_csrf" value="{{ csrf_token() }}">{% endmacro %}
+{% macro flashes() %}{% for c, m in get_flashed_messages(with_categories=true) %}<div class="flash {{ c }}" role="status">{{ m }}</div>{% endfor %}{% endmacro %}
+{% macro errs(list) %}{% if list %}<ul class="errbox" role="alert">{% for e in list %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}{% endmacro %}
+{% macro badge(kind, text) %}<span class="bd {{ kind }}">{{ text }}</span>{% endmacro %}

@@ -1,0 +1,10 @@
+{% extends "_base.html" %}{% from "_macros.html" import csrf, flashes %}
+{% block content %}<div class="wrap"><div class="pnl">
+<aside class="side"><div class="who"><b>{{ user.name }}</b><small>{{ user.company or 'مشتری' }}</small>{% if user.status == 'pending' %}<span class="bd pending">در انتظار تأیید</span>{% endif %}</div>
+<a href="/account/" {% if nav == 'home' %}aria-current="page"{% endif %}>داشبورد</a>
+<a href="/account/orders/new/" {% if nav == 'new' %}aria-current="page"{% endif %}>ثبت سفارش جدید</a>
+<a href="/account/orders/" {% if nav == 'orders' %}aria-current="page"{% endif %}>سفارش‌های من</a>
+<a href="/account/security/" {% if nav == 'sec' %}aria-current="page"{% endif %}>امنیت حساب</a>
+<a href="/account/profile/" {% if nav == 'profile' %}aria-current="page"{% endif %}>مشخصات و رمز عبور</a>
+<form method="post" action="/account/logout/">{{ csrf() }}<button type="submit">خروج</button></form></aside>
+<div class="pn2">{{ flashes() }}{% block pn %}{% endblock %}</div></div></div>{% endblock %}

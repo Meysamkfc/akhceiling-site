@@ -1,0 +1,14 @@
+{% extends "admin/_layout.html" %}{% from "_macros.html" import csrf, badge %}{% set nav = 'customers' %}
+{% block title %}{{ c.name }}{% endblock %}
+{% block pn %}<h1>{{ c.name }} {{ badge(c.status, L.US[c.status]) }}</h1>
+<div class="row2"><div class="card pad"><dl class="kv"><dt>شرکت</dt><dd>{{ c.company or '—' }}</dd><dt>موبایل</dt><dd class="num">{% if c.phone %}<a href="tel:{{ c.phone }}">{{ c.phone }}</a>{% else %}—{% endif %}</dd><dt>ایمیل</dt><dd class="num">{{ c.email or '—' }}</dd><dt>شغل</dt><dd>{{ c.job or '—' }}</dd><dt>شهر</dt><dd>{{ c.city or '—' }}</dd><dt>تاریخ عضویت</dt><dd>{{ jdatetime(c.created_at) }}</dd><dt>آخرین ورود</dt><dd>{{ jdatetime(c.last_login) or '—' }}</dd></dl></div>
+<div class="card pad"><h2>وضعیت حساب</h2>
+<form method="post" class="row">{{ csrf() }}
+{% if c.status == 'pending' %}<button class="btn sm" name="action" value="approve">تأیید عضویت</button><button class="btn sm danger" name="action" value="reject">رد</button>
+{% elif c.status == 'active' %}<button class="btn sm danger" name="action" value="disable">غیرفعال‌سازی</button>
+{% else %}<button class="btn sm" name="action" value="enable">فعال‌سازی</button>{% endif %}</form></div></div>
+<h2>سفارش‌ها</h2>
+{% if orders %}<div class="scroll"><table class="tbl"><thead><tr><th>کد</th><th>تاریخ</th><th>شهر</th><th>وضعیت</th></tr></thead><tbody>{% for o in orders %}<tr><td><a href="/admin/orders/{{ o.code }}/">{{ o.code }}</a></td><td>{{ jdate(o.created_at) }}</td><td>{{ o.city }}</td><td>{{ badge(o.status, L.OS[o.status]) }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="note">سفارشی ندارد.</p>{% endif %}
+<h2>یادداشت</h2>
+<form method="post" class="form card pad">{{ csrf() }}<input type="hidden" name="action" value="note"><div><textarea name="text" maxlength="800" required aria-label="یادداشت"></textarea></div><div><button class="btn sm line" type="submit">افزودن</button></div></form>
+<ul class="tl">{% for n in notes %}<li class="{{ n.kind }}"><small>{{ n.uname or '—' }} — {{ jdatetime(n.created_at) }}</small>{{ n.text }}</li>{% endfor %}</ul>{% endblock %}

@@ -1,0 +1,19 @@
+# build output (regenerate with: cd src && python build2.py)
+/site/
+
+# Python
+__pycache__/
+*.pyc
+server/.venv/
+
+# secrets, database, customer files, local logs
+server/.env
+server/instance/
+
+# node tooling
+tools/node_modules/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+*.bak
