@@ -21,7 +21,10 @@ def _load_env():
         if not line or line.startswith('#') or '=' not in line:
             continue
         k, v = line.split('=', 1)
-        os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+        v = v.strip()
+        if ' #' in v and not (v.startswith('"') or v.startswith("'")):  # strip a trailing ' # comment'
+            v = v.split(' #', 1)[0].strip()
+        os.environ.setdefault(k.strip(), v.strip('"').strip("'"))
 
 
 _load_env()

@@ -5,10 +5,17 @@ import time
 import hashlib
 import io
 import json
+import mimetypes
 import os
 import re
 import secrets
 from datetime import datetime, timedelta
+
+# Windows' registry-backed mimetypes often lacks these modern types, which send_file() depends on.
+mimetypes.add_type('image/webp', '.webp')
+mimetypes.add_type('image/avif', '.avif')
+mimetypes.add_type('font/woff2', '.woff2')
+mimetypes.add_type('font/woff', '.woff')
 
 from flask import (Flask, request, session, g, jsonify, render_template, redirect, abort, send_file,
                    flash, get_flashed_messages, Response)

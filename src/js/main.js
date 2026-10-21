@@ -69,7 +69,7 @@ if (pal) {
   const load = () => loading || (loading = fetch('/assets/data/search.json').then(r => r.json()).then(d => { ix = build(d); }));
   const paint = list => {
     res.replaceChildren(); shown = list; sel = -1;
-    if (!list.length) { res.appendChild(el('div', 'em', inp.value.trim() ? 'نتیجه‌ای پیدا نشد. می‌توانید از «دستیار هوشمند» بپرسید.' : 'نام محصول، پروفیل یا موضوع را بنویسید؛ مثلاً «F47» یا «سقف گریلیوم».')); return; }
+    if (!list.length) { res.appendChild(el('div', 'em', inp.value.trim() ? 'نتیجه‌ای پیدا نشد. می‌توانید از «دستیار هوشمند» بپرسید.' : 'نام محصول، پروفیل یا موضوع را بنویسید؛ مثلاً «F47» یا «سقف شبکه‌ای».')); return; }
     list.forEach(r => { const a = el('a'); a.href = r.d.u; a.appendChild(el('b', '', r.d.t)); a.appendChild(el('small', '', r.d.g + ' — ' + r.d.x.slice(0, 90))); res.appendChild(a); });
   };
   const run = async () => { await load(); paint(search(ix, inp.value, 8)); };

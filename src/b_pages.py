@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from b_core import *
 
-SYS_IMG = {'drywall': 'show/p04.jpg', 'grid-ceiling': 'projects/p01.jpg', 'grillium': 'show/grillium.jpg', 'profiles': 'photos/real-factory.jpg', 'accessories': 'photos/real-install.jpg'}
-SYS_IMG_ALT = {'drywall': 'سقف گچی دکوراتیو در پروژه هتل آزادی', 'grid-ceiling': 'سقف شبکه‌ای در دانشگاه شهرری', 'grillium': 'سقف کاذب گریلیوم با نورپردازی توکار', 'profiles': 'پروفیل‌های گالوانیزه تولیدشده در کارخانه', 'accessories': 'نصب زیرسازی سقف کاذب'}
+SYS_IMG = {'drywall': 'show/p04.jpg', 'grid-ceiling': 'projects/p01.jpg', 'profiles': 'photos/real-factory.jpg', 'accessories': 'photos/real-install.jpg'}
+SYS_IMG_ALT = {'drywall': 'سقف گچی دکوراتیو در پروژه هتل آزادی', 'grid-ceiling': 'سقف شبکه‌ای در دانشگاه شهرری', 'profiles': 'پروفیل‌های گالوانیزه تولیدشده در کارخانه', 'accessories': 'نصب زیرسازی سقف کاذب'}
 ALLP = PRODUCTS + [dict(slug='profiles', title=PROFILES['title'], short=PROFILES['short'], tags=['F47', 'UH36', 'L25'], diagram='drywall'),
                     dict(slug='accessories', title=ACCESSORIES['title'], short=ACCESSORIES['short'], tags=['SSB', 'HT90', 'پیچ و میخ'])]
 
@@ -10,8 +10,6 @@ def product_ld(p, url, d):
     props = []
     if p['slug'] in ('drywall', 'profiles'):
         props = [("طول استاندارد", "۴ متر"), ("ضخامت ورق", "۰٫۵ و ۰٫۶ میلی‌متر"), ("جنس", "فولاد گالوانیزه")]
-    elif p['slug'] == 'grillium':
-        props = [(a, b) for a, b in GRILLIUM_TABLE]
     elif p['slug'] == 'grid-ceiling':
         props = [("ابعاد تایل", "۶۰×۶۰ سانتی‌متر"), ("طول سپری مادر", "۳٫۶ متر"), ("آویز", "فنر دوبل استیل")]
     return {"@type": "Product", "@id": url + '#product', "name": p['title'], "description": d, "image": [SITE + rurl(SYS_IMG[p['slug']], 960)], "url": url,
@@ -27,15 +25,15 @@ def build_home():
               '<option value="school">آموزشی / دانشگاهی</option><option value="hospital">درمانی</option><option value="commercial">لابی / هتل / رستوران</option><option value="industrial">صنعتی / سوله</option></select></div>'
               '<div><label for="fa">متراژ (متر مربع)</label><input id="fa" inputmode="numeric" placeholder="مثلاً ۸۰" autocomplete="off"></div><button class="btn" type="submit">پیشنهاد هوشمند</button></form>')
     hero = ('<section class="hero" id="hero" aria-label="معرفی"><!-- hero3d canvas temporarily disabled, see memory note "کل پروژه" to restore --><div class="wrap in">'
-            '<h1><span style="display:block;font-size:.4em;font-weight:800;margin-bottom:6px;color:#d6d8f0">%s</span>قدمت، <em class="o">%s</em></h1><p class="lead">%s تولید پروفیل درای‌وال (F47، UH36، L25)، سقف شبکه‌ای ۶۰×۶۰ و سقف گریلیوم؛ مستقیم از کارخانه کهریزک تا پروژه شما.</p>'
+            '<h1><span style="display:block;font-size:.4em;font-weight:800;margin-bottom:6px;color:#d6d8f0">%s</span>قدمت، <em class="o">%s</em></h1><p class="lead">%s تولید پروفیل درای‌وال (F47، UH36، L25) و سقف شبکه‌ای ۶۰×۶۰؛ مستقیم از کارخانه کهریزک تا پروژه شما.</p>'
             '<div class="row"><a class="btn" href="/quote/">درخواست قیمت</a><a class="btn line" href="/products/">مشاهده محصولات</a></div>%s</div><span class="scrollcue" aria-hidden="true">اسکرول کنید</span></section>'
             % (esc(NAME_FULL), flip_text('نماد کیفیت', loop=False), FOUNDED_NOTE + ' تجربه.', finder))
-    tick = '<div class="ticker" aria-hidden="true"><div>' + ('<span>پروفیل F47</span><span>پروفیل UH36</span><span>نبشی L25</span><span>سقف شبکه‌ای ۶۰×۶۰</span><span>سقف گریلیوم</span><span>درای‌وال</span><span>تایل آکوستیک</span><span>طول سفارشی</span>' * 4) + '</div></div>'
+    tick = '<div class="ticker" aria-hidden="true"><div>' + ('<span>پروفیل F47</span><span>پروفیل UH36</span><span>نبشی L25</span><span>سقف شبکه‌ای ۶۰×۶۰</span><span>درای‌وال</span><span>تایل آکوستیک</span><span>طول سفارشی</span>' * 4) + '</div></div>'
     pn = ''
     for i, p in enumerate(ALLP):
         pn += ('<a class="pn" href="/products/%s/">%s<span class="idx">0%d</span><div class="t"><small>%s</small><h3>%s</h3><p>%s</p></div></a>' %
                (p['slug'], rimg(SYS_IMG[p['slug']], SYS_IMG_ALT[p['slug']], '(max-width:760px) 100vw, 40vw'), i + 1, ' · '.join(p['tags'][:3]), esc(p['title']), esc(p['short'])))
-    s1 = ('<section class="sec"><div class="wrap">%s<div class="head"><h2>سه سیستم سقف، <em class="o">یک تولیدکننده</em></h2><p class="lead">از سقف یکپارچه گچی تا سقف شبکه‌ای و خطی آلومینیومی؛ همه با تولید مستقیم و مشخصات فنی شفاف.</p></div>'
+    s1 = ('<section class="sec"><div class="wrap">%s<div class="head"><h2>دو سیستم سقف، <em class="o">یک تولیدکننده</em></h2><p class="lead">از سقف یکپارچه گچی تا سقف شبکه‌ای قابل‌برداشتن؛ همه با تولید مستقیم و مشخصات فنی شفاف.</p></div>'
           '<div class="panels rv">%s</div></div></section>' % (kicker('01', 'محصولات'), pn))
     nums = [('۲۲۰', '+', 'تن ظرفیت تولید در ماه'), ('۱۱', '', 'خط تولید و پرس'), ('۴۰', '+', 'سال تجربه در صنعت ساختمان'), ('۷۳٬۰۰۰', '', 'متر مربع؛ بزرگ‌ترین پروژه')]
     nb = ''.join('<div class="rv"><b>%s<em>%s</em></b><span>%s</span></div>' % (n, u, t) for n, u, t in nums)
@@ -67,14 +65,14 @@ def build_home():
     cl = '<section class="sec sm paper2"><div class="wrap"><div class="logos">%s</div></div></section>' % ''.join('<img src="/assets/clients/%s" alt="%s" width="170" height="60" loading="lazy">' % (f, esc(a)) for f, a in CLIENTS)
     body = hero + tick + s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8 + cl + cta()
     sw_cap = '%s/assets/r/%s-960.webp' % (SITE, base)
-    page('/', 'صنعت سقف البرز خاورمیانه | تولیدکننده پروفیل درای‌وال F47 و سقف کاذب', 'تولید مستقیم پروفیل درای‌وال F47، UH36 و L25، سقف کاذب شبکه‌ای ۶۰×۶۰ و گریلیوم. کارخانه کهریزک، دفتر تهران، ارسال به سراسر کشور. برآورد متریال و دستیار هوشمند.',
+    page('/', 'صنعت سقف البرز خاورمیانه | تولیدکننده پروفیل درای‌وال F47 و سقف کاذب', 'تولید مستقیم پروفیل درای‌وال F47، UH36 و L25، سقف کاذب شبکه‌ای ۶۰×۶۰. کارخانه کهریزک، دفتر تهران، ارسال به سراسر کشور. برآورد متریال و دستیار هوشمند.',
          body, home=True, scripts=('home.js',), priority='1.0', freq='weekly', kind='WebPage', images=[SITE + rurl(img_p, 960)])
     add_doc('صفحه اصلی', 'صنعت سقف البرز خاورمیانه تولیدکننده پروفیل درای‌وال و سقف کاذب', '/', 'صفحه', 'خانه معرفی')
 
 # ============================================================ HOME (English)
-EN_PRODUCT_NAME = {'drywall': 'Drywall &amp; plaster ceiling system', 'grid-ceiling': '60x60 grid suspended ceiling', 'grillium': 'Grillium grid ceiling', 'profiles': 'Drywall profiles &amp; connectors', 'accessories': 'Installation accessories'}
+EN_PRODUCT_NAME = {'drywall': 'Drywall &amp; plaster ceiling system', 'grid-ceiling': '60x60 grid suspended ceiling', 'profiles': 'Drywall profiles &amp; connectors', 'accessories': 'Installation accessories'}
 EN_PRODUCT_SHORT = {'drywall': 'A seamless, joint-free ceiling with recessed lighting boxes and partition walls', 'grid-ceiling': 'Removable tiles with easy access to services above the ceiling',
-                    'grillium': 'Aluminium grid structure, 5x5 or 10x10 cm cells, for a modern facade look', 'profiles': 'F47, UH36, L25, clips, screws and connectors with a full spec table',
+                    'profiles': 'F47, UH36, L25, clips, screws and connectors with a full spec table',
                     'accessories': 'Screws, nails, joint tape and connectors for every ceiling system'}
 
 def build_home_en():
@@ -82,15 +80,15 @@ def build_home_en():
     base, sw, sh = variants(img_p)
     hero = ('<section class="hero" id="hero" aria-label="Introduction"><!-- hero3d canvas temporarily disabled, see memory note "کل پروژه" to restore --><div class="wrap in">'
             '<h1><span style="display:block;font-size:.4em;font-weight:800;margin-bottom:6px;color:#d6d8f0">%s</span>Heritage, a mark of <em class="o">quality</em></h1>'
-            '<p class="lead">Direct manufacturing of drywall profiles (F47, UH36, L25), 60x60 grid suspended ceilings and Grillium ceilings; straight from our Kahrizak factory to your project. Over 40 years of experience.</p>'
+            '<p class="lead">Direct manufacturing of drywall profiles (F47, UH36, L25) and 60x60 grid suspended ceilings; straight from our Kahrizak factory to your project. Over 40 years of experience.</p>'
             '<div class="row"><a class="btn" href="/quote/">Request a quote</a><a class="btn line" href="/products/">View products</a></div></div><span class="scrollcue" aria-hidden="true">Scroll</span></section>'
             % esc(EN_NAME))
-    tick = '<div class="ticker" aria-hidden="true"><div>' + ('<span>F47 profile</span><span>UH36 profile</span><span>L25 angle</span><span>60x60 grid ceiling</span><span>Grillium ceiling</span><span>Drywall</span><span>Acoustic tile</span><span>Custom length</span>' * 4) + '</div></div>'
+    tick = '<div class="ticker" aria-hidden="true"><div>' + ('<span>F47 profile</span><span>UH36 profile</span><span>L25 angle</span><span>60x60 grid ceiling</span><span>Drywall</span><span>Acoustic tile</span><span>Custom length</span>' * 4) + '</div></div>'
     pn = ''
     for i, p in enumerate(ALLP):
         pn += ('<a class="pn" href="/products/%s/">%s<span class="idx">0%d</span><div class="t"><small>%s</small><h3>%s</h3><p>%s</p></div></a>' %
                (p['slug'], rimg(SYS_IMG[p['slug']], SYS_IMG_ALT[p['slug']], '(max-width:760px) 100vw, 40vw'), i + 1, ' &middot; '.join(p['tags'][:3]), EN_PRODUCT_NAME[p['slug']], EN_PRODUCT_SHORT[p['slug']]))
-    s1 = ('<section class="sec"><div class="wrap">%s<div class="head"><h2>Three ceiling systems, <em class="o">one manufacturer</em></h2><p class="lead">From seamless drywall ceilings to grid and linear aluminium ceilings; all directly manufactured with transparent technical specifications.</p>'
+    s1 = ('<section class="sec"><div class="wrap">%s<div class="head"><h2>Two ceiling systems, <em class="o">one manufacturer</em></h2><p class="lead">From seamless drywall ceilings to removable grid ceilings; all directly manufactured with transparent technical specifications.</p>'
           '<div class="panels rv">%s</div></div></section>' % (kicker('01', 'Products'), pn))
     nums = [('220', '+', 'tonnes of monthly production capacity'), ('11', '', 'production and press lines'), ('40', '+', 'years of experience in construction'), ('73,000', '', 'square metres; our largest project')]
     nb = ''.join('<div class="rv"><b>%s<em>%s</em></b><span>%s</span></div>' % (n, u, t) for n, u, t in nums)
@@ -118,7 +116,7 @@ def build_home_en():
           '<div class="stack">%s%s</div></div></div></section>' % (kicker('05', 'Catalog'), rimg('catalog/f47.jpg', 'F47 profile catalog page', '30vw'), rimg('catalog/grid-60x60.jpg', '60x60 grid ceiling catalog page', '30vw')))
     cl = '<section class="sec sm paper2"><div class="wrap"><div class="logos">%s</div></div></section>' % ''.join('<img src="/assets/clients/%s" alt="%s" width="170" height="60" loading="lazy">' % (f, esc(a)) for f, a in CLIENTS)
     body = hero + tick + s1 + s2 + s4 + s5 + s6 + s7 + cl + cta('Ready to start?', 'Sign up today and submit your first request.', lang='en')
-    page('/en/', 'AKH Ceiling Systems | Drywall Profile & Suspended Ceiling Manufacturer', 'Direct manufacturing of F47, UH36 and L25 drywall profiles, 60x60 grid and Grillium suspended ceilings. Kahrizak factory, Tehran office, nationwide shipping.',
+    page('/en/', 'AKH Ceiling Systems | Drywall Profile & Suspended Ceiling Manufacturer', 'Direct manufacturing of F47, UH36 and L25 drywall profiles and 60x60 grid suspended ceilings. Kahrizak factory, Tehran office, nationwide shipping.',
          body, home=True, scripts=('home.js',), priority='0.9', freq='weekly', kind='WebPage', images=[SITE + rurl(img_p, 960)], lang='en')
     add_doc('Homepage (EN)', 'AKH Ceiling Systems drywall profile and suspended ceiling manufacturer', '/en/', 'page', 'home english')
 
@@ -128,13 +126,13 @@ def build_products():
     for p in ALLP:
         cards += ('<a class="card hv pc rv" href="/products/%s/">%s<div class="b"><h3>%s</h3><p>%s</p><div class="tags">%s</div></div></a>' %
                   (p['slug'], rimg(SYS_IMG[p['slug']], SYS_IMG_ALT[p['slug']], '(max-width:760px) 100vw, 25vw'), esc(p['title']), esc(p['short']), ''.join('<span class="tag">%s</span>' % t for t in p['tags'])))
-    body = (phero('محصولات', 'سه سیستم سقف و دیوار کاذب و پروفیل‌های درای‌وال؛ همه با تولید مستقیم و مشخصات فنی شفاف.', [('/', 'خانه'), (None, 'محصولات')],
+    body = (phero('محصولات', 'دو سیستم سقف و دیوار کاذب و پروفیل‌های درای‌وال؛ همه با تولید مستقیم و مشخصات فنی شفاف.', [('/', 'خانه'), (None, 'محصولات')],
                   '<div class="row"><a class="btn" href="/estimate/">برآورد متریال</a><a class="btn line" href="/quote/">درخواست قیمت</a></div>') +
             '<section class="sec"><div class="wrap"><h2 class="sr">محصولات ما</h2><div class="grid g4">%s</div></div></section>' % cards + cta())
     items = [{"@type": "ListItem", "position": i + 1, "url": SITE + '/products/%s/' % p['slug'], "name": p['title']} for i, p in enumerate(ALLP)]
-    page('/products/', 'محصولات | پروفیل درای‌وال، سقف شبکه‌ای و گریلیوم', 'محصولات صنعت سقف البرز خاورمیانه: سیستم درای‌وال، سقف شبکه‌ای ۶۰×۶۰، سقف گریلیوم و پروفیل‌های F47، UH36 و L25 با مشخصات فنی کامل.', body,
+    page('/products/', 'محصولات | پروفیل درای‌وال و سقف شبکه‌ای', 'محصولات صنعت سقف البرز خاورمیانه: سیستم درای‌وال، سقف شبکه‌ای ۶۰×۶۰ و پروفیل‌های F47، UH36 و L25 با مشخصات فنی کامل.', body,
          extra_ld=[{"@type": "ItemList", "@id": SITE + '/products/#list', "itemListElement": items}], crumbs=[('/', 'خانه'), ('/products/', 'محصولات')], priority='0.9', kind='CollectionPage', images=[SITE + rurl(SYS_IMG[p['slug']]) for p in ALLP])
-    add_doc('محصولات', 'سیستم درای‌وال، سقف شبکه‌ای ۶۰×۶۰، سقف گریلیوم، پروفیل F47 UH36 L25', '/products/', 'صفحه', 'محصول')
+    add_doc('محصولات', 'سیستم درای‌وال، سقف شبکه‌ای ۶۰×۶۰، پروفیل F47 UH36 L25', '/products/', 'صفحه', 'محصول')
 
 def profiles_table():
     rows = [[a, b, c, d, e, f] for a, b, c, d, e, f in PROFILE_TABLE]
@@ -143,7 +141,6 @@ def profiles_table():
 HOWTO = {
     'drywall': ('مراحل اجرای سقف گچی درای‌وال (مرور کلی)', ['تراز سقف را علامت بزنید و نبشی L25 را دور تا دور دیوار نصب کنید.', 'آویزها را به سقف اصلی وصل کنید و پروفیل‌های باربر را روی آن‌ها بگذارید.', 'پروفیل‌های F47 پانل‌خور را با کلیپس به باربر متصل کنید.', 'تأسیسات و عایق (در صورت نیاز) را قبل از بستن سقف اجرا کنید.', 'صفحات گچی را با پیچ پانل روی زیرسازی نصب کنید.', 'درزها را با نوار و بتونه ببندید، سپس رنگ یا پوشش نهایی را اجرا کنید.']),
     'grid-ceiling': ('مراحل اجرای سقف شبکه‌ای (مرور کلی)', ['تراز سقف را مشخص و نبشی دیواری را دور تا دور نصب کنید.', 'آویزهای فنر دوبل را در فاصله‌های مشخص به سقف اصلی وصل کنید.', 'سپری‌های مادر را روی آویزها قرار دهید و تراز کنید.', 'سپری‌های ۱۲۰ و ۶۰ را برای ساختن شبکه ۶۰×۶۰ جا بزنید.', 'تایل‌ها را داخل شبکه بگذارید.']),
-    'grillium': ('مراحل اجرای سقف گریلیوم (مرور کلی)', ['تراز سقف را مشخص و زیرسازی آویز را طبق نقشه نصب کنید.', 'سازه‌های مشبک آلومینیومی را روی زیرسازی آویز کنید.', 'سازه‌ها را به هم و به زیرسازی متصل و تراز کنید.', 'نورپردازی و لبه‌های کنار سقف را مطابق طرح تکمیل کنید.']),
 }
 
 def build_product(p):
@@ -173,8 +170,6 @@ def build_product(p):
                  '<section class="sec"><div class="wrap">%s<div class="head"><h2>مدل‌های دقیق <em class="o">تایل</em></h2><p class="lead">مشخصات فنی هر مدل؛ انتخاب نهایی با توجه به فضا، بودجه و نیاز رطوبت/آکوستیک با کارشناس فنی.</p></div><div class="grid g3">%s</div></div></section>'
                  '<section class="sec paper2"><div class="wrap">%s<div class="head"><h2>انواع <em class="o">سپری</em></h2></div><div class="grid g3">%s</div></div></section>'
                  % (kicker('02', 'تایل‌ها'), tiles, kicker('03', 'مدل‌های تایل'), gt, kicker('04', 'سپری'), gb))
-    elif slug == 'grillium':
-        extra = '<section class="sec paper2"><div class="wrap">%s<div class="head"><h2>مشخصات فنی <em class="o">سقف گریلیوم</em></h2></div><div class="x10">%s</div></div></section>' % (kicker('02', 'مشخصات'), table_html(GRILLIUM_TABLE, ['مشخصه', 'مقدار']))
     elif slug == 'profiles':
         PROFILE_IMG = {'F47': 'parts/profile-f47.jpg', 'UH36': 'parts/profile-uh36.jpg', 'L25': 'parts/profile-l25.jpg'}
         roles = ''.join('<div class="card pad">%s<h3 class="x4">%s</h3><p class="lead">%s</p></div>' % (rimg(PROFILE_IMG[a], a, '(max-width:760px) 50vw, 25vw'), a, b) for a, b in PROFILE_ROLES)
@@ -209,17 +204,16 @@ def build_product(p):
         ld_extra.append(faq_node(faq, url))
     gallery = ''
     REAL_GALLERY = {'drywall': [('show/d1.jpg', 'سقف گچی باکسی با نورپردازی مخفی — نمونه اجرای واقعی')],
-                     'grid-ceiling': [('show/g3.jpg', 'سقف شبکه‌ای دایره‌ای با تایل مرکزی و نور مخفی'), ('show/p02.jpg', 'سقف شبکه‌ای با تایل پرفوریت در فضای صنعتی'), ('photos/real-ceiling.jpg', 'تیم صنعت سقف البرز خاورمیانه در حال نصب زیرسازی سقف')],
-                     'grillium': [('show/d3.jpg', 'ترکیب قاب گچی و پنل مشبک مرکزی با نورپردازی مخفی'), ('show/d4.jpg', 'سقف دایره‌ای با پنل مشبک مرکزی و نور مخفی')]}
+                     'grid-ceiling': [('show/g3.jpg', 'سقف شبکه‌ای دایره‌ای با تایل مرکزی و نور مخفی'), ('show/p02.jpg', 'سقف شبکه‌ای با تایل پرفوریت در فضای صنعتی'), ('photos/real-ceiling.jpg', 'تیم صنعت سقف البرز خاورمیانه در حال نصب زیرسازی سقف')]}
     rg = REAL_GALLERY.get(slug)
     if rg:
-        rg_num, rg_cls = {'drywall': ('05', ' paper2'), 'grid-ceiling': ('06', ' paper2'), 'grillium': ('03', '')}[slug]
+        rg_num, rg_cls = {'drywall': ('05', ' paper2'), 'grid-ceiling': ('06', ' paper2')}[slug]
         gallery += ('<section class="sec%s"><div class="wrap">%s<div class="head"><h2>نمونه <em class="o">اجرای واقعی</em></h2><p class="lead">تصاویر واقعی از سقف‌های اجراشده با این سیستم.</p></div><div class="grid g3">%s</div></div></section>' %
                     (rg_cls, kicker(rg_num, 'نمونه کار'), ''.join('<figure class="card">%s<figcaption class="pad x13">%s</figcaption></figure>' % (rimg(r, t, '(max-width:760px) 100vw, 30vw'), t) for r, t in rg)))
-    rel_art = [a for a in ARTICLES if any(k in a['title'] + a['desc'] for k in {'drywall': ['درای‌وال', 'F47', 'پروفیل'], 'grid-ceiling': ['شبکه‌ای'], 'grillium': ['گریلیوم'], 'profiles': ['پروفیل', 'پیچ'], 'accessories': ['پیچ', 'میخ']}[slug])][:3]
+    rel_art = [a for a in ARTICLES if any(k in a['title'] + a['desc'] for k in {'drywall': ['درای‌وال', 'F47', 'پروفیل'], 'grid-ceiling': ['شبکه‌ای'], 'profiles': ['پروفیل', 'پیچ'], 'accessories': ['پیچ', 'میخ']}[slug])][:3]
     rel = '<div class="rel">%s</div>' % ''.join('<a href="/articles/%s/">%s</a>' % (a['slug'], esc(a['title'])) for a in rel_art) if rel_art else ''
     others = '<div class="rel">%s</div>' % ''.join('<a href="/products/%s/">%s</a>' % (q['slug'], esc(q['title'])) for q in ALLP if q['slug'] != slug)
-    ABOUT_HEAD = {'drywall': ('چرا', 'درای‌وال؟'), 'grid-ceiling': ('ساختار', 'سقف شبکه‌ای'), 'grillium': ('طراحی', 'سقف گریلیوم'), 'profiles': ('معرفی', 'پروفیل‌ها و اتصالات'), 'accessories': ('کاربرد', 'این ملزومات')}
+    ABOUT_HEAD = {'drywall': ('چرا', 'درای‌وال؟'), 'grid-ceiling': ('ساختار', 'سقف شبکه‌ای'), 'profiles': ('معرفی', 'پروفیل‌ها و اتصالات'), 'accessories': ('کاربرد', 'این ملزومات')}
     ah1, ah2 = ABOUT_HEAD.get(slug, ('درباره', 'این سیستم'))
     main = ('<section class="sec"><div class="wrap"><div class="split"><div>%s<h2>%s <em class="o">%s</em></h2>%s</div><div class="fig rv">%s</div></div></div></section>' % (kicker('01', 'معرفی'), ah1, ah2, ab, rimg(SYS_IMG[slug], SYS_IMG_ALT[slug], '(max-width:1100px) 100vw, 45vw')))
     diag = ('<section class="sec sm"><div class="wrap"><div class="dgwrap card pad rv">%s</div></div></section>' % diagram(p['diagram'])) if p.get('diagram') else ''
@@ -310,7 +304,7 @@ def build_membership():
 
 # ============================================================ QUOTE / ESTIMATE / ASSISTANT
 def build_quote():
-    prods = ''.join('<option value="%s">%s</option>' % (k, v) for k, v in [('', 'انتخاب کنید'), ('grid', 'سقف کاذب شبکه‌ای ۶۰×۶۰'), ('drywall', 'سیستم درای‌وال و سقف گچی'), ('grillium', 'سقف گریلیوم (مشبک)'), ('profiles', 'پروفیل و اتصالات درای‌وال'), ('other', 'سایر / نیاز به راهنمایی')])
+    prods = ''.join('<option value="%s">%s</option>' % (k, v) for k, v in [('', 'انتخاب کنید'), ('grid', 'سقف کاذب شبکه‌ای ۶۰×۶۰'), ('drywall', 'سیستم درای‌وال و سقف گچی'), ('profiles', 'پروفیل و اتصالات درای‌وال'), ('other', 'سایر / نیاز به راهنمایی')])
     blds = ''.join('<option value="%s">%s</option>' % (k, v) for k, v in [('', 'انتخاب کنید'), ('office', 'اداری / تجاری'), ('school', 'آموزشی / دانشگاهی'), ('hospital', 'درمانی / بیمارستانی'), ('hotel', 'هتل / لابی / فرودگاه'), ('home', 'مسکونی'), ('industrial', 'صنعتی / سوله')])
     def fld(i, label, typ='text', req=True, ph='', extra=''):
         return '<div><label for="%s">%s%s</label><input id="%s" name="%s" type="%s"%s placeholder="%s" autocomplete="off" %s><div class="err" id="%s-e" role="alert"></div></div>' % (i, label, ' *' if req else '', i, i, typ, ' required' if req else '', ph, extra, i)
@@ -325,7 +319,7 @@ def build_quote():
             '<div class="card pad x19"><h2>بعد از ثبت چه می‌شود؟</h2><ul class="checks x8"><li>کارشناس فروش درخواست را بررسی می‌کند.</li><li>در صورت نیاز نقشه یا تصویر پروژه را از شما می‌گیرد.</li><li>قیمت و پیشنهاد فنی پس از تأیید کارشناس اعلام می‌شود.</li></ul></div>' % (PHONE_FA, PHONE_FACTORY_FA, HOURS[0], HOURS[1]))
     body = (phero('درخواست قیمت', 'مشخصات پروژه را وارد کنید؛ کارشناسان ما برای ارائه پیشنهاد فنی و قیمت با شما تماس می‌گیرند.', [('/', 'خانه'), (None, 'درخواست قیمت')]) +
             '<section class="sec"><div class="wrap"><div class="split x20"><div class="formcard">%s</div><div>%s</div></div></div></section>' % (form, side))
-    page('/quote/', 'درخواست قیمت و مشاوره | %s' % NAME, 'درخواست قیمت سقف کاذب، درای‌وال و گریلیوم: مشخصات پروژه را بنویسید تا کارشناسان صنعت سقف البرز خاورمیانه با شما تماس بگیرند.', body, crumbs=[('/', 'خانه'), ('/quote/', 'درخواست قیمت')], scripts=('quote.js',), priority='0.8')
+    page('/quote/', 'درخواست قیمت و مشاوره | %s' % NAME, 'درخواست قیمت سقف کاذب و درای‌وال: مشخصات پروژه را بنویسید تا کارشناسان صنعت سقف البرز خاورمیانه با شما تماس بگیرند.', body, crumbs=[('/', 'خانه'), ('/quote/', 'درخواست قیمت')], scripts=('quote.js',), priority='0.8')
 
 def build_estimate():
     def fld(i, label, val, hint='', f=''):

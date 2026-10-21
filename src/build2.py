@@ -38,7 +38,7 @@ def copy_static():
         sq.resize((sz, sz), Image.LANCZOS).save(os.path.join(d, n))
 
 OGSRC = {'home': 'show/p04.jpg', 'products': 'projects/p01.jpg', 'projects': 'projects/p07.jpg', 'estimate': 'projects/p01.jpg', 'about': 'photos/real-factory.jpg', 'contact': 'photos/real-expo.jpg',
-         'drywall': 'show/p04.jpg', 'grid': 'projects/p01.jpg', 'grillium': 'show/grillium.jpg', 'profiles': 'photos/real-factory.jpg', 'accessories': 'photos/real-install.jpg',
+         'drywall': 'show/p04.jpg', 'grid': 'projects/p01.jpg', 'profiles': 'photos/real-factory.jpg', 'accessories': 'photos/real-install.jpg',
          'articles': 'projects/p06.jpg', 'assistant': 'show/r8.jpg', 'catalogs': 'catalog/f47.jpg'}
 def make_og():
     os.makedirs(os.path.join(OUT, 'assets', 'og'), exist_ok=True)
@@ -58,7 +58,7 @@ def make_og():
                    ('/articles/', 'articles'), ('/quote/', 'home'), ('/faq/', 'home'), ('/membership/', 'about')):
         OGMAP[pth] = n
     for p in ALLP:
-        OGMAP['/products/%s/' % p['slug']] = {'drywall': 'drywall', 'grid-ceiling': 'grid', 'grillium': 'grillium', 'profiles': 'profiles', 'accessories': 'accessories'}[p['slug']]
+        OGMAP['/products/%s/' % p['slug']] = {'drywall': 'drywall', 'grid-ceiling': 'grid', 'profiles': 'profiles', 'accessories': 'accessories'}[p['slug']]
     for a in ARTICLES:
         OGMAP['/articles/%s/' % a['slug']] = 'articles'
 
@@ -118,7 +118,7 @@ def seo_files():
     open(os.path.join(OUT, 'rss.xml'), 'w', encoding='utf-8').write('<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>مقالات %s</title><link>%s/articles/</link><description>مقالات آموزشی سقف کاذب و درای‌وال</description><language>fa-IR</language>%s</channel></rss>' % (esc(NAME), SITE, items))
     open(os.path.join(OUT, 'manifest.webmanifest'), 'w', encoding='utf-8').write(json.dumps({"name": NAME_FULL, "short_name": "AKH", "lang": "fa", "dir": "rtl", "start_url": "/", "display": "standalone", "background_color": "#f4f5fb", "theme_color": "#15173f",
                                                                                           "icons": [{"src": "/assets/img/icon-192.png", "sizes": "192x192", "type": "image/png"}, {"src": "/assets/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}]}, ensure_ascii=False))
-    llms = ['# ' + NAME_FULL, '', '> تولیدکننده پروفیل درای‌وال (F47، UH36، L25)، سقف کاذب شبکه‌ای ۶۰×۶۰ و سقف گریلیوم. کارخانه کهریزک، دفتر مرکزی تهران، ارسال به سراسر کشور. تلفن ' + PHONE + '.', '', '## صفحه‌های اصلی'] + \
+    llms = ['# ' + NAME_FULL, '', '> تولیدکننده پروفیل درای‌وال (F47، UH36، L25) و سقف کاذب شبکه‌ای ۶۰×۶۰. کارخانه کهریزک، دفتر مرکزی تهران، ارسال به سراسر کشور. تلفن ' + PHONE + '.', '', '## صفحه‌های اصلی'] + \
            ['- [%s](%s%s): %s' % (v['title'].split('|')[0].strip(), SITE, p, v['desc']) for p, v in sorted(ENTRIES.items()) if p not in ('/404.html', '/search/') and not p.startswith('/articles/')] + ['', '## مقالات'] + \
            ['- [%s](%s/articles/%s/): %s' % (a['title'], SITE, a['slug'], a['desc']) for a in ARTICLES]
     open(os.path.join(OUT, 'llms.txt'), 'w', encoding='utf-8').write(NL.join(llms) + NL)

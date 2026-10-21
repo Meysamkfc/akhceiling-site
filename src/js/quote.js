@@ -2,7 +2,7 @@ import { solve, getChallenge } from './pow.js';
 const f = document.getElementById('qf');
 if (f) {
   const $ = id => document.getElementById(id);
-  const PROD = { grid: 'سقف کاذب شبکه‌ای ۶۰×۶۰', drywall: 'سیستم درای‌وال و سقف گچی', grillium: 'سقف گریلیوم (مشبک)', profiles: 'پروفیل و اتصالات درای‌وال', other: 'سایر / نیاز به راهنمایی' };
+  const PROD = { grid: 'سقف کاذب شبکه‌ای ۶۰×۶۰', drywall: 'سیستم درای‌وال و سقف گچی', profiles: 'پروفیل و اتصالات درای‌وال', other: 'سایر / نیاز به راهنمایی' };
   const BLD = { office: 'اداری / تجاری', school: 'آموزشی / دانشگاهی', hospital: 'درمانی / بیمارستانی', hotel: 'هتل / لابی / فرودگاه', home: 'مسکونی', industrial: 'صنعتی / سوله' };
   const q = new URLSearchParams(location.search);
   if (q.get('p') && PROD[q.get('p')]) $('product').value = q.get('p');

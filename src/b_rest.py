@@ -19,10 +19,10 @@ def words(blocks):
         n += len(re.findall(r'\S+', v if isinstance(v, str) else ' '.join(v)))
     return n
 
-ART_IMG = {'estimate': 'projects/p06.jpg', 'grillium': 'show/grillium.jpg', 'default': 'projects/p01.jpg'}
+ART_IMG = {'estimate': 'projects/p06.jpg', 'default': 'projects/p01.jpg'}
 def art_img(a):
     s = a['slug']
-    return 'show/grillium.jpg' if 'grillium' in s else 'show/p04.jpg' if ('drywall' in s or 'profile' in s or 'screw' in s) else 'projects/p01.jpg'
+    return 'show/p04.jpg' if ('drywall' in s or 'profile' in s or 'screw' in s) else 'projects/p01.jpg'
 
 def build_articles():
     cards = ''.join('<a class="card hv pc rv" href="/articles/%s/">%s<div class="b"><h3>%s</h3><p>%s</p><span class="link">ادامه مطلب</span></div></a>' % (a['slug'], rimg(art_img(a), a['title'], '(max-width:760px) 100vw, 33vw'), esc(a['title']), esc(a['desc'])) for a in ARTICLES)
@@ -61,7 +61,7 @@ def build_glossary():
 def build_faq():
     body = (phero('پرسش‌های متداول', 'پاسخ کوتاه و دقیق درباره پروفیل‌ها، سقف‌ها، ضخامت و وزن، ارسال و ساعات کاری.', [('/', 'خانه'), (None, 'پرسش‌های متداول')]) +
             '<section class="sec"><div class="wrap x10">%s</div></section>' % faq_html(FAQ_HUB) + cta('پاسخ خود را پیدا نکردید؟', 'از دستیار هوشمند بپرسید یا کارشناس ما با شما تماس می‌گیرد.'))
-    page('/faq/', 'پرسش‌های متداول | پروفیل، سقف شبکه‌ای، گریلیوم، ارسال', 'پاسخ پرسش‌های پرتکرار: تفاوت F47 و UH36، ضخامت و وزن پروفیل، طول سفارشی، تایل مقاوم رطوبت، مشخصات گریلیوم، ارسال به سراسر کشور و ساعات کاری.', body,
+    page('/faq/', 'پرسش‌های متداول | پروفیل، سقف شبکه‌ای، ارسال', 'پاسخ پرسش‌های پرتکرار: تفاوت F47 و UH36، ضخامت و وزن پروفیل، طول سفارشی، تایل مقاوم رطوبت، ارسال به سراسر کشور و ساعات کاری.', body,
          crumbs=[('/', 'خانه'), ('/faq/', 'پرسش‌های متداول')], priority='0.8', extra_ld=[faq_node(FAQ_HUB, SITE + '/faq/')], kind='FAQPage' if False else 'WebPage')
     for q, a in FAQ_HUB:
         add_doc(q, a, '/faq/', 'پرسش')

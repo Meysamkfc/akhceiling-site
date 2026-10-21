@@ -57,9 +57,9 @@ ORG_ID = SITE + '/#org'
 def org_node():
     return {"@type": ["Organization", "LocalBusiness"], "@id": ORG_ID, "name": NAME_FULL, "alternateName": ["AKH Ceiling Systems", "A.K.H", "صنعت سقف البرز"],
             "url": SITE + '/', "logo": {"@type": "ImageObject", "url": SITE + '/assets/img/emblem.jpg', "width": 560, "height": 260}, "image": SITE + '/assets/og/home.jpg',
-            "description": "تولیدکننده پروفیل درای‌وال (F47، UH36، L25) و سقف کاذب شبکه‌ای ۶۰×۶۰ و گریلیوم؛ کارخانه کهریزک و دفتر مرکزی تهران، ارسال به سراسر کشور.",
+            "description": "تولیدکننده پروفیل درای‌وال (F47، UH36، L25) و سقف کاذب شبکه‌ای ۶۰×۶۰؛ کارخانه کهریزک و دفتر مرکزی تهران، ارسال به سراسر کشور.",
             "telephone": "+982188507585", "email": EMAIL, "priceRange": "$$", "address": dict(NAME_ADDR, **{"@type": "PostalAddress"}),
-            "areaServed": {"@type": "Country", "name": "Iran"}, "knowsAbout": ["Drywall profiles", "Suspended ceilings", "Grillium open-cell aluminium ceiling", "Metal stud framing"],
+            "areaServed": {"@type": "Country", "name": "Iran"}, "knowsAbout": ["Drywall profiles", "Suspended ceilings", "Metal stud framing"],
             "openingHoursSpecification": [{"@type": "OpeningHoursSpecification", "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday"], "opens": "09:00", "closes": "17:00"},
                                           {"@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "09:00", "closes": "13:00"}],
             "contactPoint": [{"@type": "ContactPoint", "telephone": "+982188507585", "contactType": "sales", "areaServed": "IR", "availableLanguage": ["fa"]},
@@ -100,12 +100,6 @@ def diagram(kind):
                 '<rect x="20" y="74" width="360" height="7" fill="#2e3192"/><g fill="#ffffff" stroke="#15173f" stroke-width="2"><rect x="14" y="96" width="82" height="18"/><rect x="102" y="96" width="82" height="18"/><rect x="190" y="96" width="82" height="18"/><rect x="278" y="96" width="82" height="18"/></g>'
                 '<g fill="#f6821f"><rect x="96" y="92" width="6" height="26"/><rect x="184" y="92" width="6" height="26"/><rect x="272" y="92" width="6" height="26"/></g>'
                 '<text x="200" y="148" text-anchor="middle" font-size="15" font-weight="700" fill="#5c5f82">60 × 60</text>')
-    elif kind == 'grillium':
-        mesh = '<path class="dgline" pathLength="1" d="M15 0L30 15L15 30L0 15Z" stroke="#15173f" stroke-width="2" fill="none"/>'
-        body = (slab + '<defs><pattern id="gmesh" width="30" height="30" patternUnits="userSpaceOnUse">%s</pattern></defs>' % mesh +
-                '<rect x="40" y="24" width="320" height="76" fill="url(#gmesh)" stroke="#15173f" stroke-width="2.5"/>'
-                '<rect x="20" y="104" width="360" height="9" fill="#2e3192"/>'
-                '<text x="200" y="148" text-anchor="middle" font-size="15" font-weight="700" fill="#5c5f82">5×5 / 10×10 cm</text>')
     else:
         body = slab
     return '<svg viewBox="0 0 400 160" role="img" aria-label="تصویر شماتیک مقطع سقف" class="dg">%s</svg>' % body
@@ -181,9 +175,9 @@ def header(path, dynamic=False, lang='fa'):
 
 def palette(lang='fa'):
     if lang == 'en':
-        return ('<div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Search"><div class="pbox"><input type="search" placeholder="Search the site: F47, Grillium, panel screw…" aria-label="Search query" autocomplete="off">'
+        return ('<div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Search"><div class="pbox"><input type="search" placeholder="Search the site: F47, grid ceiling, panel screw…" aria-label="Search query" autocomplete="off">'
                 '<div class="pres" role="listbox"></div><div class="pfoot"><span>↑↓ Move</span><span>Enter Open</span><span>Esc Close</span></div></div></div>')
-    return ('<div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="جست‌وجو"><div class="pbox"><input type="search" placeholder="جست‌وجو در سایت: F47، سقف گریلیوم، پیچ پانل…" aria-label="عبارت جست‌وجو" autocomplete="off">'
+    return ('<div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="جست‌وجو"><div class="pbox"><input type="search" placeholder="جست‌وجو در سایت: F47، سقف شبکه‌ای، پیچ پانل…" aria-label="عبارت جست‌وجو" autocomplete="off">'
             '<div class="pres" role="listbox"></div><div class="pfoot"><span>↑↓ حرکت</span><span>Enter باز کردن</span><span>Esc بستن</span></div></div></div>')
 
 def assistant_fab(lang='fa'):

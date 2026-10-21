@@ -14,19 +14,18 @@ if (msgs) {
   const ROOMS = { office: ['اداری / تجاری', 'اداری|دفتر|شرکت|تجاری|فروشگاه|مغازه|پاساژ|مرکز خرید'], school: ['آموزشی / دانشگاهی', 'مدرسه|دانشگاه|کلاس|آموزش|دانشکده'], hospital: ['درمانی / بیمارستانی', 'بیمارستان|درمانگاه|کلینیک|مطب|درمان'],
     commercial: ['لابی / هتل', 'لابی|هتل|رستوران|ورودی|فرودگاه|ترمینال'], home: ['مسکونی', 'مسکونی|خانه|آپارتمان|ویلا|منزل|اتاق خواب|پذیرایی|آشپزخانه'], industrial: ['صنعتی / سوله', 'کارخانه|سوله|انبار|صنعتی|پارکینگ|سالن'] };
   const roomOf = t => { for (const k in ROOMS) if (new RegExp(ROOMS[k][1]).test(t)) return k; return ''; };
-  const sysOf = t => /شبکه|۶۰|60|تایل|سپری|مینرال/.test(t) ? 'grid' : /گریلیوم|مشبک/.test(t) ? 'grillium' : /درای|گچی|f47|uh36|l25|کناف|باکس|نور مخفی|پروفیل/.test(t) ? 'drywall' : '';
+  const sysOf = t => /شبکه|۶۰|60|تایل|سپری|مینرال/.test(t) ? 'grid' : /درای|گچی|f47|uh36|l25|کناف|باکس|نور مخفی|پروفیل/.test(t) ? 'drywall' : '';
   const areaOf = t => { const m = t.match(/(\d+(?:\.\d+)?)\s*(?:متر\s*مربع|مترمربع|متر|m2|m²)/); if (m) return parseFloat(m[1]); const n = t.match(/(^|\s)(\d{2,6})(\s|$)/); return n ? parseFloat(n[2]) : 0; };
   const SYS = {
     grid: { name: 'سقف کاذب شبکه‌ای ۶۰×۶۰', url: '/products/grid-ceiling/', text: 'تایل‌ها قابل برداشتن‌اند و دسترسی به تأسیسات ساده است؛ اجرا سریع و بدون نیاز به رنگ است.' },
-    drywall: { name: 'سقف گچی درای‌وال', url: '/products/drywall/', text: 'سطحی یکپارچه و بدون درز با امکان باکس، نور مخفی و طرح‌های دکوراتیو.' },
-    grillium: { name: 'سقف کاذب گریلیوم', url: '/products/grillium/', text: 'سازه مشبک آلومینیومی با چشمه ۵×۵ یا ۱۰×۱۰ سانتی‌متر و ظاهری باز و مدرن.' }
+    drywall: { name: 'سقف گچی درای‌وال', url: '/products/drywall/', text: 'سطحی یکپارچه و بدون درز با امکان باکس، نور مخفی و طرح‌های دکوراتیو.' }
   };
   const pick = (room, a) => {
     const S = (s, f, cap) => ({ s, img: '/assets/r/' + f + '-960.webp', cap });
     if (room === 'home') return a < 40 ? S('drywall', 'show-p04', 'سقف گچی دکوراتیو — هتل آزادی') : S('drywall', 'show-r8', 'سقف گچی با باکس‌های مربعی — رستوران نیاوران');
     if (room === 'office') return a < 30 ? S('drywall', 'show-d2', 'سقف گچی با باکس') : a < 150 ? S('grid', 'show-p01', 'سقف شبکه‌ای — دانشگاه شهرری') : S('grid', 'show-p06', 'سقف شبکه‌ای — راهرو و فضای بزرگ');
     if (room === 'school' || room === 'hospital') return a < 100 ? S('grid', 'show-p01', 'سقف شبکه‌ای — دانشگاه شهرری') : S('grid', 'show-p07', 'سقف شبکه‌ای — دانشگاه شهید رجایی');
-    if (room === 'commercial') return a < 40 ? S('drywall', 'show-p04', 'سقف گچی دکوراتیو — هتل آزادی') : S('grillium', 'show-grillium', 'سقف گریلیوم با نورپردازی توکار');
+    if (room === 'commercial') return a < 40 ? S('drywall', 'show-p04', 'سقف گچی دکوراتیو — هتل آزادی') : S('grid', 'show-p06', 'سقف شبکه‌ای — راهرو و فضای بزرگ');
     return a < 200 ? S('grid', 'show-p12', 'سقف شبکه‌ای — کارخانه سینک اخوان') : S('grid', 'show-p13', 'سقف شبکه‌ای — مجموعه تن‌ماهی ماسی');
   };
 
@@ -66,8 +65,7 @@ if (msgs) {
     if (area) ctx.area = area; if (room) ctx.room = room; if (sys) ctx.sys = sys;
     const wantsEstimate = /برآورد|محاسبه|چند شاخه|چقدر پروفیل|چقدر متریال|چه مقدار|تعداد|متریال|پروفیل لازم|لازم دارم|نیاز دارم|لازمه|حساب/.test(n);
     const wantsContact = /تماس|کارشناس|قیمت|سفارش|خرید|استعلام|پیش فاکتور|پیشفاکتور|شماره/.test(n);
-    if (area && (wantsEstimate || sys) && sys !== 'grillium') return estimateReply(area, sys || 'drywall');
-    if (area && sys === 'grillium') return say([P('سقف گریلیوم بر اساس ', strong('متر مربع'), ' شمارش می‌شود. برای ', strong(fa(area) + ' متر مربع'), ' حدود ', strong(fa(Math.ceil(area * 1.1)) + ' متر مربع'), ' (با ۱۰٪ پرت) سازه مشبک لازم است؛ اندازه چشمه (۵×۵ یا ۱۰×۱۰) و زیرسازی آویز را کارشناس از روی نقشه تعیین می‌کند.'), P(link('مشخصات فنی گریلیوم', '/products/grillium/'))]).then(offerContact);
+    if (area && (wantsEstimate || sys)) return estimateReply(area, sys || 'drywall');
     if ((area && ctx.room) || (room && ctx.area)) return sampleReply();
     if (wantsContact && !/وزن|ضخامت|طول|چیست|چه تفاوت/.test(n)) return contactReply('کارشناس فروش قیمت و پیشنهاد فنی را اعلام می‌کند.');
     await load; const r = ix ? search(ix, raw, 3) : [];
