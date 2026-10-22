@@ -59,7 +59,23 @@ if (msgs) {
     const raw = input.value.trim(); if (!raw) return; input.value = '';
     await say(t(raw), 'me', 0); await respond(raw);
   }
+  const isEnglish = s => { const letters = s.replace(/[^A-Za-z؀-ۿ]/g, ''); if (!letters) return false; const latin = (letters.match(/[A-Za-z]/g) || []).length; return latin / letters.length > 0.6; };
+  async function respondEN(raw) {
+    const t2 = raw.toLowerCase();
+    const sys = /grid|60x60|tile|t-?bar/.test(t2) ? 'grid' : /f47|uh36|l25|drywall|profile|stud|track/.test(t2) ? 'drywall' : '';
+    const areaM = t2.match(/(\d+(?:\.\d+)?)\s*(?:sq\s*m|sqm|m2|m²|square met(?:er|re)s?)/);
+    if (sys) {
+      const info = sys === 'grid' ? 'Removable 60×60cm grid ceiling tiles with easy access to the services above the ceiling.' : 'Seamless drywall ceiling system built from galvanized F47, UH36 and L25 profiles.';
+      return say([P(strong(SYS[sys].name + ' (' + sys + ')'), ' — ', info), P('See the full page (in Persian — your browser can translate it): ', link(SYS[sys].name, SYS[sys].url)), P(areaM ? 'For a material estimate or a quote, please use the ' : 'For pricing, please use the ', link('quote request form', '/quote/'), ' or call ', strong('+98 21 8850 7585'), '.')]).then(offerContactEN);
+    }
+    return say([P('Hi! I can give a short answer in English, but full technical detail is only in Persian on this site (your browser can translate those pages).'), P('AKH manufactures galvanized drywall profiles (F47, UH36, L25) and 60×60cm grid suspended ceilings, shipped nationwide from our Kahrizak factory.'), P('See: ', link('English homepage', '/en/'), ' · ', link('Request a quote', '/quote/'), ' · call ', strong('+98 21 8850 7585'), '.')]).then(offerContactEN);
+  }
+  function offerContactEN() {
+    const b = el('div', 'offer'); const btn = el('button', 'btn sm', 'Request a call back'); btn.type = 'button'; btn.onclick = () => contactReply('A sales expert will confirm pricing and technical details.'); b.appendChild(btn);
+    msgs.appendChild(b); scroll();
+  }
   async function respond(raw) {
+    if (isEnglish(raw)) return respondEN(raw);
     const n = norm(raw); ctx.q = raw;
     const area = areaOf(n) || 0, room = roomOf(n), sys = sysOf(n);
     if (area) ctx.area = area; if (room) ctx.room = room; if (sys) ctx.sys = sys;

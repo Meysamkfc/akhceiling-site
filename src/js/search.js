@@ -7,7 +7,12 @@ if (inp && out) {
   const run = async () => {
     await ready; out.replaceChildren(); const q = inp.value.trim(); if (!q) return;
     const r = search(ix, q, 20);
-    if (!r.length) { out.appendChild(el('p', 'lead', 'نتیجه‌ای پیدا نشد. از «دستیار هوشمند» بپرسید یا با ۰۲۱-۸۸۵۰۷۵۸۵ تماس بگیرید.')); return; }
+    if (!r.length) {
+      const latin = (q.match(/[A-Za-z]/g) || []).length / Math.max(1, q.replace(/[^A-Za-z؀-ۿ]/g, '').length);
+      out.appendChild(el('p', 'lead', 'نتیجه‌ای پیدا نشد. از «دستیار هوشمند» بپرسید یا با ۰۲۱-۸۸۵۰۷۵۸۵ تماس بگیرید.'));
+      if (latin > 0.6) { const a = el('a', 'card pad', ''); a.href = '/en/'; a.style.display = 'block'; a.style.marginTop = '8px'; a.textContent = 'English homepage →'; out.appendChild(a); }
+      return;
+    }
     r.forEach(x => { const a = el('a', 'card pad'); a.href = x.d.u; a.style.display = 'block'; a.style.marginBottom = '12px'; a.appendChild(el('h3', '', x.d.t)); a.appendChild(el('p', '', x.d.x.slice(0, 160) + '…')); a.appendChild(el('small', '', x.d.g)); out.appendChild(a); });
   };
   const q0 = new URLSearchParams(location.search).get('q'); if (q0) { inp.value = q0; run(); }
