@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """Site 2 builder:  python build2.py   ->  ../site/   (static, strict CSP, SRI, cache-busted assets) + ../server/templates/_base.html"""
 import subprocess, base64, sys
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 from b_core import *
 import b_core
 from b_pages import *
