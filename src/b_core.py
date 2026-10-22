@@ -84,6 +84,9 @@ def icon(name):
         'user': '<circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
         'menu': '<path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
         'bot': '<rect x="5" y="9" width="14" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="3.3" r="1.5" fill="currentColor"/><circle cx="9" cy="14.5" r="1.3" fill="currentColor"/><circle cx="15" cy="14.5" r="1.3" fill="currentColor"/><path d="M9 18h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+        'mail': '<rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+        'telegram': '<path d="M20.5 4L3 11.2l5 1.8m12.5-9L17 20l-6.5-5m10-11L10.5 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>',
+        'instagram': '<rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="7" r="1" fill="currentColor"/>',
     }[name]
     return '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">%s</svg>' % d
 
@@ -137,6 +140,16 @@ def lang_switch(path, lang):
         return ('/', 'فارسی')
     return None
 
+def topbar(lang='fa'):
+    tel = 'tel:+98' + PHONE.replace('-', '').lstrip('0')
+    if lang == 'en':
+        return ('<div class="topbar"><div class="wrap in"><div class="tb-c"><a href="%s">%s</a><a href="mailto:%s">%s</a></div>'
+                '<div class="tb-s"><a href="https://t.me/%s" aria-label="Telegram" rel="noopener">%s</a><a href="https://instagram.com/%s" aria-label="Instagram" rel="noopener">%s</a></div></div></div>'
+                % (tel, PHONE, EMAIL, EMAIL, TELEGRAM, icon('telegram'), INSTAGRAM, icon('instagram')))
+    return ('<div class="topbar"><div class="wrap in"><div class="tb-c"><a href="%s">%s</a><a href="mailto:%s">%s</a></div>'
+            '<div class="tb-s"><a href="https://t.me/%s" aria-label="تلگرام" rel="noopener">%s</a><a href="https://instagram.com/%s" aria-label="اینستاگرام" rel="noopener">%s</a></div></div></div>'
+            % (tel, PHONE_FA, EMAIL, EMAIL, TELEGRAM, icon('telegram'), INSTAGRAM, icon('instagram')))
+
 def header(path, dynamic=False, lang='fa'):
     if lang == 'en':
         li = ''.join('<li><a href="%s"%s>%s</a></li>' % (href, ' aria-current="page"' if path == href else '', label) for href, label, _ in EN_NAV)
@@ -144,7 +157,7 @@ def header(path, dynamic=False, lang='fa'):
         phoned = '<a class="ibtn fill" href="/contact/" aria-label="Contact us">%s<span class="lbl">Contact</span></a>' % icon('phone')
         sw = lang_switch(path, lang)
         swlink = '<a class="ibtn hide-m" href="%s">%s</a>' % sw if sw else ''
-        return ('<header class="hdr" id="hdr"><div class="wrap in"><a class="brand" href="/en/"><img src="/assets/img/emblem.jpg" alt="%s logo" width="560" height="260"><span>%s</span></a>'
+        return (topbar(lang) + '<header class="hdr" id="hdr"><div class="wrap in"><a class="brand" href="/en/"><img src="/assets/img/emblem.jpg" alt="%s logo" width="560" height="260"><span>%s</span></a>'
                 '<ul class="nav" id="nav">%s</ul><div class="tools">'
                 '<button class="ibtn hide-m" type="button" data-search aria-label="Search the site">%s<span class="lbl">Search</span><span class="kbd">Ctrl K</span></button>%s%s%s'
                 '<button class="ibtn burger" id="burger" type="button" aria-expanded="false" aria-controls="nav">%s<span class="lbl">Menu</span></button></div></div></header>'
@@ -167,7 +180,7 @@ def header(path, dynamic=False, lang='fa'):
     phoned = '<a class="ibtn fill" href="/contact/" aria-label="تماس با ما">%s<span class="lbl">تماس</span></a>' % icon('phone')
     sw = lang_switch(path, lang)
     swlink = '<a class="ibtn hide-m" href="%s">%s</a>' % sw if sw else ''
-    return ('<header class="hdr" id="hdr"><div class="wrap in"><a class="brand" href="/"><img src="/assets/img/emblem.jpg" alt="نشان %s" width="560" height="260"><span>%s</span></a>'
+    return (topbar(lang) + '<header class="hdr" id="hdr"><div class="wrap in"><a class="brand" href="/"><img src="/assets/img/emblem.jpg" alt="نشان %s" width="560" height="260"><span>%s</span></a>'
             '<ul class="nav" id="nav">%s</ul><div class="tools">'
             '<button class="ibtn hide-m" type="button" data-search aria-label="جست‌وجو در سایت">%s<span class="lbl">جست‌وجو</span><span class="kbd">Ctrl K</span></button>%s%s%s'
             '<button class="ibtn burger" id="burger" type="button" aria-expanded="false" aria-controls="nav">%s<span class="lbl">منو</span></button></div></div></header>'

@@ -3,13 +3,14 @@
 :root{
   --paper:#e4ebf8;--paper2:#cddbef;--card:#f3f7fc;--ink:#15173f;--ink2:#2d2f5e;--mut:#4f5a7a;--line:#b9c9e3;
   --navy:#2e3192;--navy2:#23266e;--night:#15173f;--or:#d9661a;--or2:#f0813a;--ord:#9c4610;
-  --max:1280px;--hh:72px;--ease:cubic-bezier(.2,.7,.2,1);
+  --max:1280px;--hh:72px;--tbh:38px;--stack:calc(var(--hh) + var(--tbh));--ease:cubic-bezier(.2,.7,.2,1);
 }
 .night,.hero{position:relative}
 .night:before,.hero:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
   background-image:url("/assets/img/noise.webp")}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hh) + 20px);-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--stack) + 20px);-webkit-text-size-adjust:100%}
+@media (max-width:760px){:root{--stack:var(--hh)}}
 body{font-family:Vazirmatn,Tahoma,sans-serif;background:var(--paper);color:var(--ink);line-height:1.95;font-size:16.5px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img,video,canvas,svg{display:block;max-width:100%}
 img{height:auto}
@@ -60,11 +61,21 @@ html[dir="ltr"] .btn:hover:after{transform:translateX(6px)}
 .link{font-weight:800;border-bottom:2px solid var(--or);padding-bottom:2px;transition:.2s}
 .link:hover{color:var(--ord)}
 
-/* ---------- header ---------- */
-.hdr{position:fixed;inset-inline:0;top:0;z-index:300;height:var(--hh);transition:background .35s,box-shadow .35s,transform .45s var(--ease);color:#fff}
+/* ---------- topbar + header ---------- */
+.topbar{position:fixed;inset-inline:0;top:0;z-index:301;height:var(--tbh);background:var(--night);color:#fff;display:flex;align-items:center;font-size:12px}
+.topbar .in{display:flex;align-items:center;justify-content:space-between;width:100%}
+.topbar .tb-c{display:flex;gap:20px}
+.topbar .tb-c a{color:#d6d8f0}
+.topbar .tb-s{display:flex;gap:12px}
+.topbar .tb-s a{color:#fff;opacity:.85;display:flex}
+.topbar .tb-s svg{width:16px;height:16px}
+body.inner .topbar{background:var(--night)}
+@media (max-width:760px){.topbar{display:none}}
+.hdr{position:fixed;inset-inline:0;top:var(--tbh);z-index:300;height:var(--hh);transition:background .35s,box-shadow .35s,transform .45s var(--ease),top .35s;color:#fff}
 .hdr .in{height:100%;display:flex;align-items:center;gap:28px}
 .hdr.solid{background:rgba(246,243,238,.94);color:var(--ink);box-shadow:0 1px 0 var(--line)}
 body.inner .hdr{background:rgba(246,243,238,.96);color:var(--ink);box-shadow:0 1px 0 var(--line)}
+@media (max-width:760px){.hdr{top:0}}
 .brand{display:flex;align-items:center;gap:12px;font-weight:900;font-size:17px;white-space:nowrap}
 .brand img{height:42px;width:auto;background:#fff;padding:4px 8px;border:1px solid #ffffff55}
 .nav{display:flex;gap:2px;margin-inline-start:auto;align-items:center}
@@ -84,7 +95,7 @@ body.inner .hdr{background:rgba(246,243,238,.96);color:var(--ink);box-shadow:0 1
 .kbd{font-size:11.5px;border:1px solid currentColor;padding:0 6px;opacity:.7;direction:ltr}
 .burger{display:none}
 main{padding-top:0}
-body.inner main{padding-top:var(--hh)}
+body.inner main{padding-top:var(--stack)}
 
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:100vh;min-height:100svh;background:var(--night);color:#fff;overflow:hidden;display:flex;align-items:flex-end;isolation:isolate}
@@ -307,7 +318,7 @@ textarea{min-height:120px;resize:vertical}
 
 /* ---------- panels (customer / staff) ---------- */
 .pnl{display:grid;grid-template-columns:250px 1fr;gap:34px;align-items:start;padding:44px 0 90px}
-.side{border:1px solid var(--ink);background:var(--card);padding:14px;position:sticky;top:calc(var(--hh) + 18px)}
+.side{border:1px solid var(--ink);background:var(--card);padding:14px;position:sticky;top:calc(var(--stack) + 18px)}
 .side .who{padding:6px 14px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
 .side .who small{display:block;color:var(--mut)}
 .side a,.side button{display:block;width:100%;text-align:start;padding:11px 14px;font-weight:800;background:none;border:0}
