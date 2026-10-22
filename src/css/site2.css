@@ -95,6 +95,15 @@ body.inner main{padding-top:var(--hh)}
 .hero h1{max-width:15ch;text-shadow:0 8px 60px #000a}
 .hero .lead{color:#d6d8f0;margin-top:22px;max-width:52ch}
 .hero .row{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.hero .bgphoto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero .mark{font-weight:800;line-height:1;font-size:clamp(28px,5vw,58px);letter-spacing:.03em;font-family:Arial,Helvetica,sans-serif;text-shadow:0 8px 40px #000a}
+.hero .mark i{display:block;width:46px;height:2px;background:var(--or);margin:16px 0}
+.hero .mark span{display:block;font-size:clamp(11px,1.1vw,15px);color:#e4e6f5;letter-spacing:.14em;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;font-weight:700}
+.hero .feats{display:grid;grid-template-columns:1fr 1fr;gap:20px 34px;margin-top:32px;max-width:420px}
+.hero .feats div{display:flex;align-items:center;gap:12px}
+.hero .feats b{font-weight:700;font-size:14px}
+.hero .ic{width:40px;height:40px;border-radius:50%;background:#ffffff14;border:1.5px solid #ffffff38;display:flex;align-items:center;justify-content:center;flex:none}
+.hero .ic svg{width:20px;height:20px}
 .finder{margin-top:46px;display:grid;grid-template-columns:1.1fr .8fr auto;gap:0;max-width:760px;background:#fffdf9f2;color:var(--ink);border:1px solid #fff;box-shadow:0 30px 70px -30px #000}
 .finder label{display:block;font-size:12px;font-weight:800;color:var(--mut);padding:12px 18px 0}
 .finder select,.finder input{width:100%;border:0;background:transparent;padding:2px 18px 12px;font-weight:700;font-size:16px;outline:0}
