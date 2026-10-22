@@ -20,14 +20,15 @@ def product_ld(p, url, d):
 def build_home():
     img_p = 'projects/p02.jpg'
     base, sw, sh = variants(img_p)
-    variants('projects/p02-flat.jpg')  # perspective-corrected crop, used as the 3D hero's centerpiece texture
     finder = ('<form class="finder" id="finder" novalidate aria-label="پیشنهاد سریع سقف"><div><label for="fr">کاربری فضا</label><select id="fr"><option value="office">اداری / تجاری</option><option value="home">مسکونی</option>'
               '<option value="school">آموزشی / دانشگاهی</option><option value="hospital">درمانی</option><option value="commercial">لابی / هتل / رستوران</option><option value="industrial">صنعتی / سوله</option></select></div>'
               '<div><label for="fa">متراژ (متر مربع)</label><input id="fa" inputmode="numeric" placeholder="مثلاً ۸۰" autocomplete="off"></div><button class="btn" type="submit">پیشنهاد هوشمند</button></form>')
-    hero = ('<section class="hero" id="hero" aria-label="معرفی"><!-- hero3d canvas temporarily disabled, see memory note "کل پروژه" to restore --><div class="wrap in">'
-            '<h1><span style="display:block;font-size:.4em;font-weight:800;margin-bottom:6px;color:#d6d8f0">%s</span>قدمت، <em class="o">%s</em></h1><p class="lead">%s تولید پروفیل درای‌وال (F47، UH36، L25) و سقف شبکه‌ای ۶۰×۶۰؛ مستقیم از کارخانه کهریزک تا پروژه شما.</p>'
-            '<div class="row"><a class="btn" href="/quote/">درخواست قیمت</a><a class="btn line" href="/products/">مشاهده محصولات</a></div>%s</div><span class="scrollcue" aria-hidden="true">اسکرول کنید</span></section>'
-            % (esc(NAME_FULL), flip_text('نماد کیفیت', loop=False), FOUNDED_NOTE + ' تجربه.', finder))
+    hero = ('<section class="sec"><!-- hero3d canvas retired in favour of a real photo; see memory note "کل پروژه" --><div class="wrap"><div class="split">'
+            '<div><span style="display:block;font-weight:800;margin-bottom:10px;color:var(--navy)">%s</span><h1>زیبایی در جزئیات، <em class="o">اعتماد در اجرا</em></h1><p class="lead">%s تولید پروفیل درای‌وال (F47، UH36، L25) و سقف شبکه‌ای ۶۰×۶۰؛ مستقیم از کارخانه کهریزک تا پروژه شما.</p>'
+            '<div class="row"><a class="btn" href="/quote/">درخواست قیمت</a><a class="btn line" href="/products/">مشاهده محصولات</a></div>%s</div>'
+            '<div class="fig rv">%s</div>'
+            '</div></div></section>'
+            % (esc(NAME_FULL), FOUNDED_NOTE + ' تجربه.', finder, rimg('show/p04.jpg', 'سقف گچی دکوراتیو با نورپردازی مخفی — نمونه اجرای واقعی', '(max-width:1100px) 100vw, 50vw', eager=True)))
     tick = '<div class="ticker" aria-hidden="true"><div>' + ('<span>پروفیل F47</span><span>پروفیل UH36</span><span>نبشی L25</span><span>سقف شبکه‌ای ۶۰×۶۰</span><span>درای‌وال</span><span>تایل آکوستیک</span><span>طول سفارشی</span>' * 4) + '</div></div>'
     pn = ''
     for i, p in enumerate(ALLP):
