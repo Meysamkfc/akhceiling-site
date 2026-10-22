@@ -18,21 +18,17 @@ def product_ld(p, url, d):
 
 # ============================================================ HOME
 def build_home():
-    img_p = 'show/hero-akh-lobby.jpg'
+    img_p = 'show/hero-grid60.jpg'
     base, sw, sh = variants(img_p)
-    feats = ''.join('<div class="feat"><span class="ic">%s</span><b>%s</b></div>' % (svg, label) for svg, label in [
-        ('<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke-linecap="round"/></svg>', 'مشاوره فنی پروژه'),
-        ('<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6l7-3z" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>', 'کیفیت قابل اعتماد'),
-        ('<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 3l8 4-8 4-8-4 8-4z" stroke-linejoin="round"/><path d="M4 11l8 4 8-4M4 15l8 4 8-4" stroke-linejoin="round"/></svg>', 'تنوع محصولات'),
-        ('<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M4 13v-1a8 8 0 0116 0v1" stroke-linecap="round"/><rect x="2.5" y="13" width="4" height="6" rx="2"/><rect x="17.5" y="13" width="4" height="6" rx="2"/></svg>', 'پشتیبانی تخصصی')])
-    hero = ('<section class="hs"><!-- hero3d canvas retired in favour of a real photo; see memory note "کل پروژه" -->'
-            '<div class="txt"><span class="u1">%s</span><h1>قدمت، <em class="o">نماد کیفیت</em></h1>'
-            '<p class="lead">%s تولید پروفیل درای‌وال (F47، UH36، L25) و سقف شبکه‌ای ۶۰×۶۰؛ مستقیم از کارخانه کهریزک تا پروژه شما.</p>'
-            '<div class="feats">%s</div>'
-            '<div class="row"><a class="btn" href="/quote/">درخواست قیمت</a><a class="btn line" href="/products/">مشاهده محصولات</a></div></div>'
-            '<div class="pic">%s<div class="mark"><b>A.K.H</b><span>CEILING</span></div><div class="tag"><b>Heritage,</b><p>A mark of quality</p></div></div>'
-            '</section>'
-            % (esc(NAME_FULL), FOUNDED_NOTE + ' تجربه.', feats, rimg(img_p, 'سقف کاذب شبکه‌ای ۶۰×۶۰ در لابی مدرن', '(max-width:900px) 100vw, 48vw', eager=True)))
+    finder = ('<form class="finder" id="finder" novalidate aria-label="پیشنهاد سریع سقف"><div><label for="fr">کاربری فضا</label><select id="fr"><option value="office">اداری / تجاری</option><option value="home">مسکونی</option>'
+              '<option value="school">آموزشی / دانشگاهی</option><option value="hospital">درمانی</option><option value="commercial">لابی / هتل / رستوران</option><option value="industrial">صنعتی / سوله</option></select></div>'
+              '<div><label for="fa">متراژ (متر مربع)</label><input id="fa" inputmode="numeric" placeholder="مثلاً ۸۰" autocomplete="off"></div><button class="btn" type="submit">پیشنهاد هوشمند</button></form>')
+    hero = ('<section class="sec"><!-- hero3d canvas retired in favour of a real photo; see memory note "کل پروژه" --><div class="wrap"><div class="split">'
+            '<div><span style="display:block;font-weight:800;margin-bottom:10px;color:var(--navy)">%s</span><h1>زیبایی در جزئیات، <em class="o">اعتماد در اجرا</em></h1><p class="lead">%s تولید پروفیل درای‌وال (F47، UH36، L25) و سقف شبکه‌ای ۶۰×۶۰؛ مستقیم از کارخانه کهریزک تا پروژه شما.</p>'
+            '<div class="row"><a class="btn" href="/quote/">درخواست قیمت</a><a class="btn line" href="/products/">مشاهده محصولات</a></div>%s</div>'
+            '<div class="fig rv"><span style="position:absolute;z-index:2;bottom:24px;left:24px;background:var(--navy);color:#fff;padding:10px 20px;border-radius:2px;font-weight:800;font-size:14px;box-shadow:0 8px 22px rgba(0,0,0,.3)">قدمت، نماد کیفیت</span>%s</div>'
+            '</div></div></section>'
+            % (esc(NAME_FULL), FOUNDED_NOTE + ' تجربه.', finder, rimg('show/hero-grid60.jpg', 'سقف کاذب شبکه‌ای ۶۰×۶۰ با نورپردازی توکار', '(max-width:1100px) 100vw, 50vw', eager=True)))
     tick = '<div class="ticker" aria-hidden="true"><div>' + ('<span>پروفیل F47</span><span>پروفیل UH36</span><span>نبشی L25</span><span>سقف شبکه‌ای ۶۰×۶۰</span><span>درای‌وال</span><span>تایل آکوستیک</span><span>طول سفارشی</span>' * 4) + '</div></div>'
     pn = ''
     for i, p in enumerate(ALLP):
