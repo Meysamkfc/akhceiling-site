@@ -25,13 +25,14 @@ def build_home():
         ('<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6l7-3z" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>', 'کیفیت قابل اعتماد'),
         ('<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 3l8 4-8 4-8-4 8-4z" stroke-linejoin="round"/><path d="M4 11l8 4 8-4M4 15l8 4 8-4" stroke-linejoin="round"/></svg>', 'تنوع محصولات'),
         ('<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M4 13v-1a8 8 0 0116 0v1" stroke-linecap="round"/><rect x="2.5" y="13" width="4" height="6" rx="2"/><rect x="17.5" y="13" width="4" height="6" rx="2"/></svg>', 'پشتیبانی تخصصی')])
-    hero = ('<section class="hero" id="hero" aria-label="معرفی">%s<div class="wrap in">'
-            '<div class="mark">A.K.H<i></i><span>Heritage, a mark of quality</span></div>'
+    hero = ('<section class="hs"><!-- hero3d canvas retired in favour of a real photo; see memory note "کل پروژه" -->'
+            '<div class="txt"><span class="u1">%s</span><h1>زیبایی در جزئیات، <em class="o">اعتماد در اجرا</em></h1>'
             '<p class="lead">%s تولید پروفیل درای‌وال (F47، UH36، L25) و سقف شبکه‌ای ۶۰×۶۰؛ مستقیم از کارخانه کهریزک تا پروژه شما.</p>'
             '<div class="feats">%s</div>'
-            '<div class="row"><a class="btn" href="/quote/">درخواست قیمت</a><a class="btn line" href="/products/">مشاهده محصولات</a></div>'
-            '</div></section>'
-            % (rimg(img_p, 'سقف کاذب شبکه‌ای ۶۰×۶۰ در لابی مدرن', '100vw', cls='bgphoto', eager=True), FOUNDED_NOTE + ' تجربه.', feats))
+            '<div class="row"><a class="btn" href="/quote/">درخواست قیمت</a><a class="btn line" href="/products/">مشاهده محصولات</a></div></div>'
+            '<div class="pic">%s<div class="tag"><b>A.K.H</b><p>Heritage, a mark of quality</p></div></div>'
+            '</section>'
+            % (esc(NAME_FULL), FOUNDED_NOTE + ' تجربه.', feats, rimg(img_p, 'سقف کاذب شبکه‌ای ۶۰×۶۰ در لابی مدرن', '(max-width:900px) 100vw, 48vw', eager=True)))
     tick = '<div class="ticker" aria-hidden="true"><div>' + ('<span>پروفیل F47</span><span>پروفیل UH36</span><span>نبشی L25</span><span>سقف شبکه‌ای ۶۰×۶۰</span><span>درای‌وال</span><span>تایل آکوستیک</span><span>طول سفارشی</span>' * 4) + '</div></div>'
     pn = ''
     for i, p in enumerate(ALLP):
