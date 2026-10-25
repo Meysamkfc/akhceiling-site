@@ -92,7 +92,7 @@ def build_home_en():
     for i, p in enumerate(ALLP):
         pn += ('<a class="pn" href="/en/products/%s/">%s<span class="idx">0%d</span><div class="t"><small>%s</small><h3>%s</h3><p>%s</p></div></a>' %
                (p['slug'], rimg(SYS_IMG[p['slug']], SYS_IMG_ALT_EN[p['slug']], '(max-width:760px) 100vw, 40vw'), i + 1, ' &middot; '.join(EN_TAGS.get(p['slug'], p['tags'])[:3]), EN_PRODUCT_NAME[p['slug']], EN_PRODUCT_SHORT[p['slug']]))
-    s1 = ('<section class="sec"><div class="wrap">%s<div class="head"><h2>Two ceiling systems, <em class="o">one manufacturer</em></h2><p class="lead">From seamless drywall ceilings to removable grid ceilings; all directly manufactured with transparent technical specifications.</p>'
+    s1 = ('<section class="sec"><div class="wrap">%s<div class="head"><h2>Two ceiling systems, <em class="o">one manufacturer</em></h2><p class="lead">From seamless drywall ceilings to removable grid ceilings; all directly manufactured with transparent technical specifications.</p></div>'
           '<div class="panels rv">%s</div></div></section>' % (kicker('01', 'Products'), pn))
     nums = [('220', '+', 'tonnes of monthly production capacity'), ('11', '', 'production and press lines'), ('40', '+', 'years of experience in construction'), ('73,000', '', 'square metres; our largest project')]
     nb = ''.join('<div class="rv"><b>%s<em>%s</em></b><span>%s</span></div>' % (n, u, t) for n, u, t in nums)
