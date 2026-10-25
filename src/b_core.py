@@ -195,8 +195,8 @@ def palette(lang='fa'):
 
 def assistant_fab(lang='fa'):
     if lang == 'en':
-        return '<a class="fab" href="/assistant/" aria-label="Chat with the smart assistant">%s<span>Smart Assistant</span></a>' % icon('bot')
-    return ('<a class="fab" href="/assistant/" aria-label="گفت‌وگو با دستیار هوشمند">%s<span>دستیار هوشمند</span></a>' % icon('bot'))
+        return '<div class="fab-tip" aria-hidden="true">Got a question? Chat with us now</div><a class="fab" href="/assistant/" aria-label="Chat with the smart assistant">%s<span>Smart Assistant</span></a>' % icon('bot')
+    return ('<div class="fab-tip" aria-hidden="true">سؤالی داری؟ همین حالا با ما چت کن</div><a class="fab" href="/assistant/" aria-label="گفت‌وگو با دستیار هوشمند">%s<span>دستیار هوشمند</span></a>' % icon('bot'))
 
 def lightbox():
     return ('<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="نمایش عکس"><button class="x" aria-label="بستن">✕</button><button class="n" aria-label="عکس بعدی">‹</button>'

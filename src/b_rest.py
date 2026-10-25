@@ -26,7 +26,7 @@ def art_img(a):
 
 def build_articles():
     cards = ''.join('<a class="card hv pc rv" href="/articles/%s/">%s<div class="b"><h3>%s</h3><p>%s</p><span class="link">ادامه مطلب</span></div></a>' % (a['slug'], rimg(art_img(a), a['title'], '(max-width:760px) 100vw, 33vw'), esc(a['title']), esc(a['desc'])) for a in ARTICLES)
-    body = (phero('مقالات و آموزش', 'راهنمای انتخاب، اجزای سیستم‌ها و نکات فنی سقف کاذب و درای‌وال؛ همه بر پایه اطلاعات رسمی کاتالوگ شرکت.', [('/', 'خانه'), (None, 'مقالات')]) +
+    body = (phero('مقالات و آموزش', 'مستندات کامل به همراه آموزش قدم‌به‌قدم درباره انتخاب، اجزای سیستم‌ها و نکات فنی سقف کاذب و درای‌وال؛ همه بر پایه اطلاعات رسمی کاتالوگ شرکت.', [('/', 'خانه'), (None, 'مقالات')]) +
             '<section class="sec"><div class="wrap"><h2 class="sr">فهرست مقالات</h2><div class="grid g3">%s</div></div></section>' % cards + cta())
     page('/articles/', 'مقالات آموزشی سقف کاذب و درای‌وال', 'مقالات تخصصی صنعت سقف البرز خاورمیانه: انتخاب سقف کاذب، اجزای سقف شبکه‌ای، پروفیل‌های درای‌وال، پیچ‌ها، ضخامت ورق و برآورد متریال.', body,
          crumbs=[('/', 'خانه'), ('/articles/', 'مقالات')], priority='0.8', freq='weekly', kind='CollectionPage',
