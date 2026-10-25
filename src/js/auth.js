@@ -7,16 +7,16 @@ import { solve, getChallenge } from './pow.js';
   if (country && cityIr && cityOther) {
     const syncCity = () => {
       const iran = country.value === 'ایران';
-      cityIr.style.display = iran ? '' : 'none'; cityIr.required = iran; cityIr.disabled = !iran;
+      cityIr.hidden = !iran; cityIr.required = iran; cityIr.disabled = !iran;
       const other = !iran || cityIr.value === 'سایر';
-      cityOther.style.display = other ? '' : 'none'; cityOther.disabled = !other;
+      cityOther.hidden = !other; cityOther.disabled = !other;
       if (other) cityOther.focus();
     };
     country.addEventListener('change', syncCity); cityIr.addEventListener('change', syncCity); syncCity();
   }
   const job = document.getElementById('job'), jobOther = document.getElementById('job_other');
   if (job && jobOther) {
-    const syncJob = () => { const other = job.value === 'سایر'; jobOther.style.display = other ? '' : 'none'; jobOther.disabled = !other; if (other) jobOther.focus(); };
+    const syncJob = () => { const other = job.value === 'سایر'; jobOther.hidden = !other; jobOther.disabled = !other; if (other) jobOther.focus(); };
     job.addEventListener('change', syncJob); syncJob();
   }
 })();

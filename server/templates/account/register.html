@@ -11,9 +11,9 @@
 <div class="row2"><div><label for="country">کشور *</label><select id="country" name="country" required>{% for c in countries %}<option value="{{ c }}" {{ 'selected' if (form.get('country') or 'ایران')==c }}>{{ c }}</option>{% endfor %}</select></div>
 <div><label for="city">شهر *</label>
 <select id="city_ir" name="city_ir">{% for c in cities_iran %}<option value="{{ c }}" {{ 'selected' if (form.get('city') or 'تهران')==c }}>{{ c }}</option>{% endfor %}</select>
-<input id="city_other" name="city_other" value="" maxlength="60" placeholder="نام شهر" style="display:none"></div></div>
+<input id="city_other" name="city_other" value="" maxlength="60" placeholder="نام شهر" hidden></div></div>
 <div><label for="job">شغل</label><select id="job" name="job">{% for j in jobs %}<option value="{{ j }}" {{ 'selected' if (form.get('job') or 'کناف‌کار')==j }}>{{ j }}</option>{% endfor %}</select>
-<input id="job_other" name="job_other" value="" maxlength="60" placeholder="شغل خود را بنویسید" style="display:none" autocomplete="organization-title"></div>
+<input id="job_other" name="job_other" value="" maxlength="60" placeholder="شغل خود را بنویسید" hidden autocomplete="organization-title"></div>
 <div class="row2"><div><label for="password">رمز عبور *</label><input id="password" name="password" type="password" required minlength="10" autocomplete="new-password"></div>
 <div><label for="password2">تکرار رمز *</label><input id="password2" name="password2" type="password" required minlength="8" autocomplete="new-password"></div></div>
 <p class="note">رمز عبور حداقل ۱۰ کاراکتر، شامل حرف لاتین و عدد و غیرقابل‌حدس باشد.</p>
@@ -21,4 +21,4 @@
 <button class="btn" type="submit">ثبت‌نام</button></form>
 <p class="note">قبلاً ثبت‌نام کرده‌اید؟ <a href="/account/login/">ورود</a></p>
 </div></div>{% endblock %}
-{% block scripts %}<script src="/assets/js/auth.js?v=f376e1d912" integrity="sha384-bD+/sEudlGdHffX5haqqI/LKTqBfc4Cej++gP/ur6nLH/fuoFVTe4jZB6YpGdn0P" crossorigin="anonymous" defer></script>{% endblock %}
+{% block scripts %}<script src="/assets/js/auth.js?v=66bd49d815" integrity="sha384-IlOMmb6yOswIO4aB6v+RLPNj35BAlGi18ttjh5Hm93a2tHn+VgxYYwpWynzctjRK" crossorigin="anonymous" defer></script>{% endblock %}
