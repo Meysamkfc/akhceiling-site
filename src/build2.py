@@ -70,10 +70,11 @@ def bundle_js():
     esb = os.path.join(ROOT, 'tools', 'node_modules', '.bin', 'esbuild.cmd' if os.name == 'nt' else 'esbuild')
     jd = os.path.join(HERE, 'js')
     ents = {'main.js': 'main.js', 'home.js': 'home.js', 'estimate.js': 'estimate.js', 'quote.js': 'quote.js', 'assistant.js': 'assistant.js', 'order.js': 'order.js', 'search.js': 'search.js', 'auth.js': 'auth.js', 'hero3d.js': 'hero3d.src.js'}
-    # hero3d.js is loaded at runtime via dynamic import() (see home.js), which needs a real ES module output;
-    # every other entry is a plain <script type="module" src=...> in the HTML, so IIFE is fine for those.
+    # hero3d.js and assistant.js are loaded at runtime via dynamic import() (see home.js and the floating
+    # chat widget in main.js), which needs a real ES module output; every other entry is a plain
+    # <script type="module" src=...> in the HTML, so IIFE is fine for those.
     for out, src in ents.items():
-        fmt = 'esm' if out == 'hero3d.js' else 'iife'
+        fmt = 'esm' if out in ('hero3d.js', 'assistant.js') else 'iife'
         r = subprocess.run([esb, os.path.join(jd, src), '--bundle', '--minify', '--format=' + fmt, '--target=es2019', '--legal-comments=none', '--outfile=' + os.path.join(od, out), '--log-level=error', '--resolve-extensions=.js,.mjs', '--alias:three=' + os.path.join(ROOT, 'tools', 'node_modules', 'three', 'build', 'three.module.js')], capture_output=True, text=True, cwd=os.path.join(ROOT, 'tools'))
         if r.returncode:
             print('esbuild failed:', src, r.stderr[:500]); sys.exit(1)
@@ -165,18 +166,20 @@ def export_jinja_base():
     open(os.path.join(tdir, '_base.html'), 'w', encoding='utf-8').write(doc)
 
 def patch_dynamic_js_refs():
-    """hero3d.js is lazy-loaded at runtime from inside home.js (new Script element), not a <script> tag in the
-    HTML, so finalize()'s regex-based cache-busting never sees it. Patch the literal path here, before finalize()
-    hashes home.js for its own <script> tag's ?v=/SRI — otherwise that SRI would go stale the moment this edits
-    home.js's bytes."""
-    hp = os.path.join(OUT, 'assets', 'js', 'home.js')
-    if not os.path.exists(hp):
-        return
-    hero_v = hashlib.md5(open(os.path.join(OUT, 'assets', 'js', 'hero3d.js'), 'rb').read()).hexdigest()[:10]
-    s = open(hp, encoding='utf-8').read()
-    s2 = s.replace('/assets/js/hero3d.js', '/assets/js/hero3d.js?v=%s' % hero_v)
-    if s2 != s:
-        open(hp, 'w', encoding='utf-8').write(s2)
+    """hero3d.js (from home.js) and assistant.js (from main.js, the floating chat widget) are lazy-loaded at
+    runtime via dynamic import(), not a <script> tag in the HTML, so finalize()'s regex-based cache-busting
+    never sees them. Patch the literal paths here, before finalize() hashes the *importing* file for its own
+    <script> tag's ?v=/SRI — otherwise that SRI would go stale the moment this edits that file's bytes."""
+    for host, dep in (('home.js', 'hero3d.js'), ('main.js', 'assistant.js')):
+        hp = os.path.join(OUT, 'assets', 'js', host)
+        dp = os.path.join(OUT, 'assets', 'js', dep)
+        if not os.path.exists(hp) or not os.path.exists(dp):
+            continue
+        v = hashlib.md5(open(dp, 'rb').read()).hexdigest()[:10]
+        s = open(hp, encoding='utf-8').read()
+        s2 = s.replace('/assets/js/%s' % dep, '/assets/js/%s?v=%s' % (dep, v))
+        if s2 != s:
+            open(hp, 'w', encoding='utf-8').write(s2)
 
 def finalize():
     """cache-busting (?v=hash) + Subresource Integrity on every first-party script / stylesheet"""

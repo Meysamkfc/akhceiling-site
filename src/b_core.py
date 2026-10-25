@@ -195,8 +195,20 @@ def palette(lang='fa'):
 
 def assistant_fab(lang='fa'):
     if lang == 'en':
-        return '<div class="fab-tip" aria-hidden="true">Got a question? Chat with us now</div><a class="fab" href="/assistant/" aria-label="Chat with the smart assistant">%s<span>Smart Assistant</span></a>' % icon('bot')
-    return ('<div class="fab-tip" aria-hidden="true">سؤالی داری؟ همین حالا با ما چت کن</div><a class="fab" href="/assistant/" aria-label="گفت‌وگو با دستیار هوشمند">%s<span>دستیار هوشمند</span></a>' % icon('bot'))
+        return '<div class="fab-tip" aria-hidden="true">Got a question? Chat with us now</div><a class="fab" id="fabChat" href="/assistant/" aria-label="Chat with the smart assistant" aria-expanded="false" aria-controls="chatWidget">%s<span>Smart Assistant</span></a>' % icon('bot')
+    return ('<div class="fab-tip" aria-hidden="true">سؤالی داری؟ همین حالا با ما چت کن</div><a class="fab" id="fabChat" href="/assistant/" aria-label="گفت‌وگو با دستیار هوشمند" aria-expanded="false" aria-controls="chatWidget">%s<span>دستیار هوشمند</span></a>' % icon('bot'))
+
+def assistant_widget(lang='fa'):
+    close_label = 'Close' if lang == 'en' else 'بستن'
+    full_label = 'Open full page' if lang == 'en' else 'باز کردن در صفحه کامل'
+    name = 'AlborzBot' if lang == 'en' else 'البرزبات'
+    sub = ('Smart assistant — answers from the company’s own documentation, no data sent until you request a call' if lang == 'en'
+           else 'دستیار هوشمند — پاسخ از مستندات خود شرکت، بدون ارسال اطلاعات تا زمان درخواست تماس')
+    return ('<div class="chat-widget" id="chatWidget" role="dialog" aria-modal="false" aria-label="%s" hidden>'
+            '<div class="chat-hd"><img src="/assets/img/emblem.jpg" alt="" width="560" height="260"><div><b>%s</b><small>%s</small></div>'
+            '<a href="/assistant/" class="cw-full" aria-label="%s">⤢</a><button type="button" class="cw-x" id="chatWidgetClose" aria-label="%s">✕</button></div>'
+            '<div class="msgs" id="msgs" aria-live="polite"></div><div class="composer" id="composer"></div></div>'
+            % (name, name, sub, full_label, close_label))
 
 def lightbox():
     return ('<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="نمایش عکس"><button class="x" aria-label="بستن">✕</button><button class="n" aria-label="عکس بعدی">‹</button>'
@@ -286,7 +298,7 @@ def page(path, title, desc, body, extra_ld=None, home=False, scripts=(), modules
 {body}
 </main>
 {footer(lang=lang)}
-{'' if path == '/assistant/' else assistant_fab(lang=lang)}
+{'' if path == '/assistant/' else assistant_fab(lang=lang) + assistant_widget(lang=lang)}
 {palette(lang=lang)}
 {lightbox()}
 <script type="module" src="/assets/js/main.js"></script>

@@ -26,6 +26,20 @@ if (sideTgl && side) {
     sideTgl.setAttribute('aria-expanded', String(open));
   });
 }
+/* floating assistant chat widget: open in place instead of navigating to /assistant/ */
+const fabChat = $('#fabChat'), chatWidget = $('#chatWidget');
+if (fabChat && chatWidget) {
+  let loaded = false;
+  const openWidget = () => {
+    chatWidget.hidden = false;
+    fabChat.setAttribute('aria-expanded', 'true');
+    if (!loaded) { loaded = true; import('/assets/js/assistant.js').catch(() => {}); }
+  };
+  const closeWidget = () => { chatWidget.hidden = true; fabChat.setAttribute('aria-expanded', 'false'); };
+  fabChat.addEventListener('click', e => { e.preventDefault(); chatWidget.hidden ? openWidget() : closeWidget(); });
+  const x = $('#chatWidgetClose'); if (x) x.addEventListener('click', closeWidget);
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !chatWidget.hidden) closeWidget(); });
+}
 /* "روند سفارش" steps 2-4: clicking shows "fill step 1 first" instead of doing nothing silently */
 $$('.step-click').forEach(b => {
   const msg = b.nextElementSibling;
