@@ -29,8 +29,8 @@ GLOSSARY = [
 ]
 # one real photo per term, same order as GLOSSARY (reused from the site's own real photography — no stock/invented images)
 GLOSSARY_IMG = [
-    'show/p04.jpg', 'projects/p01.jpg', 'catalog/f47.jpg', 'catalog/uh36-l25.jpg', 'catalog/uh36-l25.jpg',
-    'catalog/f47.jpg', 'catalog/screws.jpg', 'projects/p01.jpg', 'show/p01.jpg', 'show/p01.jpg',
+    'show/p04.jpg', 'projects/p01.jpg', 'catalog/f47.jpg', 'catalog/uh36.jpg', 'catalog/l25.jpg',
+    'catalog/f47.jpg', 'mat/screws.jpg', 'projects/p01.jpg', 'show/p01.jpg', 'show/p01.jpg',
     'show/grillium.jpg', 'show/d1.jpg', 'photos/real-factory.jpg', 'photos/real-factory.jpg', 'show/d2.jpg', 'photos/real-install.jpg',
 ]
 

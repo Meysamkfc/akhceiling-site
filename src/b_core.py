@@ -133,17 +133,20 @@ EN_PRODUCT_NAME = {'drywall': 'Drywall &amp; plaster ceiling system', 'grid-ceil
 EN_PRODUCT_SHORT = {'drywall': 'A seamless, joint-free ceiling with recessed lighting boxes and partition walls', 'grid-ceiling': 'Removable tiles with easy access to services above the ceiling',
                     'profiles': 'F47, UH36, L25, clips, screws and connectors with a full spec table',
                     'accessories': 'Screws, nails, joint tape and connectors for every ceiling system'}
-EN_NAV = [('/en/products/', 'Products', None), ('/en/projects/', 'Projects', None), ('/en/estimate/', 'Material Estimate', None), ('/en/assistant/', 'Smart Assistant', None), ('/en/about/', 'About Us', None)]
+EN_NAV = [('/en/products/', 'Products', None), ('/en/projects/', 'Projects', None), ('/en/estimate/', 'Material Estimate', None), ('/en/assistant/', 'Smart Assistant', None),
+          ('/en/articles/', 'Resources', 'res'), ('/en/about/', 'About Us', None)]
 
-# every Persian page that has a real, built English counterpart (and back); pages not listed here
-# (articles, FAQ, glossary, catalogs, privacy, search, 404 — Phase 2) have no language-switch link yet.
+# every Persian page that has a real, built English counterpart (and back).
 LANG_PAIRS = [
     ('/', '/en/'), ('/products/', '/en/products/'),
     ('/products/drywall/', '/en/products/drywall/'), ('/products/grid-ceiling/', '/en/products/grid-ceiling/'),
     ('/products/profiles/', '/en/products/profiles/'), ('/products/accessories/', '/en/products/accessories/'),
     ('/projects/', '/en/projects/'), ('/about/', '/en/about/'), ('/contact/', '/en/contact/'),
     ('/quote/', '/en/quote/'), ('/estimate/', '/en/estimate/'), ('/assistant/', '/en/assistant/'), ('/membership/', '/en/membership/'),
-]
+    # Phase 2: articles, FAQ, glossary, catalogs, privacy. (search and 404 intentionally stay Persian-only, noindex anyway.)
+    ('/articles/', '/en/articles/'), ('/faq/', '/en/faq/'), ('/glossary/', '/en/glossary/'),
+    ('/catalogs/', '/en/catalogs/'), ('/privacy/', '/en/privacy/'),
+] + [('/articles/%s/' % a['slug'], '/en/articles/%s/' % a['slug']) for a in ARTICLES]
 FA2EN = dict(LANG_PAIRS)
 EN2FA = {v: k for k, v in LANG_PAIRS}
 
@@ -169,7 +172,14 @@ def topbar(lang='fa'):
 
 def header(path, dynamic=False, lang='fa'):
     if lang == 'en':
-        li = ''.join('<li><a href="%s"%s>%s</a></li>' % (href, ' aria-current="page"' if (path == href or path.startswith(href)) else '', label) for href, label, _ in EN_NAV)
+        li = ''
+        for href, label, sub in EN_NAV:
+            cur = ' aria-current="page"' if (path == href or (sub != 'res' and path.startswith(href))) else ''
+            if sub == 'res':
+                subs = '<a href="/en/articles/">Articles &amp; guides</a><a href="/en/faq/">FAQ</a><a href="/en/catalogs/">Catalogs (PDF)</a>'
+                li += '<li><a href="%s"%s>%s ▾</a><div class="sub">%s</div></li>' % (href, cur if path.startswith(('/en/articles', '/en/faq', '/en/catalogs')) else '', label, subs)
+            else:
+                li += '<li><a href="%s"%s>%s</a></li>' % (href, cur, label)
         acct = '<a class="ibtn hide-m" aria-label="Membership and customer panel" href="/en/membership/">' + icon('user') + '<span class="lbl">Sign in</span></a>'
         phoned = '<a class="ibtn fill" href="/en/contact/" aria-label="Contact us">%s<span class="lbl">Contact</span></a>' % icon('phone')
         sw = lang_switch(path, lang)
@@ -251,9 +261,9 @@ def footer(lang='fa'):
         return ('<footer class="ft"><div class="wrap"><p class="big">Profiles, ceilings and partitions; <em class="o">from factory to site</em></p><div class="cols">'
                 '<div><h2>%s</h2><p class="slogan">Heritage, a mark of quality</p><p>Manufacturer of drywall and suspended-ceiling materials, with a factory in Kahrizak and nationwide delivery.</p></div>'
                 '<div><h2>Products</h2><ul>%s</ul></div>'
-                '<div><h2>Quick links</h2><ul><li><a href="/en/estimate/">Material estimate</a></li><li><a href="/en/assistant/">Smart assistant</a></li><li><a href="/en/quote/">Request a quote</a></li><li><a href="/en/projects/">Projects</a></li><li><a href="/en/membership/">Customer sign-in</a></li></ul></div>'
+                '<div><h2>Quick links</h2><ul><li><a href="/en/estimate/">Material estimate</a></li><li><a href="/en/assistant/">Smart assistant</a></li><li><a href="/en/quote/">Request a quote</a></li><li><a href="/en/catalogs/">Catalogs</a></li><li><a href="/en/projects/">Projects</a></li><li><a href="/en/faq/">FAQ</a></li><li><a href="/en/articles/">Articles</a></li><li><a href="/en/membership/">Customer sign-in</a></li></ul></div>'
                 '<div><h2>Contact</h2><ul><li>Head office: <a class="num" href="tel:+982188507585">%s</a></li><li>Factory: <a class="num" href="tel:+982156548804">%s</a></li><li>%s</li><li><a class="num" href="mailto:%s">%s</a></li><li>%s<br>%s</li></ul></div></div>'
-                '<div class="copy"><span>© %s — All rights reserved.</span><span><a href="/privacy/">Privacy</a> · <a href="https://t.me/%s" rel="noopener">Telegram</a> · <a href="https://instagram.com/%s" rel="noopener">Instagram</a></span></div></div></footer>'
+                '<div class="copy"><span>© %s — All rights reserved.</span><span><a href="/en/privacy/">Privacy</a> · <a href="https://t.me/%s" rel="noopener">Telegram</a> · <a href="https://instagram.com/%s" rel="noopener">Instagram</a></span></div></div></footer>'
                 % (EN_NAME, prod_en, PHONE, PHONE_FACTORY, ADDR_OFFICE_EN, EMAIL, EMAIL, HOURS_EN[0], HOURS_EN[1], EN_NAME, TELEGRAM, INSTAGRAM))
     prod = ''.join('<li><a href="/products/%s/">%s</a></li>' % (p['slug'], esc(p['title'])) for p in PRODUCTS) + '<li><a href="/products/profiles/">%s</a></li>' % PROFILES['title']
     return ('<footer class="ft"><div class="wrap"><p class="big">پروفیل، سقف و دیوار کاذب؛ <em class="o">از کارخانه تا اجرا</em></p><div class="cols">'
@@ -286,12 +296,15 @@ def page(path, title, desc, body, extra_ld=None, home=False, scripts=(), modules
     pre = ''
     if preload:
         pre = '<link rel="preload" as="image" href="%s" imagesrcset="%s" imagesizes="100vw" fetchpriority="high">' % preload
-    if lang == 'fa' and path == '/':
-        alt_tags = ('<link rel="alternate" hreflang="fa-IR" href="%s"><link rel="alternate" hreflang="en" href="%sen/"><link rel="alternate" hreflang="x-default" href="%s">' % (url, SITE + '/', url))
-    elif lang == 'en':
-        alt_tags = ('<link rel="alternate" hreflang="en" href="%s"><link rel="alternate" hreflang="fa-IR" href="%s/"><link rel="alternate" hreflang="x-default" href="%s/">' % (url, SITE, SITE))
+    if lang == 'en':
+        fa_eq = EN2FA.get(path, '/')
+        alt_tags = ('<link rel="alternate" hreflang="en" href="%s"><link rel="alternate" hreflang="fa-IR" href="%s%s"><link rel="alternate" hreflang="x-default" href="%s%s">' % (url, SITE, fa_eq, SITE, fa_eq))
     else:
-        alt_tags = ('<link rel="alternate" hreflang="fa-IR" href="%s"><link rel="alternate" hreflang="x-default" href="%s">' % (url, url))
+        en_eq = FA2EN.get(path)
+        if en_eq:
+            alt_tags = ('<link rel="alternate" hreflang="fa-IR" href="%s"><link rel="alternate" hreflang="en" href="%s%s"><link rel="alternate" hreflang="x-default" href="%s">' % (url, SITE, en_eq, url))
+        else:
+            alt_tags = ('<link rel="alternate" hreflang="fa-IR" href="%s"><link rel="alternate" hreflang="x-default" href="%s">' % (url, url))
     skip = 'Skip to content' if lang == 'en' else 'پرش به محتوا'
     brand_name = EN_NAME if lang == 'en' else NAME_FULL
     rss_title = 'Articles' if lang == 'en' else ('مقالات ' + esc(NAME))

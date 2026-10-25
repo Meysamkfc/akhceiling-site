@@ -7,7 +7,7 @@ if hasattr(sys.stdout, 'reconfigure'):
 from b_core import *
 import b_core
 from b_pages import *
-import b_pages, b_rest, b_pages_en
+import b_pages, b_rest, b_pages_en, b_rest_en
 from PIL import ImageDraw
 
 def clean_out():
@@ -206,13 +206,17 @@ if __name__ == '__main__':
     for p in ALLP: b_pages.build_product(p)
     for p in ALLP: b_pages_en.build_product_en(p)
     b_pages.build_projects(); b_pages_en.build_projects_en()
-    b_pages.build_catalogs()
     b_pages.build_about(); b_pages_en.build_about_en()
     b_pages.build_contact(); b_pages_en.build_contact_en()
     b_pages.build_membership(); b_pages_en.build_membership_en()
     b_pages.build_quote(); b_pages_en.build_quote_en()
     b_pages.build_estimate(); b_pages_en.build_estimate_en()
     b_pages.build_assistant(); b_pages_en.build_assistant_en()
-    b_rest.build_articles(); b_rest.build_faq(); b_rest.build_privacy(); b_rest.build_404(); b_rest.build_search()
+    b_rest.build_articles(); b_rest_en.build_articles_en()
+    b_rest.build_glossary(); b_rest_en.build_glossary_en()
+    b_rest.build_faq(); b_rest_en.build_faq_en()
+    b_pages.build_catalogs(); b_rest_en.build_catalogs_en()
+    b_rest.build_privacy(); b_rest_en.build_privacy_en()
+    b_rest.build_404(); b_rest.build_search()
     copy_static(); bundle_js(); patch_dynamic_js_refs(); build_css(); data_files(); seo_files(); export_jinja_base(); finalize()
     print('pages:', len(PAGES), '| search docs:', len(SEARCH), '->', OUT)
