@@ -43,16 +43,9 @@ if (msgs) {
   const P = (...c) => { const p = el('p'); c.forEach(x => p.append(typeof x === 'string' ? t(x) : x)); return p; };
   const strong = s => el('strong', '', s);
 
-  const quickBar = () => {
-    const wrap = el('div'), q = el('div', 'quick');
-    [['برآورد متریال برای متراژ من', 'مثلاً ۱۲۰ متر درای‌وال'], ['یک نمونه سقف برای فضای من', 'کاربری و متراژ را بگویم'], ['تفاوت F47 و UH36 چیست؟', 'تفاوت F47 و UH36 چیست؟'], ['ضخامت و وزن پروفیل‌ها', 'وزن بندیل F47 چقدر است؟'], ['تماس با کارشناس فروش', 'تماس با کارشناس']].forEach(([l, ph]) => {
-      const b = el('button', '', l); b.type = 'button'; b.onclick = () => { input.value = l === 'برآورد متریال برای متراژ من' ? '' : ph; if (l.startsWith('برآورد')) { input.placeholder = ph; input.focus(); say(P('متراژ و نوع سقف را بنویسید؛ مثلاً «۱۲۰ متر سقف درای‌وال» یا «۸۰ متر سقف شبکه‌ای ۶۰×۶۰».')); } else if (l.startsWith('یک نمونه')) { input.value = ''; input.focus(); say(P('کاربری فضا و متراژ را بنویسید؛ مثلاً «دفتر اداری ۸۰ متر».')); } else send(); }; q.appendChild(b);
-    });
-    wrap.appendChild(q); return wrap;
-  };
   const form = el('form', 'inl'); const input = el('input'); input.placeholder = 'سؤال یا درخواست خود را بنویسید…'; input.setAttribute('aria-label', 'پیام شما'); input.maxLength = 300; input.autocomplete = 'off';
   const go = el('button', 'btn sm plain', 'ارسال'); go.type = 'submit'; form.append(input, go);
-  comp.append(quickBar(), form);
+  comp.append(form);
   form.addEventListener('submit', e => { e.preventDefault(); send(); });
 
   async function send() {
@@ -142,7 +135,7 @@ if (msgs) {
   }
 
   (async () => {
-    await say([P('سلام 👋 من ', strong('البرزبات'), ' هستم، دستیار هوشمند صنعت سقف البرز خاورمیانه.'), P('می‌توانم ', strong('برآورد متریال'), ' بدهم، ', strong('نمونه سقف'), ' نشان بدهم یا ', strong('سؤال فنی'), ' شما را درباره پروفیل‌ها و سقف‌ها جواب بدهم. به زبان خودتان بنویسید.')], 'bot', 300);
+    await say(P('من بات البرز هستم، سؤالی دارید؟ در خدمتم.'), 'bot', 300);
     const q = new URLSearchParams(location.search), room = q.get('room'), area = parseFloat(q.get('area'));
     if (room && ROOMS[room] && area >= 1) { ctx.room = room; ctx.area = area; await say(t(ROOMS[room][0] + '، ' + fa(area) + ' متر مربع'), 'me', 0); await sampleReply(); await estimateReply(area, pick(room, area).s === 'grid' ? 'grid' : 'drywall'); }
   })();
