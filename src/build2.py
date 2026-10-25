@@ -78,7 +78,8 @@ def bundle_js():
     tnm = os.path.join(ROOT, 'tools', 'node_modules')
     aliases = ['--alias:three=' + os.path.join(tnm, 'three', 'build', 'three.module.js'),
                '--alias:@theatre/core=' + os.path.join(tnm, '@theatre', 'core', 'dist', 'index.js'),
-               '--alias:curtainsjs=' + os.path.join(tnm, 'curtainsjs', 'src', 'index.mjs')]
+               '--alias:curtainsjs=' + os.path.join(tnm, 'curtainsjs', 'src', 'index.mjs'),
+               '--alias:lenis=' + os.path.join(tnm, 'lenis', 'dist', 'lenis.mjs')]
     for out, src in ents.items():
         fmt = 'esm' if out in ('hero3d.js', 'assistant.js') else 'iife'
         r = subprocess.run([esb, os.path.join(jd, src), '--bundle', '--minify', '--format=' + fmt, '--target=es2019', '--legal-comments=none', '--outfile=' + os.path.join(od, out), '--log-level=error', '--resolve-extensions=.js,.mjs'] + aliases, capture_output=True, text=True, cwd=os.path.join(ROOT, 'tools'))

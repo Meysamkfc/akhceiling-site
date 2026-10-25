@@ -10,6 +10,8 @@
   background-image:url("/assets/img/noise.webp")}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;scroll-padding-top:calc(var(--stack) + 20px);-webkit-text-size-adjust:100%}
+html.lenis,html.lenis body{height:auto}
+html.lenis.lenis-smooth{scroll-behavior:auto!important}
 @media (max-width:760px){:root{--stack:var(--hh)}}
 body{font-family:Vazirmatn,Tahoma,sans-serif;background:var(--paper);color:var(--ink);line-height:1.95;font-size:16.5px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img,video,canvas,svg{display:block;max-width:100%}

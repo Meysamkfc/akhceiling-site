@@ -1,8 +1,27 @@
 /* Shared UI: header, menu, reveal, counters, lightbox, lazy video, search palette, anonymous page counter.
    Written without innerHTML so it works under CSP "require-trusted-types-for 'script'". */
 import { build, search, norm } from './ir.js';
+import Lenis from 'lenis';
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+
+/* gentle, native-feeling inertia scroll; off entirely under prefers-reduced-motion. the mobile nav
+   overlay, lightbox and search palette all freeze page scroll while open (see their `lock(true/false)`
+   calls below) — Lenis needs to be told to stop/start alongside body.style.overflow, not just have
+   the CSS fought over it, and a refcount keeps two overlays opening at once from unlocking too early. */
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let lenis = null;
+if (!reduceMotion) {
+  lenis = new Lenis({ duration: 1.0, easing: t => 1 - Math.pow(1 - t, 3), smoothWheel: true, syncTouch: false });
+  const raf = time => { lenis.raf(time); requestAnimationFrame(raf); };
+  requestAnimationFrame(raf);
+}
+let lockCount = 0;
+const lock = on => {
+  lockCount = Math.max(0, lockCount + (on ? 1 : -1));
+  document.body.style.overflow = lockCount > 0 ? 'hidden' : '';
+  if (lenis) lockCount > 0 ? lenis.stop() : lenis.start();
+};
 
 /* header: transparent over the hero, solid after scrolling */
 const hdr = $('.hdr');
@@ -13,7 +32,7 @@ if (hdr && !document.body.classList.contains('inner')) {
 /* mobile menu */
 const bg = $('#burger'), nav = $('#nav');
 if (bg && nav) {
-  const set = o => { nav.classList.toggle('open', o); bg.setAttribute('aria-expanded', String(o)); bg.querySelector('.lbl').textContent = o ? 'بستن' : 'منو'; document.body.style.overflow = o ? 'hidden' : ''; if (o) hdr.classList.add('solid'); else if (!document.body.classList.contains('inner') && scrollY <= 40) hdr.classList.remove('solid'); };
+  const set = o => { nav.classList.toggle('open', o); bg.setAttribute('aria-expanded', String(o)); bg.querySelector('.lbl').textContent = o ? 'بستن' : 'منو'; lock(o); if (o) hdr.classList.add('solid'); else if (!document.body.classList.contains('inner') && scrollY <= 40) hdr.classList.remove('solid'); };
   bg.addEventListener('click', () => set(!nav.classList.contains('open')));
   nav.addEventListener('click', e => { if (e.target.closest('a')) set(false); });
   addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
@@ -73,8 +92,8 @@ const lb = $('#lb');
 if (lb) {
   const im = $('#lbi'), cp = $('#lbc'); let items = [], i = 0, last = null;
   const show = n => { i = (n + items.length) % items.length; im.src = items[i].href; im.alt = items[i].dataset.cap || ''; cp.textContent = items[i].dataset.cap || ''; };
-  const open = (list, n) => { items = list; last = document.activeElement; show(n); lb.hidden = false; document.body.style.overflow = 'hidden'; $('.x', lb).focus(); };
-  const close = () => { lb.hidden = true; document.body.style.overflow = ''; im.removeAttribute('src'); last && last.focus(); };
+  const open = (list, n) => { items = list; last = document.activeElement; show(n); lb.hidden = false; lock(true); $('.x', lb).focus(); };
+  const close = () => { lb.hidden = true; lock(false); im.removeAttribute('src'); last && last.focus(); };
   $$('[data-lb]').forEach(box => { const list = $$('a.gi', box); list.forEach((a, n) => a.addEventListener('click', e => { e.preventDefault(); open(list, n); })); });
   $('.x', lb).onclick = close; $('.n', lb).onclick = () => show(i + 1); $('.p', lb).onclick = () => show(i - 1);
   lb.addEventListener('click', e => { if (e.target === lb) close(); });
@@ -98,8 +117,8 @@ if (pal) {
     list.forEach(r => { const a = el('a'); a.href = r.d.u; a.appendChild(el('b', '', r.d.t)); a.appendChild(el('small', '', r.d.g + ' — ' + r.d.x.slice(0, 90))); res.appendChild(a); });
   };
   const run = async () => { await load(); paint(search(ix, inp.value, 8)); };
-  const open = () => { pal.hidden = false; document.body.style.overflow = 'hidden'; inp.value = ''; paint([]); inp.focus(); load(); };
-  const close = () => { pal.hidden = true; document.body.style.overflow = ''; };
+  const open = () => { pal.hidden = false; lock(true); inp.value = ''; paint([]); inp.focus(); load(); };
+  const close = () => { pal.hidden = true; lock(false); };
   $$('[data-search]').forEach(b => b.addEventListener('click', open));
   addEventListener('keydown', e => {
     const typing = /INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || '');
