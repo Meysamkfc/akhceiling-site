@@ -157,6 +157,9 @@ def header(path, dynamic=False, lang='fa'):
         phoned = '<a class="ibtn fill" href="/contact/" aria-label="Contact us">%s<span class="lbl">Contact</span></a>' % icon('phone')
         sw = lang_switch(path, lang)
         swlink = '<a class="ibtn hide-m" href="%s">%s</a>' % sw if sw else ''
+        li += ('<li class="nav-ex nav-ex-first"><button type="button" data-search>Search the site</button></li>'
+               '<li class="nav-ex"><a href="/membership/">Sign in / Membership</a></li>'
+               + ('<li class="nav-ex"><a href="%s">%s</a></li>' % sw if sw else ''))
         return (topbar(lang) + '<header class="hdr" id="hdr"><div class="wrap in"><a class="brand" href="/en/"><img src="/assets/img/emblem.jpg" alt="%s logo" width="560" height="260"><span>%s</span></a>'
                 '<ul class="nav" id="nav">%s</ul><div class="tools">'
                 '<button class="ibtn hide-m" type="button" data-search aria-label="Search the site">%s<span class="lbl">Search</span><span class="kbd">Ctrl K</span></button>%s%s%s'
@@ -175,11 +178,17 @@ def header(path, dynamic=False, lang='fa'):
             li += '<li><a href="%s"%s>%s</a></li>' % (href, cur, label)
     if dynamic:
         acct = '{% if user %}<a class="ibtn hide-m" aria-label="پنل من" href="{{ \"/admin/\" if user.role != \"customer\" else \"/account/\" }}">' + icon('user') + '<span class="lbl">پنل من</span></a>{% else %}<a class="ibtn hide-m" aria-label="ورود / عضویت" href="/account/login/">' + icon('user') + '<span class="lbl">ورود</span></a>{% endif %}'
+        mobile_acct = ('<li class="nav-ex">{% if user %}<a href="{{ \"/admin/\" if user.role != \"customer\" else \"/account/\" }}">پنل من</a>'
+                       '{% else %}<a href="/account/login/">ورود / عضویت</a>{% endif %}</li>')
     else:
         acct = '<a class="ibtn hide-m" aria-label="عضویت و پنل مشتریان" href="/membership/">' + icon('user') + '<span class="lbl">ورود / عضویت</span></a>'
+        mobile_acct = '<li class="nav-ex"><a href="/membership/">ورود / عضویت</a></li>'
     phoned = '<a class="ibtn fill" href="/contact/" aria-label="تماس با ما">%s<span class="lbl">تماس</span></a>' % icon('phone')
     sw = lang_switch(path, lang)
     swlink = '<a class="ibtn hide-m" href="%s">%s</a>' % sw if sw else ''
+    li += ('<li class="nav-ex nav-ex-first"><button type="button" data-search>جست‌وجو در سایت</button></li>'
+           + mobile_acct
+           + ('<li class="nav-ex"><a href="%s">%s</a></li>' % sw if sw else ''))
     return (topbar(lang) + '<header class="hdr" id="hdr"><div class="wrap in"><a class="brand" href="/"><img src="/assets/img/emblem.jpg" alt="نشان %s" width="560" height="260"><span>%s</span></a>'
             '<ul class="nav" id="nav">%s</ul><div class="tools">'
             '<button class="ibtn hide-m" type="button" data-search aria-label="جست‌وجو در سایت">%s<span class="lbl">جست‌وجو</span><span class="kbd">Ctrl K</span></button>%s%s%s'
