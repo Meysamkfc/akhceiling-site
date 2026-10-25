@@ -1,10 +1,10 @@
 {% extends "admin/_layout.html" %}{% from "_macros.html" import csrf, errs, badge %}{% set nav = 'users' %}
-{% block title %}کاربران{% endblock %}
-{% block pn %}<h1>کارشناسان فروش و مدیران</h1>{{ errs(errors) }}
-<div class="scroll"><table class="tbl"><thead><tr><th>نام</th><th>نقش</th><th>موبایل</th><th>وضعیت</th><th></th></tr></thead><tbody>
-{% for u in rows %}<tr><td>{{ u.name }}</td><td>{{ L.ROLES[u.role] }}</td><td class="num">{{ u.phone }}</td><td>{{ badge(u.status, L.US[u.status]) }}</td><td>{% if u.id != user.id %}<form method="post" class="inline">{{ csrf() }}<input type="hidden" name="uid" value="{{ u.id }}">{% if u.status == 'active' %}<button class="btn sm danger" name="action" value="disable">غیرفعال</button>{% else %}<button class="btn sm" name="action" value="enable">فعال</button>{% endif %}</form>{% endif %}</td></tr>{% endfor %}</tbody></table></div>
-<h2>افزودن کارشناس</h2>
+{% block title %}{{ t('users_title') }}{% endblock %}
+{% block pn %}<h1>{{ t('users_title') }}</h1>{{ errs(errors) }}
+<div class="scroll"><table class="tbl"><thead><tr><th>{{ t('col_name') }}</th><th>{{ t('col_role') }}</th><th>{{ 'Mobile' if admin_lang=='en' else 'موبایل' }}</th><th>{{ t('col_status') }}</th><th></th></tr></thead><tbody>
+{% for u in rows %}<tr><td>{{ u.name }}</td><td>{{ (L.ROLES_EN if admin_lang=='en' else L.ROLES)[u.role] }}</td><td class="num">{{ u.phone }}</td><td>{{ badge(u.status, (L.US_EN if admin_lang=='en' else L.US)[u.status]) }}</td><td>{% if u.id != user.id %}<form method="post" class="inline">{{ csrf() }}<input type="hidden" name="uid" value="{{ u.id }}">{% if u.status == 'active' %}<button class="btn sm danger" name="action" value="disable">{{ t('disable') }}</button>{% else %}<button class="btn sm" name="action" value="enable">{{ t('enable') }}</button>{% endif %}</form>{% endif %}</td></tr>{% endfor %}</tbody></table></div>
+<h2>{{ t('users_new') }}</h2>
 <form method="post" class="form card pad">{{ csrf() }}<input type="hidden" name="action" value="create">
-<div class="row2"><div><label for="name">نام و نام خانوادگی</label><input id="name" name="name" required maxlength="80"></div><div><label for="phone">شماره موبایل (نام کاربری)</label><input id="phone" name="phone" dir="ltr" required></div></div>
-<div class="row2"><div><label for="role">نقش</label><select id="role" name="role"><option value="sales">کارشناس فروش</option><option value="admin">مدیر</option></select></div><div><label for="password">رمز عبور اولیه</label><input id="password" name="password" type="password" required minlength="10" autocomplete="new-password"></div></div>
-<div><button class="btn sm" type="submit">ساخت کاربر</button></div></form>{% endblock %}
+<div class="row2"><div><label for="name">{{ 'Full name' if admin_lang=='en' else 'نام و نام خانوادگی' }}</label><input id="name" name="name" required maxlength="80"></div><div><label for="phone">{{ 'Mobile number (username)' if admin_lang=='en' else 'شماره موبایل (نام کاربری)' }}</label><input id="phone" name="phone" dir="ltr" required></div></div>
+<div class="row2"><div><label for="role">{{ t('col_role') }}</label><select id="role" name="role"><option value="sales">{{ t('role_sales') }}</option><option value="admin">{{ t('role_admin') }}</option></select></div><div><label for="password">{{ 'Initial password' if admin_lang=='en' else 'رمز عبور اولیه' }}</label><input id="password" name="password" type="password" required minlength="10" autocomplete="new-password"></div></div>
+<div><button class="btn sm" type="submit">{{ t('create_user') }}</button></div></form>{% endblock %}

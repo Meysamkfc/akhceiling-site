@@ -1,17 +1,17 @@
 {% extends base %}{% from "_macros.html" import csrf, errs %}{% set nav = 'sec' %}
-{% block title %}امنیت حساب{% endblock %}
-{% block pn %}<h1>امنیت حساب</h1>{{ errs(errors) }}
+{% block title %}{{ t('security_title') }}{% endblock %}
+{% block pn %}<h1>{{ t('security_title') }}</h1>{{ errs(errors) }}
 {% if user.totp_on %}
-<div class="card pad"><h2>ورود دومرحله‌ای فعال است ✅</h2><p class="note">هنگام ورود، علاوه بر رمز عبور، کد برنامه احراز هویت هم پرسیده می‌شود.</p>
+<div class="card pad"><h2>{{ 'Two-factor login is enabled ✅' if admin_lang=='en' else 'ورود دومرحله‌ای فعال است ✅' }}</h2><p class="note">{{ 'When signing in, an authenticator app code is required in addition to your password.' if admin_lang=='en' else 'هنگام ورود، علاوه بر رمز عبور، کد برنامه احراز هویت هم پرسیده می‌شود.' }}</p>
 <form method="post" class="form">{{ csrf() }}<input type="hidden" name="action" value="disable">
-<div class="row2"><div><label for="pw">رمز عبور</label><input id="pw" name="password" type="password" required autocomplete="current-password"></div><div><label for="cd">کد فعلی برنامه</label><input id="cd" name="code" inputmode="numeric" dir="ltr" maxlength="7" required></div></div>
-<div><button class="btn sm line danger" type="submit">غیرفعال‌سازی</button></div></form></div>
+<div class="row2"><div><label for="pw">{{ t('login_password') }}</label><input id="pw" name="password" type="password" required autocomplete="current-password"></div><div><label for="cd">{{ 'Current app code' if admin_lang=='en' else 'کد فعلی برنامه' }}</label><input id="cd" name="code" inputmode="numeric" dir="ltr" maxlength="7" required></div></div>
+<div><button class="btn sm line danger" type="submit">{{ t('disable') }}</button></div></form></div>
 {% else %}
-<div class="card pad"><h2>فعال‌سازی ورود دومرحله‌ای</h2>
-<p class="note">۱) برنامه Google Authenticator، Microsoft Authenticator یا Authy را نصب کنید. ۲) کد QR را اسکن کنید. ۳) کد ۶ رقمی را وارد کنید.</p>
+<div class="card pad"><h2>{{ 'Enable two-factor login' if admin_lang=='en' else 'فعال‌سازی ورود دومرحله‌ای' }}</h2>
+<p class="note">{{ '1) Install Google Authenticator, Microsoft Authenticator or Authy. 2) Scan the QR code. 3) Enter the 6-digit code.' if admin_lang=='en' else '۱) برنامه Google Authenticator، Microsoft Authenticator یا Authy را نصب کنید. ۲) کد QR را اسکن کنید. ۳) کد ۶ رقمی را وارد کنید.' }}</p>
 <div class="split x-qr"><div class="qr">{{ qr|safe }}</div>
-<div><p class="note">اگر نمی‌توانید اسکن کنید، این کلید را دستی وارد کنید:</p><p class="num"><b>{{ secret }}</b></p>
+<div><p class="note">{{ "Can't scan? Enter this key manually:" if admin_lang=='en' else 'اگر نمی‌توانید اسکن کنید، این کلید را دستی وارد کنید:' }}</p><p class="num"><b>{{ secret }}</b></p>
 <form method="post" class="form">{{ csrf() }}<input type="hidden" name="action" value="enable">
-<div><label for="cd">کد ۶ رقمی</label><input id="cd" name="code" inputmode="numeric" dir="ltr" maxlength="7" required autocomplete="one-time-code"></div>
-<div><button class="btn sm" type="submit">فعال‌سازی</button></div></form></div></div></div>
+<div><label for="cd">{{ '6-digit code' if admin_lang=='en' else 'کد ۶ رقمی' }}</label><input id="cd" name="code" inputmode="numeric" dir="ltr" maxlength="7" required autocomplete="one-time-code"></div>
+<div><button class="btn sm" type="submit">{{ 'Enable' if admin_lang=='en' else 'فعال‌سازی' }}</button></div></form></div></div></div>
 {% endif %}{% endblock %}

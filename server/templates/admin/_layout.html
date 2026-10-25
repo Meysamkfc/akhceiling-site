@@ -1,15 +1,18 @@
 {% extends "_base.html" %}{% from "_macros.html" import csrf, flashes %}
 {% block content %}<div class="wrap"><div class="pnl">
-<aside class="side"><div class="who"><b>{{ user.name }}</b><small>{{ L.ROLES[user.role] }}</small></div>
-<a href="/admin/" {% if nav == 'home' %}aria-current="page"{% endif %}>داشبورد</a>
-<a href="/admin/leads/" {% if nav == 'leads' %}aria-current="page"{% endif %}>درخواست‌ها و سرنخ‌ها</a>
-<a href="/admin/leads/?mine=1">سرنخ‌های من</a>
-<a href="/admin/customers/" {% if nav == 'customers' %}aria-current="page"{% endif %}>مشتریان</a>
-<a href="/admin/orders/" {% if nav == 'orders' %}aria-current="page"{% endif %}>سفارش‌ها</a>
-{% if user.role == 'admin' %}<a href="/admin/users/" {% if nav == 'users' %}aria-current="page"{% endif %}>کاربران و کارشناسان</a>{% endif %}
-<a href="/account/security/">ورود دومرحله‌ای</a>
-{% if user.role == 'admin' %}<a href="/admin/audit/">گزارش امنیتی</a>{% endif %}
-<a href="/admin/export/leads.csv">خروجی اکسل سرنخ‌ها</a>
-<a href="/admin/export/orders.csv">خروجی اکسل سفارش‌ها</a>
-<form method="post" action="/account/logout/">{{ csrf() }}<button type="submit">خروج</button></form></aside>
-<div class="pn2">{{ flashes() }}{% block pn %}{% endblock %}</div></div></div>{% endblock %}
+<button type="button" class="side-tgl" id="sideTgl" aria-expanded="false" aria-controls="adminSide">☰ {{ t('nav_dashboard') }}</button>
+<aside class="side" id="adminSide"><div class="who"><b>{{ user.name }}</b><small>{{ L.ROLES_EN[user.role] if admin_lang=='en' else L.ROLES[user.role] }}</small>
+<a class="langsw" href="/admin/lang/{{ 'fa' if admin_lang=='en' else 'en' }}">{{ t('lang_switch') }}</a></div>
+<a href="/admin/" {% if nav == 'home' %}aria-current="page"{% endif %}>{{ t('nav_dashboard') }}</a>
+<a href="/admin/leads/" {% if nav == 'leads' %}aria-current="page"{% endif %}>{{ t('nav_leads') }}</a>
+<a href="/admin/leads/?mine=1">{{ t('nav_my_leads') }}</a>
+<a href="/admin/customers/" {% if nav == 'customers' %}aria-current="page"{% endif %}>{{ t('nav_customers') }}</a>
+<a href="/admin/orders/" {% if nav == 'orders' %}aria-current="page"{% endif %}>{{ t('nav_orders') }}</a>
+{% if user.role == 'admin' %}<a href="/admin/users/" {% if nav == 'users' %}aria-current="page"{% endif %}>{{ t('nav_users') }}</a>{% endif %}
+<a href="/account/security/">{{ t('nav_2fa') }}</a>
+{% if user.role == 'admin' %}<a href="/admin/audit/">{{ t('nav_audit') }}</a>{% endif %}
+<a href="/admin/export/leads.csv">{{ t('nav_export_leads') }}</a>
+<a href="/admin/export/orders.csv">{{ t('nav_export_orders') }}</a>
+<form method="post" action="/account/logout/">{{ csrf() }}<button type="submit">{{ t('logout') }}</button></form></aside>
+<div class="pn2">{{ flashes() }}{% block pn %}{% endblock %}</div></div></div>
+{% endblock %}

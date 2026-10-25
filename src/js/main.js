@@ -18,6 +18,14 @@ if (bg && nav) {
   nav.addEventListener('click', e => { if (e.target.closest('a')) set(false); });
   addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
 }
+/* admin panel: collapsible sidebar on mobile */
+const sideTgl = $('#sideTgl'), side = $('#adminSide');
+if (sideTgl && side) {
+  sideTgl.addEventListener('click', () => {
+    const open = side.classList.toggle('open');
+    sideTgl.setAttribute('aria-expanded', String(open));
+  });
+}
 /* "روند سفارش" steps 2-4: clicking shows "fill step 1 first" instead of doing nothing silently */
 $$('.step-click').forEach(b => {
   const msg = b.nextElementSibling;

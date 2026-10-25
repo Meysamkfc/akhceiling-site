@@ -29,6 +29,7 @@ import labels as L
 import notify as nt
 import security as sec
 import hardening as hd
+import i18n as I18N
 from catalog import CATALOG, BY_KEY
 from jalali import jdate, jdatetime
 
@@ -92,8 +93,18 @@ def headers(resp):
 
 @app.context_processor
 def ctx():
+    admin_lang = request.cookies.get('admin_lang') if request.cookies.get('admin_lang') in ('fa', 'en') else 'fa'
     return dict(user=g.get('user'), csrf_token=sec.csrf_token, jdate=jdate, jdatetime=jdatetime, L=L, STAFF=sec.STAFF,
-                messages=get_flashed_messages(with_categories=True))
+                messages=get_flashed_messages(with_categories=True), admin_lang=admin_lang, t=lambda k: I18N.t(k, admin_lang))
+
+
+@app.get('/admin/lang/<code>')
+@sec.login_required(*sec.STAFF)
+def admin_set_lang(code):
+    resp = redirect(request.referrer or '/admin/')
+    if code in ('fa', 'en'):
+        resp.set_cookie('admin_lang', code, max_age=31536000, samesite='Strict', secure=config.HTTPS, httponly=False)
+    return resp
 
 
 def fail(code, msg):

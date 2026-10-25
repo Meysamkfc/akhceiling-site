@@ -319,10 +319,17 @@ textarea{min-height:120px;resize:vertical}
 /* ---------- panels (customer / staff) ---------- */
 .pnl{display:grid;grid-template-columns:250px 1fr;gap:34px;align-items:start;padding:44px 0 90px}
 .side{border:1px solid var(--ink);background:var(--card);padding:14px;position:sticky;top:calc(var(--stack) + 18px)}
-.side .who{padding:6px 14px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side .who{padding:6px 14px 14px;border-bottom:1px solid var(--line);margin-bottom:8px;position:relative}
 .side .who small{display:block;color:var(--mut)}
+.side .langsw{position:absolute;inset-block-start:6px;inset-inline-end:0;width:auto;padding:4px 10px;font-size:12px;font-weight:800;border:1px solid var(--line);background:var(--paper)}
 .side a,.side button{display:block;width:100%;text-align:start;padding:11px 14px;font-weight:800;background:none;border:0}
 .side a:hover,.side button:hover{background:var(--paper2)}
+.side-tgl{display:none;width:100%;padding:13px 16px;font-weight:800;background:var(--card);border:1px solid var(--ink);margin-bottom:14px}
+@media(max-width:760px){
+  .side-tgl{display:block}
+  .side{display:none}
+  .side.open{display:block}
+}
 .side a[aria-current]{background:var(--ink);color:#fff}
 .pn2 h1{font-size:34px;margin-bottom:20px}.pn2 h2{font-size:23px;margin:30px 0 12px}
 .stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:10px}
