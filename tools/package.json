@@ -1,1 +1,1 @@
-{"name":"akh-site2-tools","private":true,"version":"1.0.0","devDependencies":{"esbuild":"0.21.5","three":"0.160.0"},"dependencies":{"@theatre/core":"^0.7.2","curtainsjs":"^8.1.6","lenis":"^1.3.27"}}
+{"name":"akh-site2-tools","private":true,"version":"1.0.0","devDependencies":{"esbuild":"^0.28.2","three":"0.160.0"},"dependencies":{"@theatre/core":"^0.7.2","curtainsjs":"^8.1.6","lenis":"^1.3.27"}}
