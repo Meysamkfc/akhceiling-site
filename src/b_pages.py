@@ -3,6 +3,7 @@ from b_core import *
 
 SYS_IMG = {'drywall': 'show/p04.jpg', 'grid-ceiling': 'projects/p01.jpg', 'profiles': 'photos/real-factory.jpg', 'accessories': 'photos/real-install.jpg'}
 SYS_IMG_ALT = {'drywall': 'سقف گچی دکوراتیو در پروژه هتل آزادی', 'grid-ceiling': 'سقف شبکه‌ای در دانشگاه شهرری', 'profiles': 'پروفیل‌های گالوانیزه تولیدشده در کارخانه', 'accessories': 'نصب زیرسازی سقف کاذب'}
+SYS_IMG_ALT_EN = {'drywall': 'Decorative drywall ceiling at the Hotel Azadi project', 'grid-ceiling': 'Grid ceiling at Shahre Rey University', 'profiles': 'Galvanized profiles manufactured at our factory', 'accessories': 'Installing a false-ceiling frame'}
 ALLP = PRODUCTS + [dict(slug='profiles', title=PROFILES['title'], short=PROFILES['short'], tags=['F47', 'UH36', 'L25'], diagram='drywall'),
                     dict(slug='accessories', title=ACCESSORIES['title'], short=ACCESSORIES['short'], tags=['SSB', 'HT90', 'پیچ و میخ'])]
 
@@ -70,10 +71,13 @@ def build_home():
     add_doc('صفحه اصلی', 'صنعت سقف البرز خاورمیانه تولیدکننده پروفیل درای‌وال و سقف کاذب', '/', 'صفحه', 'خانه معرفی')
 
 # ============================================================ HOME (English)
-EN_PRODUCT_NAME = {'drywall': 'Drywall &amp; plaster ceiling system', 'grid-ceiling': '60x60 grid suspended ceiling', 'profiles': 'Drywall profiles &amp; connectors', 'accessories': 'Installation accessories'}
-EN_PRODUCT_SHORT = {'drywall': 'A seamless, joint-free ceiling with recessed lighting boxes and partition walls', 'grid-ceiling': 'Removable tiles with easy access to services above the ceiling',
-                    'profiles': 'F47, UH36, L25, clips, screws and connectors with a full spec table',
-                    'accessories': 'Screws, nails, joint tape and connectors for every ceiling system'}
+# English names for PROJECTS, positionally paired so the photo/order stays identical between languages.
+EN_PROJECT_NAMES = ['Hotel Azadi', 'Shahre Rey University', 'Shahid Rajaee University', 'Akhavan Sink factory', 'Massi Tuna Fish complex', 'Velenjak commercial project',
+                     'Multi-layer circular ceiling', 'Office corridor', 'Boxed ceiling with recessed lighting', 'Retail store ceiling', 'Office space', 'Framework before tile installation', 'Retail corridor', 'Industrial kitchen']
+EN_PROJECT_SYS = ['Decorative drywall ceiling', 'Grid ceiling', 'Grid ceiling', 'Grid ceiling', 'Grid and drywall ceiling', 'Acoustic grid ceiling', 'Decorative drywall ceiling', 'Grid ceiling',
+                   'Decorative drywall ceiling', 'Decorative drywall ceiling', 'Grid ceiling', 'Grid ceiling', 'Linear aluminum ceiling', 'Linear aluminum ceiling']
+EN_TAGS = {'accessories': ['SSB', 'HT90', 'Screws & nails'], 'grid-ceiling': ['Gypsum tile', 'Aluminum', 'Mineral acoustic']}
+EN_CLIENTS_ALT = ['Iran Khodro', 'Chitoz', 'Customer', 'KCC Kison', 'Akhavan', 'Kerman Motor']
 
 def build_home_en():
     img_p = 'projects/p02.jpg'
@@ -81,13 +85,13 @@ def build_home_en():
     hero = ('<section class="hero" id="hero" aria-label="Introduction"><canvas id="hero3d" aria-hidden="true"></canvas><div class="wrap in">'
             '<h1><span style="display:block;font-size:.4em;font-weight:800;margin-bottom:6px;color:#d6d8f0">%s</span>Heritage, a mark of <em class="o">quality</em></h1>'
             '<p class="lead">Direct manufacturing of drywall profiles (F47, UH36, L25) and 60x60 grid suspended ceilings; straight from our Kahrizak factory to your project. Over 40 years of experience.</p>'
-            '<div class="row"><a class="btn" href="/quote/">Request a quote</a><a class="btn line" href="/products/">View products</a></div></div><span class="scrollcue" aria-hidden="true">Scroll</span></section>'
+            '<div class="row"><a class="btn" href="/en/quote/">Request a quote</a><a class="btn line" href="/en/products/">View products</a></div></div><span class="scrollcue" aria-hidden="true">Scroll</span></section>'
             % esc(EN_NAME))
     tick = '<div class="ticker" aria-hidden="true"><div>' + ('<span>F47 profile</span><span>UH36 profile</span><span>L25 angle</span><span>60x60 grid ceiling</span><span>Drywall</span><span>Acoustic tile</span><span>Custom length</span>' * 4) + '</div></div>'
     pn = ''
     for i, p in enumerate(ALLP):
-        pn += ('<a class="pn" href="/products/%s/">%s<span class="idx">0%d</span><div class="t"><small>%s</small><h3>%s</h3><p>%s</p></div></a>' %
-               (p['slug'], rimg(SYS_IMG[p['slug']], SYS_IMG_ALT[p['slug']], '(max-width:760px) 100vw, 40vw'), i + 1, ' &middot; '.join(p['tags'][:3]), EN_PRODUCT_NAME[p['slug']], EN_PRODUCT_SHORT[p['slug']]))
+        pn += ('<a class="pn" href="/en/products/%s/">%s<span class="idx">0%d</span><div class="t"><small>%s</small><h3>%s</h3><p>%s</p></div></a>' %
+               (p['slug'], rimg(SYS_IMG[p['slug']], SYS_IMG_ALT_EN[p['slug']], '(max-width:760px) 100vw, 40vw'), i + 1, ' &middot; '.join(EN_TAGS.get(p['slug'], p['tags'])[:3]), EN_PRODUCT_NAME[p['slug']], EN_PRODUCT_SHORT[p['slug']]))
     s1 = ('<section class="sec"><div class="wrap">%s<div class="head"><h2>Two ceiling systems, <em class="o">one manufacturer</em></h2><p class="lead">From seamless drywall ceilings to removable grid ceilings; all directly manufactured with transparent technical specifications.</p>'
           '<div class="panels rv">%s</div></div></section>' % (kicker('01', 'Products'), pn))
     nums = [('220', '+', 'tonnes of monthly production capacity'), ('11', '', 'production and press lines'), ('40', '+', 'years of experience in construction'), ('73,000', '', 'square metres; our largest project')]
@@ -97,12 +101,12 @@ def build_home_en():
                    for k, a in [('roll', 'Profile roll-forming line'), ('cut', 'Cutting and finishing'), ('pack', 'Packing and shipment preparation')])
     s4 = ('<section class="sec" id="factory"><div class="wrap">%s<div class="head"><h2>Manufactured directly at our <em class="o">Kahrizak factory</em></h2><p class="lead">From galvanized steel coil to a profile ready for shipment; see the production process up close.</p></div><div class="fv">%s</div></div></section>'
           % (kicker('02', 'Production'), vid))
-    rows = ''.join('<a href="/projects/"><span class="n">0%d</span><h3>%s</h3><span>%s</span>%s</a>' % (i + 1, esc(t), esc(s), rimg('projects/' + f, t, '130px', '', w=130, h=84)) for i, (f, t, s) in enumerate(PROJECTS[:6]))
-    s5 = ('<section class="sec paper2"><div class="wrap">%s<div class="head"><h2>Projects built with <em class="o">our materials</em></h2><a class="btn line" href="/projects/">All projects</a></div><div class="plist rv">%s</div></div></section>'
+    rows = ''.join('<a href="/en/projects/"><span class="n">0%d</span><h3>%s</h3><span>%s</span>%s</a>' % (i + 1, esc(EN_PROJECT_NAMES[i]), esc(EN_PROJECT_SYS[i]), rimg('projects/' + f, EN_PROJECT_NAMES[i], '130px', '', w=130, h=84)) for i, (f, t, s) in enumerate(PROJECTS[:6]))
+    s5 = ('<section class="sec paper2"><div class="wrap">%s<div class="head"><h2>Projects built with <em class="o">our materials</em></h2><a class="btn line" href="/en/projects/">All projects</a></div><div class="plist rv">%s</div></div></section>'
           % (kicker('03', 'Projects'), rows))
     def step_li_en(i, t, d):
         if i == 0:
-            return ('<li class="rv d0"><h3><a class="link" href="/quote/">%s</a></h3><p>%s</p><a class="num" href="tel:+98%s">Or call our team directly: %s</a></li>'
+            return ('<li class="rv d0"><h3><a class="link" href="/en/quote/">%s</a></h3><p>%s</p><a class="num" href="tel:+98%s">Or call our team directly: %s</a></li>'
                     % (t, d, PHONE.replace('-', '').lstrip('0'), PHONE))
         return ('<li class="rv d%d"><button type="button" class="step-click"><h3>%s</h3><p>%s</p></button><span class="step-msg">Please fill in step 1 first</span></li>' % (i % 4, t, d))
     steps = ''.join(step_li_en(i, t, d) for i, (t, d) in enumerate([
@@ -112,9 +116,9 @@ def build_home_en():
         ('Shipped to your project', 'Materials are shipped nationwide, with technical support continuing during installation.')]))
     s6 = '<section class="sec"><div class="wrap">%s<div class="head"><h2>From <em class="o">request</em> to delivery in four steps</h2></div><ol class="steps">%s</ol></div></section>' % (kicker('04', 'Order process'), steps)
     s7 = ('<section class="sec night"><div class="wrap"><div class="split"><div>%s<h2>Download our <em class="o">technical catalog</em></h2><p class="lead">A PDF with the full spec table for profiles, screws, connectors and ceiling systems (in Persian).</p>'
-          '<div class="row x5"><a class="btn" href="/assets/catalog/akh-catalog.pdf" download>Download catalog (PDF)</a><a class="btn line" href="/catalogs/">View catalog pages</a></div></div>'
+          '<div class="row x5"><a class="btn" href="/assets/catalog/akh-catalog.pdf" download>Download catalog (PDF)</a></div></div>'
           '<div class="stack">%s%s</div></div></div></section>' % (kicker('05', 'Catalog'), rimg('catalog/f47.jpg', 'F47 profile catalog page', '30vw'), rimg('catalog/grid-60x60.jpg', '60x60 grid ceiling catalog page', '30vw')))
-    cl = '<section class="sec sm paper2"><div class="wrap"><div class="logos">%s</div></div></section>' % ''.join('<img src="/assets/clients/%s" alt="%s" width="170" height="60" loading="lazy">' % (f, esc(a)) for f, a in CLIENTS)
+    cl = '<section class="sec sm paper2"><div class="wrap"><div class="logos">%s</div></div></section>' % ''.join('<img src="/assets/clients/%s" alt="%s" width="170" height="60" loading="lazy">' % (f, esc(EN_CLIENTS_ALT[i])) for i, (f, a) in enumerate(CLIENTS))
     body = hero + tick + s1 + s2 + s4 + s5 + s6 + s7 + cl + cta('Ready to start?', 'Sign up today and submit your first request.', lang='en')
     page('/en/', 'AKH Ceiling Systems | Drywall Profile & Suspended Ceiling Manufacturer', 'Direct manufacturing of F47, UH36 and L25 drywall profiles and 60x60 grid suspended ceilings. Kahrizak factory, Tehran office, nationwide shipping.',
          body, home=True, scripts=('home.js',), priority='0.9', freq='weekly', kind='WebPage', images=[SITE + rurl(img_p, 960)], lang='en')

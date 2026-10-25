@@ -90,7 +90,7 @@ def icon(name):
     }[name]
     return '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">%s</svg>' % d
 
-def diagram(kind):
+def diagram(kind, lang='fa'):
     slab = '<rect x="10" y="6" width="380" height="14" fill="#d8daec"/>'
     if kind == 'drywall':
         body = (slab + '<g stroke="#15173f" stroke-width="3" fill="none"><path class="dgline" pathLength="1" d="M70 20v46"/><path class="dgline" pathLength="1" d="M200 20v46"/><path class="dgline" pathLength="1" d="M330 20v46"/></g><rect x="30" y="66" width="340" height="9" fill="#2e3192"/>'
@@ -105,7 +105,8 @@ def diagram(kind):
                 '<text x="200" y="148" text-anchor="middle" font-size="15" font-weight="700" fill="#5c5f82">60 × 60</text>')
     else:
         body = slab
-    return '<svg viewBox="0 0 400 160" role="img" aria-label="تصویر شماتیک مقطع سقف" class="dg">%s</svg>' % body
+    label = 'Schematic ceiling cross-section' if lang == 'en' else 'تصویر شماتیک مقطع سقف'
+    return '<svg viewBox="0 0 400 160" role="img" aria-label="%s" class="dg">%s</svg>' % (label, body)
 
 def flip_text(text, duration=2.2, delay=0, loop=False, separator=' ', together=False, cls=''):
     """3D card-flip reveal, one flip unit per WORD (precomputed at build time, no client JS needed).
@@ -126,18 +127,34 @@ def flip_text(text, duration=2.2, delay=0, loop=False, separator=' ', together=F
 # ------------------------------------------------------------------ layout
 NAV = [('/products/', 'محصولات', 'products'), ('/projects/', 'پروژه‌ها', None), ('/estimate/', 'برآورد متریال', None), ('/assistant/', 'دستیار هوشمند', None),
        ('/articles/', 'منابع', 'res'), ('/about/', 'درباره ما', None)]
-# English nav points at the Persian pages (not yet translated) except the homepage itself — an honest
-# interim state rather than broken English stubs; EN_NAME is the brand name already established in the
-# site's own schema.org alternateName.
+# EN_NAME is the brand name already established in the site's own schema.org alternateName.
 EN_NAME = 'AKH Ceiling Systems'
-EN_NAV = [('/products/', 'Products', None), ('/projects/', 'Projects', None), ('/estimate/', 'Material Estimate', None), ('/assistant/', 'Smart Assistant', None), ('/about/', 'About Us', None)]
+EN_PRODUCT_NAME = {'drywall': 'Drywall &amp; plaster ceiling system', 'grid-ceiling': '60x60 grid suspended ceiling', 'profiles': 'Drywall profiles &amp; connectors', 'accessories': 'Installation accessories'}
+EN_PRODUCT_SHORT = {'drywall': 'A seamless, joint-free ceiling with recessed lighting boxes and partition walls', 'grid-ceiling': 'Removable tiles with easy access to services above the ceiling',
+                    'profiles': 'F47, UH36, L25, clips, screws and connectors with a full spec table',
+                    'accessories': 'Screws, nails, joint tape and connectors for every ceiling system'}
+EN_NAV = [('/en/products/', 'Products', None), ('/en/projects/', 'Projects', None), ('/en/estimate/', 'Material Estimate', None), ('/en/assistant/', 'Smart Assistant', None), ('/en/about/', 'About Us', None)]
+
+# every Persian page that has a real, built English counterpart (and back); pages not listed here
+# (articles, FAQ, glossary, catalogs, privacy, search, 404 — Phase 2) have no language-switch link yet.
+LANG_PAIRS = [
+    ('/', '/en/'), ('/products/', '/en/products/'),
+    ('/products/drywall/', '/en/products/drywall/'), ('/products/grid-ceiling/', '/en/products/grid-ceiling/'),
+    ('/products/profiles/', '/en/products/profiles/'), ('/products/accessories/', '/en/products/accessories/'),
+    ('/projects/', '/en/projects/'), ('/about/', '/en/about/'), ('/contact/', '/en/contact/'),
+    ('/quote/', '/en/quote/'), ('/estimate/', '/en/estimate/'), ('/assistant/', '/en/assistant/'), ('/membership/', '/en/membership/'),
+]
+FA2EN = dict(LANG_PAIRS)
+EN2FA = {v: k for k, v in LANG_PAIRS}
 
 def lang_switch(path, lang):
-    """the opposite-language equivalent of this path, if one exists (only '/' <-> '/en/' for now)."""
-    if lang == 'fa' and path == '/':
-        return ('/en/', 'EN')
+    """the opposite-language equivalent of this path, if one exists."""
+    if lang == 'fa':
+        t = FA2EN.get(path)
+        return (t, 'EN') if t else None
     if lang == 'en':
-        return ('/', 'فارسی')
+        t = EN2FA.get(path)
+        return (t, 'فارسی') if t else None
     return None
 
 def topbar(lang='fa'):
@@ -152,13 +169,13 @@ def topbar(lang='fa'):
 
 def header(path, dynamic=False, lang='fa'):
     if lang == 'en':
-        li = ''.join('<li><a href="%s"%s>%s</a></li>' % (href, ' aria-current="page"' if path == href else '', label) for href, label, _ in EN_NAV)
-        acct = '<a class="ibtn hide-m" aria-label="Membership and customer panel" href="/membership/">' + icon('user') + '<span class="lbl">Sign in</span></a>'
-        phoned = '<a class="ibtn fill" href="/contact/" aria-label="Contact us">%s<span class="lbl">Contact</span></a>' % icon('phone')
+        li = ''.join('<li><a href="%s"%s>%s</a></li>' % (href, ' aria-current="page"' if (path == href or path.startswith(href)) else '', label) for href, label, _ in EN_NAV)
+        acct = '<a class="ibtn hide-m" aria-label="Membership and customer panel" href="/en/membership/">' + icon('user') + '<span class="lbl">Sign in</span></a>'
+        phoned = '<a class="ibtn fill" href="/en/contact/" aria-label="Contact us">%s<span class="lbl">Contact</span></a>' % icon('phone')
         sw = lang_switch(path, lang)
         swlink = '<a class="ibtn hide-m" href="%s">%s</a>' % sw if sw else ''
         li += ('<li class="nav-ex nav-ex-first"><button type="button" data-search>Search the site</button></li>'
-               '<li class="nav-ex"><a href="/membership/">Sign in / Membership</a></li>'
+               '<li class="nav-ex"><a href="/en/membership/">Sign in / Membership</a></li>'
                + ('<li class="nav-ex"><a href="%s">%s</a></li>' % sw if sw else ''))
         return (topbar(lang) + '<header class="hdr" id="hdr"><div class="wrap in"><a class="brand" href="/en/"><img src="/assets/img/emblem.jpg" alt="%s logo" width="560" height="260"><span>%s</span></a>'
                 '<ul class="nav" id="nav">%s</ul><div class="tools">'
@@ -204,7 +221,7 @@ def palette(lang='fa'):
 
 def assistant_fab(lang='fa'):
     if lang == 'en':
-        return '<div class="fab-tip" aria-hidden="true">Got a question? Chat with us now</div><a class="fab" id="fabChat" href="/assistant/" aria-label="Chat with the smart assistant" aria-expanded="false" aria-controls="chatWidget">%s<span>Smart Assistant</span></a>' % icon('bot')
+        return '<div class="fab-tip" aria-hidden="true">Got a question? Chat with us now</div><a class="fab" id="fabChat" href="/en/assistant/" aria-label="Chat with the smart assistant" aria-expanded="false" aria-controls="chatWidget">%s<span>Smart Assistant</span></a>' % icon('bot')
     return ('<div class="fab-tip" aria-hidden="true">سؤالی داری؟ همین حالا با ما چت کن</div><a class="fab" id="fabChat" href="/assistant/" aria-label="گفت‌وگو با دستیار هوشمند" aria-expanded="false" aria-controls="chatWidget">%s<span>دستیار هوشمند</span></a>' % icon('bot'))
 
 def assistant_widget(lang='fa'):
@@ -217,7 +234,10 @@ def assistant_widget(lang='fa'):
             '<div class="msgs" id="msgs" aria-live="polite"></div><div class="composer" id="composer"></div></div>'
             % (name, icon('bot'), name, min_label, close_label))
 
-def lightbox():
+def lightbox(lang='fa'):
+    if lang == 'en':
+        return ('<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Image viewer"><button class="x" aria-label="Close">✕</button><button class="n" aria-label="Next image">‹</button>'
+                '<button class="p" aria-label="Previous image">›</button><figure><img id="lbi" alt=""><figcaption id="lbc"></figcaption></figure></div>')
     return ('<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="نمایش عکس"><button class="x" aria-label="بستن">✕</button><button class="n" aria-label="عکس بعدی">‹</button>'
             '<button class="p" aria-label="عکس قبلی">›</button><figure><img id="lbi" alt=""><figcaption id="lbc"></figcaption></figure></div>')
 
@@ -227,12 +247,14 @@ HOURS_EN = ['Saturday–Wednesday: 9:00 AM – 5:00 PM', 'Thursday: 9:00 AM – 
 
 def footer(lang='fa'):
     if lang == 'en':
+        prod_en = ''.join('<li><a href="/en/products/%s/">%s</a></li>' % (p['slug'], EN_PRODUCT_NAME[p['slug']]) for p in PRODUCTS) + '<li><a href="/en/products/profiles/">%s</a></li>' % EN_PRODUCT_NAME['profiles']
         return ('<footer class="ft"><div class="wrap"><p class="big">Profiles, ceilings and partitions; <em class="o">from factory to site</em></p><div class="cols">'
                 '<div><h2>%s</h2><p class="slogan">Heritage, a mark of quality</p><p>Manufacturer of drywall and suspended-ceiling materials, with a factory in Kahrizak and nationwide delivery.</p></div>'
-                '<div><h2>Quick links</h2><ul><li><a href="/estimate/">Material estimate</a></li><li><a href="/assistant/">Smart assistant</a></li><li><a href="/quote/">Request a quote</a></li><li><a href="/catalogs/">Catalogs</a></li><li><a href="/projects/">Projects</a></li><li><a href="/account/login/">Customer sign-in</a></li></ul></div>'
+                '<div><h2>Products</h2><ul>%s</ul></div>'
+                '<div><h2>Quick links</h2><ul><li><a href="/en/estimate/">Material estimate</a></li><li><a href="/en/assistant/">Smart assistant</a></li><li><a href="/en/quote/">Request a quote</a></li><li><a href="/en/projects/">Projects</a></li><li><a href="/en/membership/">Customer sign-in</a></li></ul></div>'
                 '<div><h2>Contact</h2><ul><li>Head office: <a class="num" href="tel:+982188507585">%s</a></li><li>Factory: <a class="num" href="tel:+982156548804">%s</a></li><li>%s</li><li><a class="num" href="mailto:%s">%s</a></li><li>%s<br>%s</li></ul></div></div>'
                 '<div class="copy"><span>© %s — All rights reserved.</span><span><a href="/privacy/">Privacy</a> · <a href="https://t.me/%s" rel="noopener">Telegram</a> · <a href="https://instagram.com/%s" rel="noopener">Instagram</a></span></div></div></footer>'
-                % (EN_NAME, PHONE, PHONE_FACTORY, ADDR_OFFICE_EN, EMAIL, EMAIL, HOURS_EN[0], HOURS_EN[1], EN_NAME, TELEGRAM, INSTAGRAM))
+                % (EN_NAME, prod_en, PHONE, PHONE_FACTORY, ADDR_OFFICE_EN, EMAIL, EMAIL, HOURS_EN[0], HOURS_EN[1], EN_NAME, TELEGRAM, INSTAGRAM))
     prod = ''.join('<li><a href="/products/%s/">%s</a></li>' % (p['slug'], esc(p['title'])) for p in PRODUCTS) + '<li><a href="/products/profiles/">%s</a></li>' % PROFILES['title']
     return ('<footer class="ft"><div class="wrap"><p class="big">پروفیل، سقف و دیوار کاذب؛ <em class="o">از کارخانه تا اجرا</em></p><div class="cols">'
             '<div><h2>%s</h2><p class="slogan">قدمت، نماد کیفیت</p><p>تولیدکننده متریال سقف و دیوار کاذب و سیستم درای‌وال با کارخانه در کهریزک و ارسال به سراسر کشور.</p></div>'
@@ -305,9 +327,9 @@ def page(path, title, desc, body, extra_ld=None, home=False, scripts=(), modules
 {body}
 </main>
 {footer(lang=lang)}
-{'' if path == '/assistant/' else assistant_fab(lang=lang) + assistant_widget(lang=lang)}
+{'' if path in ('/assistant/', '/en/assistant/') else assistant_fab(lang=lang) + assistant_widget(lang=lang)}
 {palette(lang=lang)}
-{lightbox()}
+{lightbox(lang=lang)}
 <script type="module" src="/assets/js/main.js"></script>
 {js}
 </body></html>'''
@@ -348,21 +370,24 @@ def inline_to_classes(doc):
         return re.sub(r'^<(\w+)', lambda mm: '<' + mm.group(1) + ' class="' + cls + '"', t, 1)
     return re.sub(r'<[a-zA-Z][^>]*\sstyle="[^"]*"[^>]*>', tag, doc)
 
-def phero(h1, lead, crumbs, actions=''):
+def phero(h1, lead, crumbs, actions='', lang='fa'):
     cr = ''.join(('<span><a href="%s">%s</a></span>' % (u, n)) if u else '<span>%s</span>' % n for u, n in crumbs)
-    return '<section class="phero"><div class="wrap"><nav class="crumbs" aria-label="مسیر">%s</nav><h1>%s</h1><p class="lead">%s</p>%s</div></section>' % (cr, h1, lead, actions)
+    label = 'Breadcrumb' if lang == 'en' else 'مسیر'
+    return '<section class="phero"><div class="wrap"><nav class="crumbs" aria-label="%s">%s</nav><h1>%s</h1><p class="lead">%s</p>%s</div></section>' % (label, cr, h1, lead, actions)
 
 def cta(title=None, text=None, lang='fa'):
     if lang == 'en':
         title = title or 'Get a quote for your project'
         text = text or 'Tell us the area and project type; our team will contact you.'
         labels = ('Request a quote', 'Chat with the assistant')
+        quote_url, assistant_url = '/en/quote/', '/en/assistant/'
     else:
         title = title or 'برای پروژه خود قیمت بگیرید'
         text = text or 'متراژ و نوع پروژه را بنویسید؛ کارشناسان ما با شما تماس می‌گیرند.'
         labels = ('درخواست قیمت', 'گفت‌وگو با دستیار')
-    return ('<section class="sec sm"><div class="wrap"><div class="cta rv"><div><h2>%s</h2><p>%s</p></div><div class="row"><a class="btn" href="/quote/">%s</a>'
-            '<a class="btn line" href="/assistant/">%s</a></div></div></div></section>' % (title, text, labels[0], labels[1]))
+        quote_url, assistant_url = '/quote/', '/assistant/'
+    return ('<section class="sec sm"><div class="wrap"><div class="cta rv"><div><h2>%s</h2><p>%s</p></div><div class="row"><a class="btn" href="%s">%s</a>'
+            '<a class="btn line" href="%s">%s</a></div></div></div></section>' % (title, text, quote_url, labels[0], assistant_url, labels[1]))
 
 def kicker(n, text):
     return '<div class="kicker"><b>%s</b>%s</div>' % (n, text)

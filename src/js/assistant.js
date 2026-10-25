@@ -43,8 +43,9 @@ if (msgs) {
   const P = (...c) => { const p = el('p'); c.forEach(x => p.append(typeof x === 'string' ? t(x) : x)); return p; };
   const strong = s => el('strong', '', s);
 
-  const form = el('form', 'inl'); const input = el('input'); input.placeholder = 'سؤال یا درخواست خود را بنویسید…'; input.setAttribute('aria-label', 'پیام شما'); input.maxLength = 300; input.autocomplete = 'off';
-  const go = el('button', 'btn sm plain', 'ارسال'); go.type = 'submit'; form.append(input, go);
+  const isEN = document.documentElement.lang === 'en';
+  const form = el('form', 'inl'); const input = el('input'); input.placeholder = isEN ? 'Type your question or request…' : 'سؤال یا درخواست خود را بنویسید…'; input.setAttribute('aria-label', isEN ? 'Your message' : 'پیام شما'); input.maxLength = 300; input.autocomplete = 'off';
+  const go = el('button', 'btn sm plain', isEN ? 'Send' : 'ارسال'); go.type = 'submit'; form.append(input, go);
   comp.append(form);
   form.addEventListener('submit', e => { e.preventDefault(); send(); });
 
@@ -135,7 +136,8 @@ if (msgs) {
   }
 
   (async () => {
-    await say(P('من بات البرز هستم، سؤالی دارید؟ در خدمتم.'), 'bot', 300);
+    const greeting = document.documentElement.lang === 'en' ? "I'm AlborzBot, got a question? I'm here to help." : 'من بات البرز هستم، سؤالی دارید؟ در خدمتم.';
+    await say(P(greeting), 'bot', 300);
     const q = new URLSearchParams(location.search), room = q.get('room'), area = parseFloat(q.get('area'));
     if (room && ROOMS[room] && area >= 1) { ctx.room = room; ctx.area = area; await say(t(ROOMS[room][0] + '، ' + fa(area) + ' متر مربع'), 'me', 0); await sampleReply(); await estimateReply(area, pick(room, area).s === 'grid' ? 'grid' : 'drywall'); }
   })();
