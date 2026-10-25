@@ -69,13 +69,19 @@ def bundle_js():
     od = os.path.join(OUT, 'assets', 'js'); os.makedirs(od, exist_ok=True)
     esb = os.path.join(ROOT, 'tools', 'node_modules', '.bin', 'esbuild.cmd' if os.name == 'nt' else 'esbuild')
     jd = os.path.join(HERE, 'js')
-    ents = {'main.js': 'main.js', 'home.js': 'home.js', 'estimate.js': 'estimate.js', 'quote.js': 'quote.js', 'assistant.js': 'assistant.js', 'order.js': 'order.js', 'search.js': 'search.js', 'auth.js': 'auth.js', 'hero3d.js': 'hero3d.src.js'}
+    ents = {'main.js': 'main.js', 'home.js': 'home.js', 'estimate.js': 'estimate.js', 'quote.js': 'quote.js', 'assistant.js': 'assistant.js', 'order.js': 'order.js', 'search.js': 'search.js', 'auth.js': 'auth.js', 'hero3d.js': 'hero3d.src.js', 'gallery.js': 'gallery.src.js'}
     # hero3d.js and assistant.js are loaded at runtime via dynamic import() (see home.js and the floating
     # chat widget in main.js), which needs a real ES module output; every other entry is a plain
     # <script type="module" src=...> in the HTML, so IIFE is fine for those.
+    # tools/node_modules isn't an ancestor of src/js/, so esbuild's normal node-resolution walk never finds
+    # it; every package used from src/js/ needs an explicit --alias pointing straight at its real entry file.
+    tnm = os.path.join(ROOT, 'tools', 'node_modules')
+    aliases = ['--alias:three=' + os.path.join(tnm, 'three', 'build', 'three.module.js'),
+               '--alias:@theatre/core=' + os.path.join(tnm, '@theatre', 'core', 'dist', 'index.js'),
+               '--alias:curtainsjs=' + os.path.join(tnm, 'curtainsjs', 'src', 'index.mjs')]
     for out, src in ents.items():
         fmt = 'esm' if out in ('hero3d.js', 'assistant.js') else 'iife'
-        r = subprocess.run([esb, os.path.join(jd, src), '--bundle', '--minify', '--format=' + fmt, '--target=es2019', '--legal-comments=none', '--outfile=' + os.path.join(od, out), '--log-level=error', '--resolve-extensions=.js,.mjs', '--alias:three=' + os.path.join(ROOT, 'tools', 'node_modules', 'three', 'build', 'three.module.js')], capture_output=True, text=True, cwd=os.path.join(ROOT, 'tools'))
+        r = subprocess.run([esb, os.path.join(jd, src), '--bundle', '--minify', '--format=' + fmt, '--target=es2019', '--legal-comments=none', '--outfile=' + os.path.join(od, out), '--log-level=error', '--resolve-extensions=.js,.mjs'] + aliases, capture_output=True, text=True, cwd=os.path.join(ROOT, 'tools'))
         if r.returncode:
             print('esbuild failed:', src, r.stderr[:500]); sys.exit(1)
     shutil.copy(os.path.join(jd, 'flag.js'), os.path.join(od, 'flag.js'))

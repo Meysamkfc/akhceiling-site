@@ -5,6 +5,35 @@ import {
   MeshBasicMaterial, Object3D, HemisphereLight, DirectionalLight, PointLight, PCFSoftShadowMap, Group, Points, BufferGeometry,
   Float32BufferAttribute, PointsMaterial, MathUtils, TextureLoader, SRGBColorSpace
 } from 'three';
+import { getProject, types } from '@theatre/core';
+
+// a one-shot, precisely-keyframed entrance (Theatre.js): the camera dollies in from further back/higher
+// and settles into the exact same resting pose the idle loop below already computes, as an additive
+// offset that eases to zero — so once it finishes, the hand-off to the idle drift is seamless and the
+// scene itself (grid, lights, coffer) is untouched. Skipped entirely under prefers-reduced-motion.
+const INTRO_LEN = 2.4;
+const bez = [0.42, 1, 0.42, 0];
+const kf = (id, position, value) => ({ id, position, value, handles: bez, connectedRight: position === 0, type: 'bezier' });
+const THEATRE_STATE = {
+  sheetsById: {
+    Intro: {
+      staticOverrides: { byObject: {} },
+      sequence: {
+        type: 'PositionalSequence', length: INTRO_LEN, subUnitsPerUnit: 30,
+        tracksByObject: {
+          camera: {
+            trackIdByPropPath: { '["zOff"]': 'trZ', '["rotOff"]': 'trR', '["yOff"]': 'trY' },
+            trackData: {
+              trZ: { type: 'BasicKeyframedTrack', keyframes: [kf('z0', 0, -17), kf('z1', INTRO_LEN, 0)] },
+              trR: { type: 'BasicKeyframedTrack', keyframes: [kf('r0', 0, -0.42), kf('r1', INTRO_LEN, 0)] },
+              trY: { type: 'BasicKeyframedTrack', keyframes: [kf('y0', 0, 1.1), kf('y1', INTRO_LEN, 0)] },
+            },
+          },
+        },
+      },
+    },
+  },
+};
 
 const host = document.getElementById('hero');
 const canvas = document.getElementById('hero3d');
@@ -126,6 +155,18 @@ if (host && canvas) {
     const wallMat = new MeshStandardMaterial({ color: 0x181a4a, roughness: 1 });
     [-1, 1].forEach(s => { const w = new InstancedMesh(new BoxGeometry(.2, 5, lenZ), wallMat, 1); dummy.position.set(s * (lenX / 2 + .6) * 0 + s * 6.6, Y - 2.5, z0 - lenZ / 2); dummy.updateMatrix(); w.setMatrixAt(0, dummy.matrix); scene.add(w); });
 
+    // --- intro sequence (Theatre.js) ---
+    let introZ = calm ? 0 : -17, introR = calm ? 0 : -0.42, introY = calm ? 0 : 1.1;
+    if (!calm) {
+      try {
+        const proj = getProject('AKH Hero', { state: THEATRE_STATE });
+        const introSheet = proj.sheet('Intro');
+        const introObj = introSheet.object('camera', { zOff: types.number(-17, { range: [-17, 0] }), rotOff: types.number(-0.42, { range: [-0.42, 0] }), yOff: types.number(1.1, { range: [0, 1.1] }) });
+        introObj.onValuesChange(v => { introZ = v.zOff; introR = v.rotOff; introY = v.yOff; });
+        proj.ready.then(() => introSheet.sequence.play());
+      } catch (e) { introZ = introR = introY = 0; }
+    }
+
     // --- loop ---
     let mx = 0, my = 0, tx = 0, ty = 0, scrollP = 0, running = false, raf = 0, t0 = performance.now(), last = t0, ready = false;
     const resize = () => { const w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h, false); cam.aspect = w / h; cam.fov = w / h < .8 ? 78 : 62; cam.updateProjectionMatrix(); };
@@ -137,9 +178,9 @@ if (host && canvas) {
       const dt = Math.min(.05, (now - last) / 1000); last = now;
       const t = (now - t0) / 1000;
       mx += (tx - mx) * Math.min(1, dt * 3); my += (ty - my) * Math.min(1, dt * 3);
-      const z = calm ? -4 : -(8 + 7.5 * Math.sin(t * 0.055)) - scrollP * 10;
-      cam.position.set(mx * .35, 0.15 - my * .08, z);
-      cam.rotation.set(0.5 + scrollP * .55 + my * -.05, -mx * .12, 0, 'YXZ');
+      const z = (calm ? -4 : -(8 + 7.5 * Math.sin(t * 0.055)) - scrollP * 10) + introZ;
+      cam.position.set(mx * .35, 0.15 - my * .08 + introY, z);
+      cam.rotation.set(0.5 + scrollP * .55 + my * -.05 + introR, -mx * .12, 0, 'YXZ');
       dust.position.z = (t * .12) % 3;
       renderer.render(scene, cam);
       if (!ready) { ready = true; host.classList.add('gl-ready'); }

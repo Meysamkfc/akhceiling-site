@@ -246,7 +246,7 @@ def build_projects_en():
     items = [{"@type": "ImageObject", "contentUrl": SITE + rurl('projects/' + f, 1600), "name": EN_PROJECT_NAMES[i], "caption": '%s — %s' % (EN_PROJECT_NAMES[i], EN_PROJECT_SYS[i]), "creator": {"@id": ORG_ID}} for i, (f, t, s) in enumerate(PROJECTS)]
     page('/en/projects/', 'Completed Projects | Universities, Hotels, Commercial & Industrial', 'False-ceiling and drywall projects built with AKH Ceiling Systems materials: Hotel Azadi, Shahre Rey University, the Oil Industry University, Telecom, the 73,000 m² Mahan Park project and more.', body,
          extra_ld=[{"@type": "ImageGallery", "@id": SITE + '/en/projects/#gallery', "name": "Completed projects", "associatedMedia": items}], crumbs=[('/en/', 'Home'), ('/en/projects/', 'Projects')], priority='0.8', kind='CollectionPage',
-         images=[SITE + rurl('projects/' + f, 1600) for f, t, s in PROJECTS], lang='en')
+         images=[SITE + rurl('projects/' + f, 1600) for f, t, s in PROJECTS], lang='en', scripts=('gallery.js',))
     add_doc('Projects (EN)', 'completed projects Hotel Azadi Shahre Rey University Mahan Park', '/en/projects/', 'page', 'projects portfolio')
 
 # ============================================================ ABOUT

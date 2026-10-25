@@ -245,7 +245,7 @@ def build_projects():
             '<section class="sec"><div class="wrap">%s<div class="head"><h2>اجرا در پروژه <em class="o">ماهان پارک</em></h2><p class="lead">تصاویر واقعی از تیم اجرایی ما هنگام نصب سقف و دیوار کاذب.</p></div><div class="gal" data-lb>%s</div></div></section>' % (kicker('03', 'کارگاه'), gal) + cta('پروژه شما بعدی است', 'نوع پروژه را بگویید تا بهترین سیستم را پیشنهاد دهیم.'))
     items = [{"@type": "ImageObject", "contentUrl": SITE + rurl('projects/' + f, 1600), "name": t, "caption": '%s — %s' % (t, s), "creator": {"@id": ORG_ID}} for f, t, s in PROJECTS]
     page('/projects/', 'پروژه‌های اجراشده | دانشگاه، هتل، مراکز تجاری و صنعتی', 'پروژه‌های سقف کاذب و درای‌وال با متریال صنعت سقف البرز خاورمیانه: هتل آزادی، دانشگاه شهرری، دانشگاه صنعت نفت، مخابرات، ماهان پارک ۷۳٬۰۰۰ متر مربع و بیشتر.', body,
-         extra_ld=[{"@type": "ImageGallery", "@id": SITE + '/projects/#gallery', "name": "پروژه‌های اجراشده", "associatedMedia": items}], crumbs=[('/', 'خانه'), ('/projects/', 'پروژه‌ها')], priority='0.8', kind='CollectionPage', images=[SITE + rurl('projects/' + f, 1600) for f, t, s in PROJECTS])
+         extra_ld=[{"@type": "ImageGallery", "@id": SITE + '/projects/#gallery', "name": "پروژه‌های اجراشده", "associatedMedia": items}], crumbs=[('/', 'خانه'), ('/projects/', 'پروژه‌ها')], priority='0.8', kind='CollectionPage', images=[SITE + rurl('projects/' + f, 1600) for f, t, s in PROJECTS], scripts=('gallery.js',))
     add_doc('پروژه‌ها', 'پروژه‌های اجراشده هتل آزادی دانشگاه شهرری شهید رجایی صنعت نفت مخابرات ماهان پارک باران تشریفات', '/projects/', 'صفحه', 'پروژه نمونه کار')
 
 # ============================================================ CATALOGS
