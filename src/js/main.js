@@ -35,9 +35,12 @@ if (fabChat && chatWidget) {
     fabChat.setAttribute('aria-expanded', 'true');
     if (!loaded) { loaded = true; import('/assets/js/assistant.js').catch(() => {}); }
   };
-  const closeWidget = () => { chatWidget.hidden = true; fabChat.setAttribute('aria-expanded', 'false'); };
+  const closeWidget = () => { chatWidget.hidden = true; chatWidget.classList.remove('minimized'); fabChat.setAttribute('aria-expanded', 'false'); };
   fabChat.addEventListener('click', e => { e.preventDefault(); chatWidget.hidden ? openWidget() : closeWidget(); });
   const x = $('#chatWidgetClose'); if (x) x.addEventListener('click', closeWidget);
+  const mn = $('#chatWidgetMin'), hd = $('#chatWidgetHd');
+  if (mn) mn.addEventListener('click', e => { e.stopPropagation(); chatWidget.classList.toggle('minimized'); });
+  if (hd) hd.addEventListener('click', () => { if (chatWidget.classList.contains('minimized')) chatWidget.classList.remove('minimized'); });
   addEventListener('keydown', e => { if (e.key === 'Escape' && !chatWidget.hidden) closeWidget(); });
 }
 /* "روند سفارش" steps 2-4: clicking shows "fill step 1 first" instead of doing nothing silently */
