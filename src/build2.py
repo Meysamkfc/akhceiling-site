@@ -111,7 +111,8 @@ def seo_files():
     # explicit allows for AI answer-engine / assistant crawlers (GEO/AEO): ChatGPT, Google AI, Perplexity,
     # Claude and Common Crawl (used by most LLM training sets) are welcomed in addition to the default '*' rule.
     ai_bots = ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'Google-Extended', 'PerplexityBot', 'Perplexity-User',
-               'ClaudeBot', 'Claude-User', 'Claude-SearchBot', 'anthropic-ai', 'CCBot', 'Applebot-Extended']
+               'ClaudeBot', 'Claude-User', 'Claude-SearchBot', 'anthropic-ai', 'CCBot', 'Applebot-Extended',
+               'MistralAI-User', 'DeepSeekBot', 'xAI-Bot', 'cohere-ai', 'meta-externalagent']
     ai_rules = []
     for b in ai_bots:
         ai_rules += ['User-agent: ' + b, 'Allow: /', '']
