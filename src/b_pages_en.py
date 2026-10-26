@@ -295,10 +295,10 @@ def build_membership_en():
     bl = ''.join('<li><b>%s</b> — %s</li>' % (esc(t), d) for t, d in benefits)
     steps = ''.join('<li>%s</li>' % s for s in ('Sign up with your email or mobile number and a password', 'Optionally add your job title (not required)', 'Complete your project details', 'View proforma invoices and invoices in your panel'))
     body = (phero('Customer Panel Membership', 'Sign up for free to the %s customer panel and manage your orders and invoices in one secure, personal space.' % esc(EN_NAME),
-                  [('/en/', 'Home'), (None, 'Membership')], '<div class="row"><a class="btn" href="/account/register/">Sign up free</a><a class="btn line" href="/account/login/">Sign in</a></div>', lang='en') +
+                  [('/en/', 'Home'), (None, 'Membership')], '<div class="row"><a class="btn" href="/account/register/?lang=en">Sign up free</a><a class="btn line" href="/account/login/?lang=en">Sign in</a></div>', lang='en') +
             ('<section class="sec"><div class="wrap"><div class="card pad rv">%s<h2>Why <em class="o">sign up</em></h2>'
              '<ul class="checks x15">%s</ul><h3 class="x4">How do I get started?</h3><ul class="checks x15">%s</ul>'
-             '<a class="btn x4" href="/account/register/">Sign up now</a></div></div></section>'
+             '<a class="btn x4" href="/account/register/?lang=en">Sign up now</a></div></div></section>'
              % (kicker('01', 'Benefits'), bl, steps)) +
             cta('Ready?', 'Sign up today and submit your first request.', lang='en'))
     page('/en/membership/', 'Customer Panel Membership | %s' % EN_NAME, 'Sign up for free to the AKH Ceiling Systems customer panel to manage your orders and invoices, and chat with the smart assistant.', body,

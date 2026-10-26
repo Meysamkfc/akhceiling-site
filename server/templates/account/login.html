@@ -7,7 +7,7 @@
 <div><label for="identifier">{{ t('login_identifier') }}</label><input id="identifier" name="identifier" dir="ltr" required maxlength="120" autocomplete="username"></div>
 <div><label for="password">{{ t('login_password') }}</label><input id="password" name="password" type="password" required autocomplete="current-password"></div>
 <button class="btn" type="submit">{{ t('login_btn') }}</button></form>
-<p class="note"><a href="/account/forgot/">{{ 'Forgot your password?' if admin_lang=='en' else 'رمز عبور را فراموش کرده‌اید؟' }}</a></p>
-<p class="note">{{ 'A regular customer and not yet a member?' if admin_lang=='en' else 'مشتری ثابت هستید و هنوز عضو نشده‌اید؟' }} <a href="/account/register/">{{ 'Customer sign-up' if admin_lang=='en' else 'ثبت‌نام مشتریان' }}</a></p>
+<p class="note"><a href="/account/forgot/{{ '?lang=en' if admin_lang=='en' else '' }}">{{ 'Forgot your password?' if admin_lang=='en' else 'رمز عبور را فراموش کرده‌اید؟' }}</a></p>
+<p class="note">{{ 'A regular customer and not yet a member?' if admin_lang=='en' else 'مشتری ثابت هستید و هنوز عضو نشده‌اید؟' }} <a href="/account/register/{{ '?lang=en' if admin_lang=='en' else '' }}">{{ 'Customer sign-up' if admin_lang=='en' else 'ثبت‌نام مشتریان' }}</a></p>
 </div></div>{% endblock %}
-{% block scripts %}<script src="/assets/js/auth.js?v=f376e1d912" integrity="sha384-bD+/sEudlGdHffX5haqqI/LKTqBfc4Cej++gP/ur6nLH/fuoFVTe4jZB6YpGdn0P" crossorigin="anonymous" defer></script>{% endblock %}
+{% block scripts %}<script src="/assets/js/auth.js?v=66bd49d815" integrity="sha384-IlOMmb6yOswIO4aB6v+RLPNj35BAlGi18ttjh5Hm93a2tHn+VgxYYwpWynzctjRK" crossorigin="anonymous" defer></script>{% endblock %}

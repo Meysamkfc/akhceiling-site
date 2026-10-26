@@ -19,9 +19,13 @@ CALL_OUTCOMES = ['پاسخ داد — مایل به ادامه', 'پاسخ ند�
 CALL_OUTCOMES_EN = ['Answered — wants to continue', 'No answer', 'Busy — call back later', 'Wrong number', 'Got pricing — needs proforma', 'Not interested']
 
 COUNTRIES = ['ایران', 'عراق', 'افغانستان', 'ترکیه', 'امارات متحده عربی', 'عمان', 'قطر', 'کویت', 'عربستان سعودی', 'پاکستان', 'آذربایجان', 'ترکمنستان', 'ارمنستان', 'روسیه', 'سایر']
+COUNTRIES_EN = ['Iran', 'Iraq', 'Afghanistan', 'Turkey', 'United Arab Emirates', 'Oman', 'Qatar', 'Kuwait', 'Saudi Arabia', 'Pakistan', 'Azerbaijan', 'Turkmenistan', 'Armenia', 'Russia', 'Other']
 CITIES_IRAN = ['تهران', 'مشهد', 'اصفهان', 'کرج', 'شیراز', 'تبریز', 'قم', 'اهواز', 'کرمانشاه', 'ارومیه', 'رشت', 'زاهدان', 'همدان', 'کرمان', 'یزد', 'اردبیل', 'بندرعباس', 'اراک', 'ساری', 'قزوین',
                'زنجان', 'سنندج', 'خرم‌آباد', 'گرگان', 'بوشهر', 'بابل', 'ایلام', 'شهرکرد', 'یاسوج', 'بیرجند', 'سمنان', 'شهریار', 'ورامین', 'پاکدشت', 'سایر']
+CITIES_IRAN_EN = ['Tehran', 'Mashhad', 'Isfahan', 'Karaj', 'Shiraz', 'Tabriz', 'Qom', 'Ahvaz', 'Kermanshah', 'Urmia', 'Rasht', 'Zahedan', 'Hamadan', 'Kerman', 'Yazd', 'Ardabil', 'Bandar Abbas', 'Arak', 'Sari', 'Qazvin',
+                  'Zanjan', 'Sanandaj', 'Khorramabad', 'Gorgan', 'Bushehr', 'Babol', 'Ilam', 'Shahrekord', 'Yasuj', 'Birjand', 'Semnan', 'Shahriar', 'Varamin', 'Pakdasht', 'Other']
 JOBS = ['کناف‌کار', 'پیمانکار', 'مهندس / ناظر', 'معمار', 'تأسیساتچی', 'فروشنده مصالح ساختمانی', 'شرکت', 'سایر']
+JOBS_EN = ['Drywall installer', 'Contractor', 'Engineer / Supervisor', 'Architect', 'HVAC/plumbing technician', 'Building-materials dealer', 'Company', 'Other']
 
 LS = dict(LEAD_STATUS)
 OS = dict(ORDER_STATUS)

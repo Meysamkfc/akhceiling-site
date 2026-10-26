@@ -76,6 +76,9 @@ def enforce_2fa():
 
 @app.after_request
 def headers(resp):
+    lang = request.args.get('lang')
+    if lang in ('fa', 'en'):
+        resp.set_cookie('admin_lang', lang, max_age=31536000, samesite='Strict', secure=config.HTTPS, httponly=False)
     resp.headers['Content-Security-Policy'] = CSP
     resp.headers['X-Content-Type-Options'] = 'nosniff'
     resp.headers['X-Frame-Options'] = 'DENY'
@@ -91,9 +94,19 @@ def headers(resp):
     return resp
 
 
+def current_lang():
+    """?lang= on this request wins immediately (so a first click lands already-translated);
+    otherwise fall back to the admin_lang cookie from a previous visit."""
+    q = request.args.get('lang')
+    if q in ('fa', 'en'):
+        return q
+    c = request.cookies.get('admin_lang')
+    return c if c in ('fa', 'en') else 'fa'
+
+
 @app.context_processor
 def ctx():
-    admin_lang = request.cookies.get('admin_lang') if request.cookies.get('admin_lang') in ('fa', 'en') else 'fa'
+    admin_lang = current_lang()
     return dict(user=g.get('user'), csrf_token=sec.csrf_token, jdate=jdate, jdatetime=jdatetime, L=L, STAFF=sec.STAFF,
                 messages=get_flashed_messages(with_categories=True), admin_lang=admin_lang, t=lambda k: I18N.t(k, admin_lang))
 
@@ -265,6 +278,8 @@ def safe_next(n):
 def register():
     if g.user:
         return redirect('/account/')
+    admin_lang = current_lang()
+    e = lambda k: I18N.t(k, admin_lang)
     form, errors = {}, []
     if request.method == 'POST':
         sec.check_csrf()
@@ -281,26 +296,26 @@ def register():
         phone = email = None
         if '@' in ident:
             if re.fullmatch(r'[^@\s]+@[^@\s]+\.[^@\s]+', ident): email = ident.lower()
-            else: errors.append('ایمیل معتبر نیست.')
+            else: errors.append(e('reg_err_email_invalid'))
         elif ident:
             phone = sec.norm_phone(ident)
-            if not phone: errors.append('ایمیل یا شماره موبایل معتبر وارد کنید (مثل ۰۹۱۲۳۴۵۶۷۸۹).')
+            if not phone: errors.append(e('reg_err_phone_invalid'))
         else:
-            errors.append('ایمیل یا شماره موبایل را وارد کنید.')
+            errors.append(e('reg_err_identifier_required'))
         pw, pw2 = request.form.get('password', ''), request.form.get('password2', '')
         if sec.clean(request.form.get('website')):
             abort(400)
         if not hd.pow_verify(request.form.get('pow_token'), request.form.get('pow_nonce'), sec.client_ip()):
-            errors.append('تأیید امنیتی انجام نشد؛ جاوااسکریپت را فعال کنید و دوباره تلاش کنید.')
-        if len(form['name']) < 3: errors.append('نام و نام خانوادگی را وارد کنید.')
-        if len(form['city']) < 2: errors.append('شهر را وارد کنید.')
+            errors.append(e('reg_err_pow'))
+        if len(form['name']) < 3: errors.append(e('reg_err_name_required'))
+        if len(form['city']) < 2: errors.append(e('reg_err_city_required'))
         pe = hd.password_problem(pw, phone or '')
-        if pe: errors.append(pe)
-        elif pw != pw2: errors.append('تکرار رمز عبور یکسان نیست.')
+        if pe: errors.append(I18N.tp(pe, admin_lang))
+        elif pw != pw2: errors.append(e('reg_err_password_mismatch'))
         dup = (phone and db.one('SELECT 1 FROM users WHERE phone=?', (phone,))) or (email and db.one('SELECT 1 FROM users WHERE email=?', (email,)))
         if not errors and dup:
             # do not reveal whether the account exists (account enumeration): same answer, nothing created
-            flash('ثبت‌نام انجام شد. پس از تأیید کارشناس فروش حساب شما فعال می‌شود. اگر قبلاً ثبت‌نام کرده‌اید، با همان ایمیل/شماره و رمز خود وارد شوید.', 'ok')
+            flash(e('reg_ok_duplicate'), 'ok')
             return redirect('/account/login/')
         if not errors:
             uid = db.run("INSERT INTO users(role,name,company,phone,email,city,job,country,pass_hash,status) VALUES('customer',?,?,?,?,?,?,?,?,'pending')",
@@ -308,7 +323,7 @@ def register():
             db.audit(uid, 'register', phone or email, sec.client_ip())
             nt.notify('ثبت‌نام مشتری جدید', '👤 درخواست عضویت جدید\nنام: %s\nشرکت: %s\nایمیل/موبایل: %s\nکشور: %s\nشهر: %s\nشغل: %s\n%s/admin/customers/%d' % (
                 form['name'], form['company'] or '—', phone or email, form['country'], form['city'], form['job'] or '—', config.BASE_URL, uid))
-            flash('ثبت‌نام انجام شد. پس از تأیید کارشناس فروش، حساب شما فعال می‌شود و می‌توانید وارد شوید.', 'ok')
+            flash(e('reg_ok_created'), 'ok')
             return redirect('/account/login/')
     return render_template('account/register.html', form=form, errors=errors, countries=L.COUNTRIES, cities_iran=L.CITIES_IRAN, jobs=L.JOBS)
 
@@ -317,6 +332,7 @@ def register():
 def login():
     if g.user:
         return redirect('/admin/' if g.user['role'] in sec.STAFF else '/account/')
+    admin_lang = current_lang()
     error = None
     if request.method == 'POST':
         sec.check_csrf()
@@ -327,12 +343,12 @@ def login():
         if not sec.hit('login:' + ip, 20, 600):
             abort(429)
         if sec.recent_fails(ip) >= 3 and not hd.pow_verify(request.form.get('pow_token'), request.form.get('pow_nonce'), ip):
-            return render_template('account/login.html', error='برای ادامه، تأیید امنیتی لازم است؛ صفحه را تازه کنید و دوباره تلاش کنید.')
+            return render_template('account/login.html', error=I18N.t('login_err_pow', admin_lang))
         u = db.one('SELECT * FROM users WHERE phone=?', (phone,)) if phone else (db.one('SELECT * FROM users WHERE email=?', (email,)) if email else None)
         pw = request.form.get('password', '')
         now = datetime.now()
         if u and u['locked_until'] and datetime.strptime(u['locked_until'], '%Y-%m-%d %H:%M:%S') > now:
-            error = 'به‌دلیل تلاش‌های ناموفق، ورود تا ۱۵ دقیقه مسدود شده است.'
+            error = I18N.t('login_err_locked', admin_lang)
         else:
             ok = check_password_hash(u['pass_hash'], pw) if u else check_password_hash(generate_password_hash('x'), pw)  # constant-ish time
             if not (u and ok):
@@ -342,11 +358,11 @@ def login():
                     db.run('UPDATE users SET failed=?, locked_until=? WHERE id=?', (0 if lock else f, lock, u['id']))
                 sec.note_fail(ip)
                 db.audit(u['id'] if u else None, 'login_failed', ident, ip)
-                error = 'ایمیل/شماره موبایل یا رمز عبور درست نیست.'
+                error = I18N.t('login_err_bad_creds', admin_lang)
             elif u['status'] == 'rejected':
-                error = 'درخواست عضویت شما تأیید نشد. با کارشناس فروش تماس بگیرید.'
+                error = I18N.t('login_err_rejected', admin_lang)
             elif u['status'] == 'disabled':
-                error = 'این حساب غیرفعال شده است.'
+                error = I18N.t('login_err_disabled', admin_lang)
             else:
                 nxt = safe_next(request.args.get('next'))
                 if u['totp_on']:
