@@ -180,12 +180,18 @@ def header(path, dynamic=False, lang='fa'):
                 li += '<li><a href="%s"%s>%s ▾</a><div class="sub">%s</div></li>' % (href, cur if path.startswith(('/en/articles', '/en/faq', '/en/catalogs')) else '', label, subs)
             else:
                 li += '<li><a href="%s"%s>%s</a></li>' % (href, cur, label)
-        acct = '<a class="ibtn hide-m" aria-label="Membership and customer panel" href="/en/membership/">' + icon('user') + '<span class="lbl">Sign in</span></a>'
+        if dynamic:
+            acct = '{% if user %}<a class="ibtn hide-m" aria-label="My account" href="{{ \"/admin/\" if user.role != \"customer\" else \"/account/\" }}">' + icon('user') + '<span class="lbl">My account</span></a>{% else %}<a class="ibtn hide-m" aria-label="Sign in / Membership" href="/account/login/?lang=en">' + icon('user') + '<span class="lbl">Sign in</span></a>{% endif %}'
+            mobile_acct_en = ('<li class="nav-ex">{% if user %}<a href="{{ \"/admin/\" if user.role != \"customer\" else \"/account/\" }}">My account</a>'
+                               '{% else %}<a href="/account/login/?lang=en">Sign in / Membership</a>{% endif %}</li>')
+        else:
+            acct = '<a class="ibtn hide-m" aria-label="Membership and customer panel" href="/en/membership/">' + icon('user') + '<span class="lbl">Sign in</span></a>'
+            mobile_acct_en = '<li class="nav-ex"><a href="/en/membership/">Sign in / Membership</a></li>'
         phoned = '<a class="ibtn fill" href="/en/contact/" aria-label="Contact us">%s<span class="lbl">Contact</span></a>' % icon('phone')
         sw = lang_switch(path, lang)
         swlink = '<a class="ibtn hide-m" href="%s">%s</a>' % sw if sw else ''
         li += ('<li class="nav-ex nav-ex-first"><button type="button" data-search>Search the site</button></li>'
-               '<li class="nav-ex"><a href="/en/membership/">Sign in / Membership</a></li>'
+               + mobile_acct_en
                + ('<li class="nav-ex"><a href="%s">%s</a></li>' % sw if sw else ''))
         return (topbar(lang) + '<header class="hdr" id="hdr"><div class="wrap in"><a class="brand" href="/en/"><img src="/assets/img/emblem.jpg" alt="%s logo" width="560" height="260"><span>%s</span></a>'
                 '<ul class="nav" id="nav">%s</ul><div class="tools">'

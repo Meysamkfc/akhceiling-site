@@ -163,10 +163,11 @@ def seo_files():
     open(os.path.join(OUT, 'nginx.conf.example'), 'w').write(ng)
 
 def export_jinja_base():
-    h = header('', dynamic=True)
+    h = "{%% if admin_lang=='en' %%}%s{%% else %%}%s{%% endif %%}" % (header('', dynamic=True, lang='en'), header('', dynamic=True, lang='fa'))
+    f = "{%% if admin_lang=='en' %%}%s{%% else %%}%s{%% endif %%}" % (footer(lang='en'), footer(lang='fa'))
     doc = ('<!doctype html><html lang="@@L@@" dir="@@D@@"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>@@T@@ | ' + NAME_FULL + '</title><meta name="robots" content="noindex,nofollow">'
            '<link rel="icon" href="/assets/img/favicon.png" sizes="64x64"><link rel="preload" href="/assets/fonts/vazirmatn-arabic.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/assets/css/site2.css"><script src="/assets/js/flag.js"></script></head>'
-           '<body class="inner app"><a class="skip" href="#main">پرش به محتوا</a>' + h + '<main id="main">@@C@@</main>' + footer() + palette() + lightbox() + '<script type="module" src="/assets/js/main.js"></script>@@S@@</body></html>')
+           '<body class="inner app"><a class="skip" href="#main">پرش به محتوا</a>' + h + '<main id="main">@@C@@</main>' + f + palette() + lightbox() + '<script type="module" src="/assets/js/main.js"></script>@@S@@</body></html>')
     doc = inline_to_classes(apply_xsty(doc)).replace('@@T@@', '{% block title %}{{ title|default("پنل") }}{% endblock %}').replace('@@C@@', '{% block content %}{% endblock %}').replace('@@S@@', '{% block scripts %}{% endblock %}')
     doc = doc.replace('@@L@@', "{{ 'en' if admin_lang=='en' else 'fa' }}").replace('@@D@@', "{{ 'ltr' if admin_lang=='en' else 'rtl' }}")
     tdir = os.path.join(ROOT, 'server', 'templates'); os.makedirs(tdir, exist_ok=True)
