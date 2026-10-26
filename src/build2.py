@@ -29,7 +29,7 @@ def copy_static():
                 if only and not only(f):
                     continue
                 shutil.copy(os.path.join(s, f), os.path.join(d, f)) if os.path.isfile(os.path.join(s, f)) else None
-    cp('fonts'); cp('clients'); cp('video'); cp('img', only=lambda f: f in ('emblem.jpg', 'noise.webp'))
+    cp('fonts'); cp('clients'); cp('video'); cp('img', only=lambda f: f in ('emblem.jpg', 'noise.webp', 'alborzbot-mascot.png'))
     cp('catalog', only=lambda f: f.endswith('-big.jpg') or f.endswith('.pdf'))
     cp('gallery', only=lambda f: f.startswith('g'))
     cp('cards', only=lambda f: f.endswith('-big.jpg'))

@@ -243,10 +243,12 @@ def palette(lang='fa'):
     return ('<div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="جست‌وجو"><div class="pbox"><input type="search" placeholder="جست‌وجو در سایت: F47، سقف شبکه‌ای، پیچ پانل…" aria-label="عبارت جست‌وجو" autocomplete="off">'
             '<div class="pres" role="listbox"></div><div class="pfoot"><span>↑↓ حرکت</span><span>Enter باز کردن</span><span>Esc بستن</span></div></div></div>')
 
+MASCOT_IMG = '<img src="/assets/img/alborzbot-mascot.png" alt="" width="377" height="539">'
+
 def assistant_fab(lang='fa'):
     if lang == 'en':
-        return '<div class="fab-tip" aria-hidden="true">Got a question? Chat with us now</div><a class="fab" id="fabChat" href="/en/assistant/" aria-label="Chat with the smart assistant" aria-expanded="false" aria-controls="chatWidget">%s<span>Smart Assistant</span></a>' % icon('bot')
-    return ('<div class="fab-tip" aria-hidden="true">سؤالی داری؟ همین حالا با ما چت کن</div><a class="fab" id="fabChat" href="/assistant/" aria-label="گفت‌وگو با دستیار هوشمند" aria-expanded="false" aria-controls="chatWidget">%s<span>دستیار هوشمند</span></a>' % icon('bot'))
+        return '<div class="fab-tip" aria-hidden="true">Got a question? Chat with us now</div><a class="fab" id="fabChat" href="/en/assistant/" aria-label="Chat with the smart assistant" aria-expanded="false" aria-controls="chatWidget">%s<span>Smart Assistant</span></a>' % MASCOT_IMG
+    return ('<div class="fab-tip" aria-hidden="true">سؤالی داری؟ همین حالا با ما چت کن</div><a class="fab" id="fabChat" href="/assistant/" aria-label="گفت‌وگو با دستیار هوشمند" aria-expanded="false" aria-controls="chatWidget">%s<span>دستیار هوشمند</span></a>' % MASCOT_IMG)
 
 def assistant_widget(lang='fa'):
     close_label = 'Close' if lang == 'en' else 'بستن'
@@ -256,7 +258,7 @@ def assistant_widget(lang='fa'):
             '<div class="chat-hd" id="chatWidgetHd"><span class="cw-ic">%s</span><b>%s</b>'
             '<button type="button" class="cw-min" id="chatWidgetMin" aria-label="%s">&#x2212;</button><button type="button" class="cw-x" id="chatWidgetClose" aria-label="%s">&#x2715;</button></div>'
             '<div class="msgs" id="msgs" aria-live="polite"></div><div class="composer" id="composer"></div></div>'
-            % (name, icon('bot'), name, min_label, close_label))
+            % (name, MASCOT_IMG, name, min_label, close_label))
 
 def lightbox(lang='fa'):
     if lang == 'en':

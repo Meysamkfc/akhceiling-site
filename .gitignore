@@ -13,6 +13,9 @@ server/instance/
 # node tooling
 tools/node_modules/
 
+# graphify knowledge-graph output (local dev tool, regenerate with /graphify .)
+/graphify-out/
+
 # OS/editor
 .DS_Store
 Thumbs.db
