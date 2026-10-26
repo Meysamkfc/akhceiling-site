@@ -494,21 +494,16 @@ body{overflow-wrap:anywhere}
 .num,.tbl td,.tbl th{overflow-wrap:normal}
 
 /* ---------- smart-assistant floating widget ---------- */
-.fab{position:fixed;z-index:250;inset-inline-end:26px;bottom:26px;display:flex;align-items:center;justify-content:center;width:62px;height:62px;border-radius:50%;background:#fff;border:1px solid var(--line);box-shadow:0 14px 34px -10px #0007;transition:.3s var(--ease)}
-.fab svg,.fab img{width:34px;height:34px;flex:none;object-fit:contain}
+.fab{position:fixed;z-index:250;inset-inline-end:26px;bottom:26px;display:flex;align-items:center;justify-content:center;width:62px;height:62px;border-radius:50%;background:#fff;border:1px solid var(--line);box-shadow:0 14px 34px -10px #0007;transition:.3s var(--ease);overflow:hidden}
+.fab svg,.fab img{width:100%;height:100%;object-fit:cover;flex:none}
 .fab:hover{background:var(--paper2);transform:translateY(-4px)}
-.fab-tip{position:fixed;z-index:250;inset-inline-end:26px;bottom:98px;width:260px;background:var(--card);color:var(--ink);box-shadow:0 14px 34px -10px #0007;overflow:hidden}
-.fab-tip:after{content:"";position:absolute;bottom:-6px;inset-inline-end:28px;width:12px;height:12px;background:var(--ink);transform:rotate(45deg);z-index:-1}
-.fab-tip .tip-hd{background:var(--ink);color:#fff;padding:9px 12px;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
-.fab-tip .tip-ic{flex:none;display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#ffffff26;overflow:hidden}
-.fab-tip .tip-ic img{width:18px;height:18px;object-fit:contain}
-.fab-tip .tip-hd b{flex:1;font-size:12.5px}
-.fab-tip .tip-min,.fab-tip .tip-x{flex:none;color:#fff;opacity:.8;font-size:13px;line-height:1;width:22px;height:22px;border-radius:5px;background:none;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.fab-tip .tip-min:hover,.fab-tip .tip-x:hover{opacity:1;background:#ffffff26}
-.fab-tip p{padding:12px 13px;font-weight:700;font-size:13px;line-height:1.75;cursor:pointer}
-.fab-tip.minimized p{display:none}
+.fab-tip{position:fixed;z-index:250;inset-inline-end:26px;bottom:98px;width:260px;background:var(--card);color:var(--ink);box-shadow:0 14px 34px -10px #0007}
+.fab-tip:after{content:"";position:absolute;bottom:-6px;inset-inline-end:28px;width:12px;height:12px;background:var(--card);transform:rotate(45deg);z-index:-1}
+.fab-tip p{padding:14px 15px;font-weight:700;font-size:13px;line-height:1.9;cursor:pointer;margin:0}
 .fab-tip[hidden]{display:none}
 .wave-hand{display:inline-block;font-size:14px;transform-origin:70% 70%;animation:wave 2.2s ease-in-out infinite}
 @keyframes wave{0%,60%,100%{transform:rotate(0)}10%{transform:rotate(16deg)}20%{transform:rotate(-8deg)}30%{transform:rotate(16deg)}40%{transform:rotate(-4deg)}50%{transform:rotate(10deg)}}
+.tip-x{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:var(--ink);color:#fff;border:0;font-size:9.5px;line-height:1;cursor:pointer;vertical-align:middle;margin:0 2px;flex:none}
+.tip-x:hover{background:var(--or)}
 @media(max-width:600px){.fab{width:54px;height:54px;inset-inline-end:16px;bottom:16px}.fab-tip{inset-inline-end:12px;width:auto;max-width:calc(100vw - 80px);bottom:78px}}
 @media(prefers-reduced-motion:reduce){.fab{transition:none}.wave-hand{animation:none}}

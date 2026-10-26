@@ -51,14 +51,17 @@ if (fabTip) {
   let dismissed = false;
   try { dismissed = localStorage.getItem('akh_fabtip_dismissed') === '1'; } catch (e) {}
   if (dismissed) fabTip.hidden = true;
-  const tipMin = $('#fabTipMin'), tipClose = $('#fabTipClose'), tipHd = $('.tip-hd', fabTip), tipBody = $('p', fabTip);
+  const tipClose = $('#fabTipClose'), tipBody = $('p', fabTip);
+  // One click on the X is treated as "don't show this again" (not just this page view) —
+  // a visitor who dismisses a popup rarely wants it reappearing on the next page.
   if (tipClose) tipClose.addEventListener('click', e => {
     e.stopPropagation(); fabTip.hidden = true;
     try { localStorage.setItem('akh_fabtip_dismissed', '1'); } catch (e2) {}
   });
-  if (tipMin) tipMin.addEventListener('click', e => { e.stopPropagation(); fabTip.classList.toggle('minimized'); });
-  if (tipHd) tipHd.addEventListener('click', () => { if (fabTip.classList.contains('minimized')) fabTip.classList.remove('minimized'); });
-  if (tipBody) tipBody.addEventListener('click', () => { fabTip.hidden = true; $('#fabChat')?.click(); });
+  if (tipBody) tipBody.addEventListener('click', e => {
+    if (e.target.closest('.tip-x')) return;
+    fabTip.hidden = true; $('#fabChat')?.click();
+  });
 }
 const fabChat = $('#fabChat'), chatWidget = $('#chatWidget');
 if (fabChat && chatWidget) {
