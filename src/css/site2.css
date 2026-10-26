@@ -388,9 +388,12 @@ textarea{min-height:120px;resize:vertical}
 .js .rv.in{opacity:1;transform:none}
 .js .rv.d1{transition-delay:.1s}.js .rv.d2{transition-delay:.2s}.js .rv.d3{transition-delay:.3s}
 
+.signup-cta{display:none}
+
 /* ---------- responsive ---------- */
 @media(max-width:1100px){
   .nav{display:none}.burger{display:inline-flex;margin-inline-start:0}
+  .call-cta{display:none}.signup-cta{display:inline-flex}
   .hdr .in{gap:12px}.brand{margin-inline-end:auto}
   .nav.open{display:flex;position:fixed;inset:var(--hh) 0 0;background:var(--night);color:#fff;flex-direction:column;align-items:stretch;padding:20px 28px 40px;overflow-y:auto;z-index:299}
   .nav.open>li>a,.nav.open>li>button{font-size:22px;padding:16px 4px;border-bottom:1px solid #ffffff1f;width:100%;text-align:start}

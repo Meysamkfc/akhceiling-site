@@ -187,7 +187,11 @@ def header(path, dynamic=False, lang='fa'):
         else:
             acct = '<a class="ibtn hide-m" aria-label="Membership and customer panel" href="/en/membership/">' + icon('user') + '<span class="lbl">Sign in</span></a>'
             mobile_acct_en = '<li class="nav-ex"><a href="/en/membership/">Sign in / Membership</a></li>'
-        phoned = '<a class="ibtn fill" href="/en/contact/" aria-label="Contact us">%s<span class="lbl">Contact</span></a>' % icon('phone')
+        if dynamic:
+            signup_cta = '{% if user %}<a class="ibtn fill signup-cta" href="{{ \"/admin/\" if user.role != \"customer\" else \"/account/\" }}" aria-label="My account">' + icon('user') + '<span class="lbl">My account</span></a>{% else %}<a class="ibtn fill signup-cta" href="/account/register/?lang=en" aria-label="Sign up">' + icon('user') + '<span class="lbl">Sign up</span></a>{% endif %}'
+        else:
+            signup_cta = '<a class="ibtn fill signup-cta" href="/account/register/?lang=en" aria-label="Sign up">' + icon('user') + '<span class="lbl">Sign up</span></a>'
+        phoned = '<a class="ibtn fill call-cta" href="/en/contact/" aria-label="Contact us">%s<span class="lbl">Contact</span></a>' % icon('phone') + signup_cta
         sw = lang_switch(path, lang)
         swlink = '<a class="ibtn hide-m" href="%s">%s</a>' % sw if sw else ''
         li += ('<li class="nav-ex nav-ex-first"><button type="button" data-search>Search the site</button></li>'
@@ -216,7 +220,11 @@ def header(path, dynamic=False, lang='fa'):
     else:
         acct = '<a class="ibtn hide-m" aria-label="عضویت و پنل مشتریان" href="/membership/">' + icon('user') + '<span class="lbl">ورود / عضویت</span></a>'
         mobile_acct = '<li class="nav-ex"><a href="/membership/">ورود / عضویت</a></li>'
-    phoned = '<a class="ibtn fill" href="/contact/" aria-label="تماس با ما">%s<span class="lbl">تماس</span></a>' % icon('phone')
+    if dynamic:
+        signup_cta = '{% if user %}<a class="ibtn fill signup-cta" href="{{ \"/admin/\" if user.role != \"customer\" else \"/account/\" }}" aria-label="پنل من">' + icon('user') + '<span class="lbl">پنل من</span></a>{% else %}<a class="ibtn fill signup-cta" href="/account/register/" aria-label="ثبت‌نام">' + icon('user') + '<span class="lbl">ثبت‌نام</span></a>{% endif %}'
+    else:
+        signup_cta = '<a class="ibtn fill signup-cta" href="/account/register/" aria-label="ثبت‌نام">' + icon('user') + '<span class="lbl">ثبت‌نام</span></a>'
+    phoned = '<a class="ibtn fill call-cta" href="/contact/" aria-label="تماس با ما">%s<span class="lbl">تماس</span></a>' % icon('phone') + signup_cta
     sw = lang_switch(path, lang)
     swlink = '<a class="ibtn hide-m" href="%s">%s</a>' % sw if sw else ''
     li += ('<li class="nav-ex nav-ex-first"><button type="button" data-search>جست‌وجو در سایت</button></li>'
