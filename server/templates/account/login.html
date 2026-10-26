@@ -1,6 +1,7 @@
 {% extends "_base.html" %}{% from "_macros.html" import csrf, flashes %}
 {% block title %}{{ t('login_title') }}{% endblock %}
 {% block content %}<div class="wrap"><div class="authbox card pad">
+<nav class="crumbs" aria-label="{{ t('nav_crumb_label') }}"><span><a href="{{ '/en/' if admin_lang=='en' else '/' }}">{{ t('nav_home') }}</a></span><span>{{ t('login_title') }}</span></nav>
 <h1>{{ t('login_title') }}</h1>{{ flashes() }}
 {% if error %}<div class="errbox" role="alert">{{ error }}</div>{% endif %}
 <form method="post" class="form" data-pow>{{ csrf() }}

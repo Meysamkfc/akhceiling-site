@@ -1,6 +1,7 @@
 {% extends "_base.html" %}{% from "_macros.html" import csrf, errs %}
 {% block title %}{{ t('register_title') }}{% endblock %}
 {% block content %}<div class="wrap"><div class="authbox card pad">
+<nav class="crumbs" aria-label="{{ t('nav_crumb_label') }}"><span><a href="{{ '/en/' if admin_lang=='en' else '/' }}">{{ t('nav_home') }}</a></span><span>{{ t('register_title') }}</span></nav>
 <h1>{{ t('register_title') }}</h1>
 <p class="note">{{ t('register_intro') }}</p>
 {{ errs(errors) }}

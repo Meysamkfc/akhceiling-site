@@ -84,6 +84,9 @@ UI = {
     'col_event': ('رویداد', 'Event'),
     'col_ip': ('IP', 'IP'),
 
+    'nav_home': ('خانه', 'Home'),
+    'nav_crumb_label': ('مسیر', 'Breadcrumb'),
+
     'security_title': ('ورود دومرحله‌ای (۲FA)', 'Two-factor login (2FA)'),
     'login_title': ('ورود به حساب', 'Sign in'),
     'login_identifier': ('ایمیل یا شماره موبایل', 'Email or mobile number'),
