@@ -46,12 +46,27 @@ if (sideTgl && side) {
   });
 }
 /* floating assistant chat widget: open in place instead of navigating to /assistant/ */
+const fabTip = $('#fabTip');
+if (fabTip) {
+  let dismissed = false;
+  try { dismissed = localStorage.getItem('akh_fabtip_dismissed') === '1'; } catch (e) {}
+  if (dismissed) fabTip.hidden = true;
+  const tipMin = $('#fabTipMin'), tipClose = $('#fabTipClose'), tipHd = $('.tip-hd', fabTip), tipBody = $('p', fabTip);
+  if (tipClose) tipClose.addEventListener('click', e => {
+    e.stopPropagation(); fabTip.hidden = true;
+    try { localStorage.setItem('akh_fabtip_dismissed', '1'); } catch (e2) {}
+  });
+  if (tipMin) tipMin.addEventListener('click', e => { e.stopPropagation(); fabTip.classList.toggle('minimized'); });
+  if (tipHd) tipHd.addEventListener('click', () => { if (fabTip.classList.contains('minimized')) fabTip.classList.remove('minimized'); });
+  if (tipBody) tipBody.addEventListener('click', () => { fabTip.hidden = true; $('#fabChat')?.click(); });
+}
 const fabChat = $('#fabChat'), chatWidget = $('#chatWidget');
 if (fabChat && chatWidget) {
   let loaded = false;
   const openWidget = () => {
     chatWidget.hidden = false;
     fabChat.setAttribute('aria-expanded', 'true');
+    if (fabTip) fabTip.hidden = true;
     if (!loaded) { loaded = true; import('/assets/js/assistant.js').catch(() => {}); }
   };
   const closeWidget = () => { chatWidget.hidden = true; chatWidget.classList.remove('minimized'); fabChat.setAttribute('aria-expanded', 'false'); };

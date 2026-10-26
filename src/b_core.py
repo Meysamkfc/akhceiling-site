@@ -246,9 +246,17 @@ def palette(lang='fa'):
 MASCOT_IMG = '<img src="/assets/img/alborzbot-mascot.png" alt="" width="377" height="539">'
 
 def assistant_fab(lang='fa'):
+    name = 'AlborzBot' if lang == 'en' else 'البرزبات'
+    min_label = 'Minimize' if lang == 'en' else 'کوچک‌کردن'
+    close_label = 'Close' if lang == 'en' else 'بستن'
+    greet = ('Hi! I&rsquo;m AlborzBot, your smart expert. If you have a question, ask right now.' if lang == 'en'
+             else 'سلام! من البرزبات هستم، کارشناس هوشمند. اگر سؤالی دارید همین حالا بپرسید.')
+    tip = ('<div class="fab-tip" id="fabTip"><div class="tip-hd"><span class="tip-ic">%s</span><b>%s</b>'
+           '<button type="button" class="tip-min" id="fabTipMin" aria-label="%s">&#x2212;</button><button type="button" class="tip-x" id="fabTipClose" aria-label="%s">&#x2715;</button></div>'
+           '<p>%s</p></div>' % (MASCOT_IMG, name, min_label, close_label, greet))
     if lang == 'en':
-        return '<div class="fab-tip" aria-hidden="true">Got a question? Chat with us now</div><a class="fab" id="fabChat" href="/en/assistant/" aria-label="Chat with the smart assistant" aria-expanded="false" aria-controls="chatWidget">%s<span>Smart Assistant</span></a>' % MASCOT_IMG
-    return ('<div class="fab-tip" aria-hidden="true">سؤالی داری؟ همین حالا با ما چت کن</div><a class="fab" id="fabChat" href="/assistant/" aria-label="گفت‌وگو با دستیار هوشمند" aria-expanded="false" aria-controls="chatWidget">%s<span>دستیار هوشمند</span></a>' % MASCOT_IMG)
+        return tip + '<a class="fab" id="fabChat" href="/en/assistant/" aria-label="Chat with the smart assistant" aria-expanded="false" aria-controls="chatWidget">%s<span>Smart Assistant</span></a>' % MASCOT_IMG
+    return tip + ('<a class="fab" id="fabChat" href="/assistant/" aria-label="گفت‌وگو با دستیار هوشمند" aria-expanded="false" aria-controls="chatWidget">%s<span>دستیار هوشمند</span></a>' % MASCOT_IMG)
 
 def assistant_widget(lang='fa'):
     close_label = 'Close' if lang == 'en' else 'بستن'
