@@ -243,15 +243,15 @@ def palette(lang='fa'):
     return ('<div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="جست‌وجو"><div class="pbox"><input type="search" placeholder="جست‌وجو در سایت: F47، سقف شبکه‌ای، پیچ پانل…" aria-label="عبارت جست‌وجو" autocomplete="off">'
             '<div class="pres" role="listbox"></div><div class="pfoot"><span>↑↓ حرکت</span><span>Enter باز کردن</span><span>Esc بستن</span></div></div></div>')
 
-MASCOT_IMG = '<img src="/assets/img/alborzbot-mascot.png" alt="" width="315" height="477">'
+MASCOT_IMG = '<img src="/assets/img/alborzbot-mascot.png" alt="" width="377" height="539">'
 
 def assistant_fab(lang='fa'):
     close_label = 'Close' if lang == 'en' else 'بستن'
     wave = '<span class="wave-hand" aria-hidden="true">&#x1F44B;</span>'
     xbtn = '<button type="button" class="tip-x" id="fabTipClose" aria-label="%s">&#x2715;</button>' % close_label
-    greet = ('Hi %s, I&rsquo;m AlborzBot, your smart expert %s if you have a question, ask right now.' % (wave, xbtn) if lang == 'en'
-             else 'سلام %s، من البرزبات، کارشناس هوشمند %s اگر سؤالی دارید همین حالا بپرسید.' % (wave, xbtn))
-    tip = '<div class="fab-tip" id="fabTip"><p>%s</p></div>' % greet
+    greet = ('Hi %s I&rsquo;m AlborzBot, your smart expert, if you have a question, ask right now.' % wave if lang == 'en'
+             else 'سلام %s من البرزبات، کارشناس هوشمند، اگر سؤالی دارید همین حالا بپرسید.' % wave)
+    tip = '<div class="fab-tip" id="fabTip">%s<p>%s</p></div>' % (xbtn, greet)
     if lang == 'en':
         return tip + '<a class="fab" id="fabChat" href="/en/assistant/" aria-label="Chat with the smart assistant" aria-expanded="false" aria-controls="chatWidget">%s</a>' % MASCOT_IMG
     return tip + ('<a class="fab" id="fabChat" href="/assistant/" aria-label="گفت‌وگو با دستیار هوشمند" aria-expanded="false" aria-controls="chatWidget">%s</a>' % MASCOT_IMG)
